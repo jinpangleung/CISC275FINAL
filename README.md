@@ -1,2 +1,2 @@
-# CISC275FINAL
-Final submission for CISC 275
+# CISC275BETA
+CISC 275 Project Beta
