@@ -47,6 +47,8 @@ public class Model {
 				new ComponentPosition((int) (screenWidth * X_PADDING), (int) (screenHeight * Y_PADDING)),
 				(int) (screenWidth * GRID_WIDTH), (int) (screenHeight * GRID_HEIGHT));
 		this.componentMapping.addComponent(grid);
+		Animation.initialize();
+		this.touch = new Touch();
 		// Initialize Inventory and its components
 		inventory = new Inventory();
 		inventory.initialize(screenWidth, screenHeight);

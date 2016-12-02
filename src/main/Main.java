@@ -30,7 +30,8 @@ public class Main {
 		long minimumTime = 10000000; // 1/100 seconds
 			
 		long previousTime = System.nanoTime();
-    	while(true){
+		int alpha = 0;
+    	while(alpha > 2){
     		long currentTime = System.nanoTime();
     		long elapsedTime = currentTime - previousTime;
     		previousTime = currentTime;
@@ -44,6 +45,7 @@ public class Main {
     				
     			}
     		}
+    		alpha++;
     	}
 	}
 }

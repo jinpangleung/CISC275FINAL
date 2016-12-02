@@ -36,8 +36,7 @@ public class Grid extends Component {
 		instance = this;
 		board = new Board("grid.txt");
 		pixelGrid = new PixelGrid(board);
-		Animation.initialize();
-		new Touch();
+		
 		
 		
 	}
