@@ -103,6 +103,7 @@ public class Animation {
 	} 
 	
 	public static void initialize(){
+		imageLibrary = new HashMap<String, BufferedImage>();
 		insertImage("images/null.png", "null");
 		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
 		insertImage("images/EH1.png", "EH1");

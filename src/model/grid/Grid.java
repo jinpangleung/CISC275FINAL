@@ -33,11 +33,12 @@ public class Grid extends Component {
 		gabions = new ArrayList<Gabion>();
 		towers = new ArrayList<Tower>();
 		trailItems = new ArrayList<TrailItem>();
+		instance = this;
 		board = new Board("grid.txt");
 		pixelGrid = new PixelGrid(board);
 		Animation.initialize();
 		new Touch();
-		instance = this;
+		
 		
 	}
 	

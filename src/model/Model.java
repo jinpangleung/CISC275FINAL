@@ -38,11 +38,10 @@ public class Model {
 		System.out.println("\tModel is being initialized");
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
+		Model.instance = this;
 		// Initialize component mapping
 		defaultComponent = new DefaultComponent(0, 0, screenWidth, screenHeight);
 		componentMapping = new ComponentMapping(defaultComponent, screenWidth, screenHeight);
-		// Initialize Touch
-		touch = new Touch();
 		// Initialize Grid component
 		this.grid = new Grid(
 				new ComponentPosition((int) (screenWidth * X_PADDING), (int) (screenHeight * Y_PADDING)),
@@ -57,7 +56,7 @@ public class Model {
 		this.componentMapping.addComponent(inventory.getCgf());
 		this.componentMapping.addComponent(inventory.getOgf());
 		
-		Model.instance = this;
+		
 		
 		System.out.println("\tModel has been initialized");
 	}
