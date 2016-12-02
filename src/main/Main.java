@@ -27,24 +27,23 @@ public class Main {
 		
 			System.out.println("Preparing to start Game Loop...");
 			
+		long minimumTime = 10000000; // 1/100 seconds
+			
 		long previousTime = System.nanoTime();
     	while(true){
     		long currentTime = System.nanoTime();
     		long elapsedTime = currentTime - previousTime;
     		previousTime = currentTime;
     		controller.run(elapsedTime);
-    		elapsedTime = System.nanoTime() - previousTime;
     		// Put a cap on game loop, otherwise CPU runs relentlessly
     		// At the moment it is put at an absolute maximum of 100FPS
-    		/*
-    		if(elapsedTime < 10){
+    		if(elapsedTime < minimumTime){ // one second
     			try{
-    				Thread.sleep(10 - (elapsedTime/1000000));
+    				Thread.sleep(0, (int) (minimumTime - elapsedTime)); // 0 milliseconds + some nanoseconds
     			} catch (Exception e){
     				
     			}
     		}
-    		*/
     	}
 	}
 }

@@ -7,7 +7,7 @@ import model.drawing.*;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.gridcell.GridPosition;
-import model.grid.GridColor;
+import model.grid.griditem.GridColor;
 import model.moving.Velocity;
 
 /**
@@ -24,8 +24,8 @@ import model.moving.Velocity;
 
 public class Oyster extends TrailItem{
 
-	public Oyster(){
-		super(new Coord(0,0), new Animation("oyster", Offset.CENTER, Offset.CENTER), 
+	public Oyster(Coord c){
+		super(c, new Animation("oyster"), 
 				new GridPosition(0,0), new Velocity(0, 0.01),  GridColor.BLUE);
 	}
 	

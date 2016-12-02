@@ -4,10 +4,9 @@ import java.util.Collection;
 import model.*;
 import model.drawing.Animation;
 import model.drawing.Coord;
-import model.drawing.Offset;
 import model.grid.Grid.*;
 import model.grid.gridcell.GridPosition;
-import model.grid.GridColor;
+import model.grid.griditem.GridColor;
 import model.moving.Velocity;
 
 /**
@@ -24,8 +23,8 @@ import model.moving.Velocity;
 
 public class InvasiveItem extends TrailItem{
 	
-	public InvasiveItem() {
-		super(new Coord(0,0), new Animation("invasive_item", Offset.CENTER, Offset.CENTER), new GridPosition(0,0), new Velocity(0,0.01),  GridColor.GREEN);
+	public InvasiveItem(Coord c) {
+		super(c, new Animation("invasive_item"), new GridPosition(0,0), new Velocity(0,0.01),  GridColor.GREEN);
 	}
 	
 	

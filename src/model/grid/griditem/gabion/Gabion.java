@@ -2,7 +2,7 @@ package model.grid.griditem.gabion;
 
 import model.drawing.Animation;
 import model.drawing.Coord;
-import model.grid.GridColor;
+import model.grid.griditem.GridColor;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridItem;
 
@@ -31,10 +31,14 @@ public abstract class Gabion extends GridItem {
 	    this.health = health;
 	}
 	
-	public abstract void takeDamage();
+	public void takeDamage(){
+		this.health -= 10;
+	}
 	
-	public static void snap(GridItem gridI, Coord dest){
-		gridI.setCoord(dest);
+	@Override
+	public void update(long elapsedTime) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

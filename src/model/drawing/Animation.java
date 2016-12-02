@@ -4,23 +4,33 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
+
 import javax.imageio.ImageIO;
+
+import model.Time;
 
 /**
  * Animation
- * Animation keeps an array of strings and uses an underlying image library to draw
- * Animation also keeps an index to know which to draw
- * 
+ * Animation is how a DrawableObject should draw itself frame-by-frame
+ * <p>
+ * All DrawableObjects needs an animation
  * @author Eric
  *
  */
 
 public class Animation {
 	
-	private static HashMap<String, BufferedImage> imageLibrary = new HashMap<String, BufferedImage>();
+	// Image Library
+	private static HashMap<String, BufferedImage> imageLibrary;
 	
+	/**
+	 * insertImage
+	 * Open image at given file name, load into ImageLibrary with given image name
+	 * 
+	 * @param String fileName
+	 * @param String imageName
+	 */
 	private static void insertImage(String fileName, String imageName){
 		BufferedImage img = null;
 		try {
@@ -32,36 +42,40 @@ public class Animation {
 		}
 	}
 	
+	/**
+	 * initialize
+	 * Load all images into image library
+	 */
 	public static void initialize(){
-		insertImage("images/ConcreteGabion.png", "ConcreteGabion");
-		insertImage("images/EH1.png", "EH1");
-		insertImage("images/EH2.png", "EH2");
-		insertImage("images/EH3.png", "EH3");
-		insertImage("images/EH4.png", "EH4");
-		insertImage("images/Fisherman.png", "Fisherman");
-		insertImage("images/Losing Screen.png", "LosingScreen");
-		insertImage("images/OysterGabion.png", "OysterGabion");
-		insertImage("images/Rain.png", "rain");
-		insertImage("images/Storm.png", "storm");
-		insertImage("images/background.png", "background");
-		insertImage("images/invasive_item.png", "invasive_item");
-		insertImage("images/invasive_item_tower.png", "invasive_item_tower");
-		insertImage("images/larvae.png", "larvae");
-		insertImage("images/oyster.png", "oyster");
-		insertImage("images/oyster_tower.png", "oyster_tower");
-		insertImage("images/pollutant1.png", "pollutant1");
-		insertImage("images/pollutant2.png", "pollutant2");
-		insertImage("images/pollutant3.png", "pollutant3");
-		insertImage("images/pollutant4.png", "pollutant4");
-		insertImage("images/pollutant_tower.png", "pollutant_tower");
-		insertImage("images/bcg.png", "bcg");
-		
+		imageLibrary = new HashMap<String, BufferedImage>();
+		// Load all required images
+		insertImage("images/null.png", "null");
 	}
 	
+	/**
+	 * getImage
+	 * Return the image that is stored under given name
+	 * 
+	 * @param String imageName
+	 * @return BufferedImage
+	 */
 	public static BufferedImage getImage(String imageName){
-		return imageLibrary.get(imageName);
+		BufferedImage img = imageLibrary.get(imageName);
+		if(img == null){
+			insertImage("images/null.png", imageName);
+			return getImage(imageName);
+		} else {
+			return img;
+		}
 	}
 	
+	
+	// Animation
+	
+	// Unless otherwise specified, how often should the frame of the animation be switched
+	private static final int DESIRED_FPS = 30;
+	
+	// Attributes
 	private String[] sprites;
 	private int length;
 	private int index;
@@ -69,7 +83,86 @@ public class Animation {
 	private int yOffset;
 	private int imageWidth;
 	private int imageHeight;
+	private long animationTime;
+	private long frameTime;
+	private long elapsedTime;
 	
+	// Constructor
+	public Animation(String sprite){
+		this.sprites = new String[1];
+		this.sprites[0] = sprite;
+		this.index = 0;
+		this.length = 1;
+		BufferedImage img = getImage(sprite);
+		this.imageWidth = img.getWidth();
+		this.imageHeight = img.getHeight();
+		this.xOffset = this.imageWidth / 2;
+		this.yOffset = this.imageHeight / 2;
+		double secondsOneCycle = 1.0 / ((double) DESIRED_FPS / (double) this.length);
+		double nanoOneCycle = secondsOneCycle * Time.nanosecond;
+		this.animationTime = (long) nanoOneCycle;
+		this.frameTime = (long) (nanoOneCycle / (double) this.length);
+		this.elapsedTime = 0;
+	}
+	
+	// Draw Image at curent index
+	public void draw(Graphics g, double x, double y){
+		g.drawImage(Animation.getImage(sprites[index]), (int) x + xOffset, (int) y + yOffset, null);
+	}
+	
+	// Draw Image given coord
+	public void draw(Graphics g, Coord c){
+		this.draw(g, c.getX(), c.getY());
+	}
+	
+	// Update the index based on how much time has passed
+	public void update(long elapsedTime){
+		this.elapsedTime += elapsedTime;
+		this.elapsedTime = this.elapsedTime % this.animationTime;
+		long newIndex = this.elapsedTime / this.frameTime;
+		this.index = (int) newIndex;
+	}
+
+	public String[] getSprites() {
+		return sprites;
+	}
+
+	public void setSprites(String[] sprites) {
+		this.sprites = sprites;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getxOffset() {
+		return xOffset;
+	}
+
+	public void setxOffset(int xOffset) {
+		this.xOffset = xOffset;
+	}
+
+	public int getyOffset() {
+		return yOffset;
+	}
+
+	public void setyOffset(int yOffset) {
+		this.yOffset = yOffset;
+	}
+
 	public int getImageWidth() {
 		return imageWidth;
 	}
@@ -86,87 +179,32 @@ public class Animation {
 		this.imageHeight = imageHeight;
 	}
 
-	public Animation(){
-		sprites = new String[1];
-		sprites[0] = "null"; //This may need to get changed to work correctly
-		this.length = 1;
-		this.index = 0;
-		this.xOffset = 0;
-		this.yOffset = 0;
-		this.imageWidth = 0;
-		this.imageHeight = 0;
+	public long getAnimationTime() {
+		return animationTime;
+	}
+
+	public void setAnimationTime(long animationTime) {
+		this.animationTime = animationTime;
+	}
+
+	public long getFrameTime() {
+		return frameTime;
+	}
+
+	public void setFrameTime(long frameTime) {
+		this.frameTime = frameTime;
+	}
+
+	public long getElapsedTime() {
+		return elapsedTime;
+	}
+
+	public void setElapsedTime(long elapsedTime) {
+		this.elapsedTime = elapsedTime;
 	}
 	
-	public Animation(String sprite, int xOffset, int yOffset){
-		this.sprites = new String[1];
-		this.sprites[0] = sprite;
-		this.index = 0;
-		this.length = 1;
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
-		BufferedImage img = getImage(sprite);
-		this.imageWidth = img.getWidth();
-		this.imageHeight = img.getHeight();
-	}
 	
-	// Create a new Animation using generic offsets
-	public Animation(String sprite, Offset xOff, Offset yOff){
-		this.sprites = new String[1];
-		this.sprites[0] = sprite;
-		this.index = 0;
-		this.length = 1;
-		BufferedImage img = getImage(sprite);
-		this.imageWidth = img.getWidth();
-		this.imageHeight = img.getHeight();
-		switch(xOff){
-		case CENTER: this.xOffset = imageWidth / 2; break;
-		}
-		switch(yOff){
-		case CENTER: this.yOffset = imageHeight / 2; break;
-		}
-	}
 	
-	private boolean draw(Graphics g, int x, int y){
-		int currentIndex = index;
-		index = (index + 1) % length;
-		BufferedImage image = getImage(sprites[currentIndex]);
-		int drawX = x - xOffset;
-		int drawY = y - yOffset;
-		g.drawImage(image, drawX, drawY, null);
-		return index == 0;
-	}
 	
-	public boolean draw(Graphics g, Coord coord){
-		return draw(g, (int) coord.getX(), (int) coord.getY());
-	}
-	
-	// Draw without updating the animation index
-	private void drawStatic(Graphics g, int x, int y){
-		BufferedImage image = getImage(sprites[index]);
-		int drawX = x - xOffset;
-		int drawY = y - xOffset;
-		g.drawImage(image, drawX, drawY, null);
-	}
-	
-	public void drawStatic(Graphics g, Coord coord){
-		drawStatic(g, (int) coord.getX(), (int) coord.getY());
-	}
-	
-	/* Example String
-	 * [oyster_1, oyster_2, oyster_3, oyster_4]
-	 * Length : 4
-	 * Current Index : 2 : oyster_3
-	 * Size : 128x128
-	 * Offset : 63, 63
-	 */
-	public String toString(){
-		String str = "";
-		str += Arrays.toString(sprites);
-		str += "\nLength : " + Integer.toString(length);
-		str += "\nCurrent Index : " + Integer.toString(index) + " : " + sprites[index];
-		str += "\nSize : " + Integer.toString(imageWidth) + "x" + Integer.toString(imageHeight);
-		str += "\nOffset : " + Integer.toString(xOffset) + ", " + Integer.toString(yOffset);
-		return str;
-	}
 
 }

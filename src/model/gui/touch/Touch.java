@@ -25,37 +25,47 @@ public class Touch {
 	private Coord startPosition;
 	private static Touch instance;
 	
-	private Touch(){
+	public Touch(){
 		nullObject = new DefaultTouchObject();
 		holding = nullObject;
 		isHolding = false;
 		startPosition = new Coord(0, 0);
+		instance = this;
 	}
 	
 	public static Touch getInstance(){
-		if(instance == null){
-			instance = new Touch();
-		}
 		return instance;
 	}
 	
 	public void mouseDragged(int mouseX, int mouseY){
-		this.holding.setCoord(mouseX, mouseY);
+		if(this.isHolding){
+			this.holding.setCoord(mouseX, mouseY);
+		}
 	}
 	
 	public void clamp(GridItem objectToBeClamped){
-		this.holding = objectToBeClamped;
-		this.startPosition = objectToBeClamped.getCoord();
-		this.isHolding = true;
-		System.out.println(objectToBeClamped);
+		if(this.isHolding){
+			System.out.println("Touch is already holding something");
+			System.out.println(holding);
+			throw new UnableToClampException();
+		} else {
+			this.holding = objectToBeClamped;
+			this.startPosition.setX(objectToBeClamped.getCoord().getX());
+			this.startPosition.setY(objectToBeClamped.getCoord().getY());
+			this.isHolding = true;
+		}
 		
 	}
 	
 	public GridItem unClamp(){
-		GridItem gi = holding;
-		holding = nullObject;
-		this.isHolding = false;
-		return gi;
+		if(this.isHolding){
+			GridItem gi = holding;
+			holding = nullObject;
+			this.isHolding = false;
+			return gi;
+		} else {
+			throw new ImpossibleUnclampException();
+		}
 	}
 	
 	public void draw(Graphics g){

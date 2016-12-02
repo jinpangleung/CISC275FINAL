@@ -1,67 +1,51 @@
 package model.grid;
 
-import model.drawing.Coord;
 import model.grid.gridcell.GridCell;
 import model.grid.gridcell.GridPosition;
-
+import model.gui.component.ComponentPosition;
 
 /**
  * PixelGrid
- * it helps for moveableObject, so the animation can move smoothly, instead of jumping from
- * gridcell to gridcell
- * 
- * @author Roy, Eric
+ * A class that provides a O(1) conversion from an x,y coordinate to a GridCell
+ * @author eric
  *
  */
 
 public class PixelGrid {
 	
-	public int squareWidth;
-	public int squareHeight;
-
+	private Board board;
+	private double squareWidth; // absolute
+	private double squareHeight; // absolute
+	private ComponentPosition offset;
+	private int width;
+	private int height;
+	private static PixelGrid instance;
 	
-	public PixelGrid(){
-		Grid g = Grid.getInstance();
-		int width = g.getBottomRight().getX() - g.getTopLeft().getX();
-		int height = g.getBottomRight().getY() - g.getTopLeft().getY();
-		int numSquareWidth = g.getSquareWidth();
-		int numSquareHeight = g.getSquareHeight();
-		squareWidth = width / numSquareWidth;
-		squareHeight = height / numSquareHeight;
+	public PixelGrid(Board b){
+		this.board = b;
+		this.offset = Grid.getInstance().getTopLeft();
+		this.width = Grid.getInstance().getWidth();
+		this.height = Grid.getInstance().getHeight();
+		this.squareWidth = (double) width / (double) this.board.getWidth();
+		this.squareHeight = (double) height / (double) this.board.getHeight();
+		PixelGrid.instance = this;
 	}
 	
-	public GridPosition getGridCell(int x, int y){
-		//get offset X and Y position
-				int offsetX = Grid.getInstance().getTopLeft().getX();
-				int offsetY = Grid.getInstance().getTopLeft().getY();
-				//get coord X and Y position
-				int coordX = x;
-				int coordY = y;
-				//get exact X and Y position
-				int xPos = (coordX - offsetX) / squareWidth;
-				int yPos = (coordY - offsetY) / squareHeight;
-				
-				System.out.println(Integer.toString(coordX) + " - " + Integer.toString(offsetX)
-						+ " / " + Integer.toString(squareWidth) + " = " + Integer.toString(xPos));
-				//crash program if goes out of grid
-				if(xPos >= Grid.getInstance().getSquareWidth() || xPos < 0 
-						|| yPos >= Grid.getInstance().getSquareHeight() || yPos < 0){
-					System.out.println(Integer.toString(xPos) + ", " + Integer.toString(yPos));
-					throw new OutOfGridException();
-				}
-				return new GridPosition(xPos, yPos);
+	public static PixelGrid getInstance(){
+		return PixelGrid.instance;
 	}
 	
-	public GridPosition getGridCell(Coord coord){
-		return getGridCell((int) coord.getX(), (int) coord.getY());
+	public GridPosition getGridPosition(int x, int y){
+		int gpX = (int) (((double) x - this.offset.getX()) / this.squareWidth);
+		int gpY = (int) (((double) y - this.offset.getY()) / this.squareHeight);
+		if(gpX >= board.getWidth() || gpY >= board.getHeight()){
+			throw new PixelGridOutOfBoundsExcpetion();
+		}
+		return new GridPosition(gpX, gpY);
+	}
+	
+	public GridCell getGridCell(int x, int y){
+		return this.board.getGridCell(this.getGridPosition(x, y));
 	}
 
-	
-	public Coord getValidCoord(GridPosition gp){
-		int offsetX = Grid.getInstance().getTopLeft().getX();
-		int offsetY = Grid.getInstance().getTopLeft().getY();
-		int posX = gp.getX() * squareWidth;
-		int posY = gp.getY() * squareHeight;
-		return new Coord(posX + offsetX, posY + offsetY);
-	}
 }

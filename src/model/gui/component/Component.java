@@ -33,13 +33,9 @@ public abstract class Component {
 				topLeft.getY() <= y && bottomRight.getY() >= y;
 	}
 	
-	public void mouseClicked(int mouseX, int mouseY){
-		// Do nothing
-	}
+	public abstract void mouseClicked(int mouseX, int mouseY);
 	
-	public void mouseReleased(int mouseX, int mouseY){
-		// Do nothing
-	}
+	public abstract void mouseReleased(int mouseX, int mouseY);
 
 	public ComponentPosition getTopLeft() {
 		return topLeft;
@@ -57,6 +53,15 @@ public abstract class Component {
 		this.bottomRight = bottomRight;
 	}
 	
+	public int getWidth(){
+		return (this.getBottomRight().getX() - this.getTopLeft().getX()) + 1;
+	}
+	
+	public int getHeight(){
+		return (this.getBottomRight().getY() - this.getTopLeft().getY()) + 1;
+		// TODO test
+	}
+	
 	/* Example String
 	 * Component
 	 * Top Left : (10, 10)
@@ -70,6 +75,7 @@ public abstract class Component {
 		return str;
 	}
 	
+	// Very temporary draw
 	public void draw(Graphics g){
 		g.setColor(Color.CYAN);
 		g.fillRect(this.getTopLeft().getX(), this.getTopLeft().getY(),

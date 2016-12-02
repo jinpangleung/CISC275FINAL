@@ -4,15 +4,15 @@ import java.awt.Graphics;
 
 /**
  * DrawableObject
- * Any object that can be drawn
- * Drawable object contains a Coord
+ * An Object that can be drawn
+ * A DrawableObject must have a coord and an animation
  * 
  * @see Coord
  * @author Eric
  *
  */
 
-public abstract class DrawableObject {
+public abstract class DrawableObject implements Drawable{
 	
 	protected Coord coord;
 	protected Animation animation;
@@ -26,8 +26,8 @@ public abstract class DrawableObject {
 		animation.draw(g, coord);
 	}
 	
-	public void drawStatic(Graphics g){
-		animation.drawStatic(g, coord);
+	public void update(long elapsedTime){
+		this.animation.update(elapsedTime);
 	}
 	
 	public Coord getCoord(){
@@ -46,11 +46,12 @@ public abstract class DrawableObject {
 		this.animation = animation;
 	}
 	
-	public void setCoord(int x, int y){
+	public void setCoord(double x, double y){
 		this.coord.setX(x);
 		this.coord.setY(y);
 	}
 	
+	// Checks if x,y is inside of drawable object
 	public boolean isWithin(double x, double y){
 		int halfWidth = this.getAnimation().getImageWidth() / 2;
 		int halfHeight = this.getAnimation().getImageHeight() / 2;
@@ -61,6 +62,7 @@ public abstract class DrawableObject {
 		return left <= x && right >= x && top <= y && bottom >= y;
 	}
 	
+	// Checks if Coord is inside of drawable object
 	public boolean isWithin(Coord coord){
 		return isWithin(coord.getX(), coord.getY());
 	}

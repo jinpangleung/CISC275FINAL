@@ -3,7 +3,6 @@ package model.grid.griditem;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.drawing.DrawableObject;
-import model.grid.GridColor;
 import model.grid.gridcell.GridPosition;
 
 /**
@@ -14,7 +13,7 @@ import model.grid.gridcell.GridPosition;
  *
  */
 
-public class GridItem extends DrawableObject {
+public abstract class GridItem extends DrawableObject {
 	
 	public GridItem(Coord coord, Animation animation, GridPosition gridPosition, GridColor gc) {
 		super(coord, animation);
@@ -41,9 +40,6 @@ public class GridItem extends DrawableObject {
 		this.gridColor = gc;
 	}
 
-	public void update(long elapsedTime) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void update(long elapsedTime);
 
 }

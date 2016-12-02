@@ -1,11 +1,11 @@
 package model.gui.path;
 
+import model.Time;
 import model.drawing.Coord;
 import model.grid.Grid;
 import model.grid.griditem.GridItem;
 import model.grid.griditem.trailitem.TrailItem;
 import model.gui.touch.Touch;
-import model.moving.Velocity;
 
 /*
  * A Path is used to tell a Grid Items to move from one point of the screen to another
@@ -13,10 +13,13 @@ import model.moving.Velocity;
 
 public class Path {
 	
+	private static final long TIME_TO_COMPLETE_PATH = Time.nanosecond;
+	
 	private GridItem gi;
 	private Coord destination;
 	private double speed; // separate from Grid Item's speed
-	private Velocity velocity;
+	private double angle;
+	private PathVelocity velocity;
 	private PathBehavior termination;
 	private boolean posX;
 	private boolean posY;
@@ -30,19 +33,18 @@ public class Path {
 	
 	private void initializeSpeed(){
 		Coord start = gi.getCoord();
-		Coord end = this.getDestination();
-		long desiredNanoSeconds = 4000000000L; // How many nano seconds should it take for the path to finish
-		// Currently it takes 1 second to complete a path
+		Coord end = destination;
 		double distance = Math.sqrt(Math.pow(end.getX() - start.getX(), 2) + Math.pow(end.getY() - start.getY(), 2));
-		this.speed = distance / desiredNanoSeconds;
-		double angle = Math.atan2(end.getY() - start.getY(), end.getX() - start.getX());
-		this.velocity = new Velocity(this.speed * Math.cos(angle), this.speed * Math.sin(angle));
+		this.speed = distance / TIME_TO_COMPLETE_PATH;
+		this.angle = Math.atan2(end.getY() - start.getY(), end.getX() - start.getX());
+		this.velocity = new PathVelocity(this.speed * Math.cos(angle), this.speed * Math.sin(angle));
 		this.posX = this.velocity.getX() >= 0;
 		this.posY = this.velocity.getY() >= 0;
 		
 	}
 	
-	public static void snap(){
+	
+	public static Path snap(){
 		GridItem gi = Touch.getInstance().unClamp();
 		Coord destination = Touch.getInstance().getStartPosition();
 		Path p;
@@ -51,10 +53,10 @@ public class Path {
 		} else {
 			p = new Path(gi, destination, new TowerBehavior());
 		}
-		p.initializeSpeed();
-		System.out.println(p);
 		Grid.getInstance().addPath(p);
+		return p;
 	}
+	
 	
 	@Override
 	public String toString(){
@@ -66,6 +68,15 @@ public class Path {
 		return str;
 	}
 	
+	/**
+	 * When the Grid is updating the path, the Grid must remove the Path when path.update returns true
+	 * This is the only safe way to do it
+	 * A path will not know whether or not it needs to be removed until it is update
+	 * And the Grid is what updates it
+	 * 
+	 * @param elapsedTime
+	 * @return true when path needs to be removed from Grid
+	 */
 	public boolean update(long elapsedTime){
 		double origX = gi.getCoord().getX();
 		double origY = gi.getCoord().getY();
@@ -83,7 +94,7 @@ public class Path {
 		}
 	}
 	
-	private boolean finished(){
+	public boolean finished(){
 		boolean isFinished = true;
 		if(this.posX){
 			isFinished = isFinished && gi.getCoord().getX() >= this.destination.getX();
@@ -96,10 +107,6 @@ public class Path {
 			isFinished = isFinished && gi.getCoord().getY() <= this.destination.getY();
 		}
 		return isFinished;
-	}
-	
-	private void removeFromGrid(){
-		
 	}
 	
 	public double getSpeed() {
@@ -119,6 +126,12 @@ public class Path {
 	}
 	public void setDestination(Coord destination) {
 		this.destination = destination;
+	}
+	public PathVelocity getVelocity(){
+		return this.velocity;
+	}
+	public double getAngle(){
+		return this.angle;
 	}
 
 }

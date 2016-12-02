@@ -5,9 +5,8 @@ import java.util.Collection;
 import model.*;
 import model.drawing.Animation;
 import model.drawing.Coord;
-import model.drawing.Offset;
 import model.grid.gridcell.GridPosition;
-import model.grid.GridColor;
+import model.grid.griditem.GridColor;
 import model.moving.Velocity;
 
 /**
@@ -25,8 +24,8 @@ import model.moving.Velocity;
 
 public class Larvae extends TrailItem{
 
-	public Larvae() {
-		super(new Coord(0,0), new Animation("larvae", Offset.CENTER, Offset.CENTER), new GridPosition(0,0), new Velocity(0, 0.01),  GridColor.WHITE);
+	public Larvae(Coord c) {
+		super(c, new Animation("larvae"), new GridPosition(0,0), new Velocity(0, 0.01),  GridColor.WHITE);
 	}
 
 }

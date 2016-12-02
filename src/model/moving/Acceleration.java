@@ -1,5 +1,7 @@
 package model.moving;
 
+import model.OrderedPair;
+
 /**
  * Acceleration
  * Pair of x, y that dictates acceleration
@@ -10,37 +12,9 @@ package model.moving;
  *
  */
 
-public class Acceleration {
-	
-	private double x;
-	private double y;
+public class Acceleration extends OrderedPair<Double> {
 	
 	public Acceleration(double x, double y){
-	    this.x = x;
-	    this.y = y;
+	    super(x, y);
 	}
-	
-	public double getX() {
-		return x;
-	}
-	public void setX(double x) {
-		this.x = x;
-	}
-	public double getY() {
-		return y;
-	}
-	public void setY(double y) {
-		this.y = y;
-	}
-	
-	public String toString(){
-		String str = "";
-		str += "(";
-		str += Double.toString(x);
-		str += ", ";
-		str += Double.toString(y);
-		str += ")";
-		return str;
-	}
-
 }

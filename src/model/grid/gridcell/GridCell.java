@@ -1,51 +1,60 @@
 package model.grid.gridcell;
 
-import model.grid.Grid;
-import model.grid.griditem.GridItem;
-import model.grid.griditem.gabion.Gabion;
-import model.grid.griditem.towers.Tower;
-import model.grid.griditem.trailitem.TrailItem;
-import model.gui.path.BackToGridBehavior;
-import model.gui.path.Path;
-import model.gui.path.TowerBehavior;
-import model.gui.touch.Touch;
-
+import model.Time;
 
 /**
  * GridCell
- * GridCell is part of the grid that the game is going to be played on
- * It handles the placing of towers ad gabions from the inventory
- * It also let us know which GriCell each item is on, even when drawable object moved in terms of 
- * PixelGrid
  * 
  * @author Eric
  *
  */
 
-
-// A spot on the underlying Grid of the game
-// Mostly controls direction of the water flowing
 public class GridCell {
 	
 	private GridPosition gridPosition;
-	private boolean isTrail;
-	//public boolean isLand;
 	private Direction direction;
-	private boolean forGabion = false;
+	private boolean isTrail;
+	private boolean canPlaceTower;
+	private boolean canPlaceGabion;
 	
-	public GridCell(GridPosition g, boolean isT, Direction d){//boolean isL
-		this.gridPosition = g;
-		this.isTrail = isT;
-		//this.isLand = isL; probably dont need this, if its not the trail then its the land.
-		this.direction = d;
+	public GridCell(GridPosition gp, Direction dir, boolean isTrail, boolean tower, boolean gabion){
+		this.gridPosition = gp;
+		this.direction = dir;
+		this.isTrail = isTrail;
+		this.canPlaceTower = tower;
+		this.canPlaceGabion = gabion;
 	}
-
-	public Direction getDirection() {
-		return direction;
+	
+	private static final double ACCELERATION = 1; // how much to accelerate every second, by pixel
+	public static final double ACCELERATION_BY_NANOSECOND = ACCELERATION / Time.nanosecond;
+	
+	private static Acceleration[] accelerationByDirection;
+	
+	// GridCell must be statically initialized
+	public static void initialize(){
+		double diagonalAcceleration = ACCELERATION_BY_NANOSECOND * Math.cos(Math.toRadians(45));
+		
+		accelerationByDirection = new Acceleration[8];
+		accelerationByDirection[Direction.NORTH.ordinal()] = 
+				new Acceleration(0, -ACCELERATION_BY_NANOSECOND);
+		accelerationByDirection[Direction.EAST.ordinal()] = 
+				new Acceleration(ACCELERATION_BY_NANOSECOND, 0);
+		accelerationByDirection[Direction.SOUTH.ordinal()] = 
+				new Acceleration(0, ACCELERATION_BY_NANOSECOND);
+		accelerationByDirection[Direction.WEST.ordinal()] = 
+				new Acceleration(-ACCELERATION_BY_NANOSECOND, 0);
+		accelerationByDirection[Direction.NORTHEAST.ordinal()] = 
+				new Acceleration(diagonalAcceleration, -diagonalAcceleration);
+		accelerationByDirection[Direction.NORTHWEST.ordinal()] = 
+				new Acceleration(-diagonalAcceleration, -diagonalAcceleration);
+		accelerationByDirection[Direction.SOUTHEAST.ordinal()] = 
+				new Acceleration(diagonalAcceleration, diagonalAcceleration);
+		accelerationByDirection[Direction.SOUTHWEST.ordinal()] = 
+				new Acceleration(-diagonalAcceleration, diagonalAcceleration);
 	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
+	
+	public Acceleration getAcceleration(){
+		return accelerationByDirection[this.direction.ordinal()];
 	}
 
 	public GridPosition getGridPosition() {
@@ -56,6 +65,14 @@ public class GridCell {
 		this.gridPosition = gridPosition;
 	}
 
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+
 	public boolean isTrail() {
 		return isTrail;
 	}
@@ -64,64 +81,20 @@ public class GridCell {
 		this.isTrail = isTrail;
 	}
 
-//	public boolean isLand() {
-//		return isLand;
-//	}
-//
-//	public void setLand(boolean isLand) {
-//		this.isLand = isLand;
-//	}
-	public String toString(){
-		String str = "";
-		switch(direction){
-		case NORTH: str += "North"; break;
-		case EAST: str += "South"; break;
-		case WEST: str += "West"; break;
-		case SOUTH: str += "South"; break;
-		case SOUTHEAST: str += "South East"; break;
-		case SOUTHWEST: str += "South West"; break;
-		case NORTHEAST: str += "North East"; break;
-		case NORTHWEST: str += "North West"; break;
-		default: str += "Something is wrong with direction..."; break;
-		}
-		return str;
+	public boolean isCanPlaceTower() {
+		return canPlaceTower;
 	}
-	
-	public void release(int mouseX, int mouseY){
-		GridItem gi = Touch.getInstance().getHolding();
-		System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-		System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-		System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-		System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-		System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-		System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-		if(gi instanceof TrailItem){
-			System.out.println("AAAAAAAAAAAAA\nAAAAAAAAAAAAAA\nAAAAAAAAAAAAA");
-			Path.snap();
-		} else if (gi instanceof Tower){
-			makeAnHonestAttemptToPlaceTheTower((Tower) gi);
-		} else if (gi instanceof Gabion){
-			makeAnHonestAttemptToPlaceTheGabion((Gabion) gi);
-		}
+
+	public void setCanPlaceTower(boolean canPlaceTower) {
+		this.canPlaceTower = canPlaceTower;
 	}
-	
-	public void makeAnHonestAttemptToPlaceTheTower(Tower t){
-		if(forGabion){
-			Path.snap();
-			return;
-		}
-		if(Grid.getInstance().hasTower(this.gridPosition)){
-			Path.snap();
-			return;
-		}
-		Grid.getInstance().addTower(t);
-		Touch.getInstance().unClamp();
-		
+
+	public boolean isCanPlaceGabion() {
+		return canPlaceGabion;
 	}
-	
-	public void makeAnHonestAttemptToPlaceTheGabion(Gabion g){
-				Grid.getInstance().addGabion(g);
-				Touch.getInstance().unClamp();
+
+	public void setCanPlaceGabion(boolean canPlaceGabion) {
+		this.canPlaceGabion = canPlaceGabion;
 	}
 
 }

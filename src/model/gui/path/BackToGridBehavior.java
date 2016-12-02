@@ -1,7 +1,6 @@
 package model.gui.path;
 
 import model.grid.Grid;
-import model.grid.griditem.trailitem.TrailItem;
 
 /**
  * BackToGridBehavior
@@ -14,7 +13,7 @@ import model.grid.griditem.trailitem.TrailItem;
 public class BackToGridBehavior implements PathBehavior {
 	
 	public void terminate(Path p){
-		Grid.getInstance().addTrailItem((TrailItem) p.getGridItem());
+		Grid.getInstance().addItem(p.getGridItem());
 	}
 
 }

@@ -2,8 +2,9 @@ package model.inventory;
 
 import java.awt.Graphics;
 
-import model.grid.GridColor;
-import model.grid.griditem.gabion.GabionType;
+import model.grid.griditem.GridItem;
+import model.grid.griditem.gabion.*;
+import model.grid.griditem.tower.*;
 import model.gui.component.ComponentPosition;
 import model.inventory.factory.*;
 
@@ -27,14 +28,11 @@ public class Inventory {
 	public static final double FACTORY_X_START = .85;
 	public static final double FACTORY_SIZE = .05;
 	
-	private Inventory(){
+	public Inventory(){
+		instance = this;
 	}
 	
 	public static Inventory getInstance(){
-		if(instance == null){
-			instance = new Inventory();
-		}
-		
 		return instance;
 	}
 	
@@ -56,23 +54,6 @@ public class Inventory {
 				(int) (screenWidth * FACTORY_SIZE), (int) (screenHeight * FACTORY_SIZE));
 	}
 	
-	public TowerFactory getTowerFactory(GridColor gc){
-		switch(gc){
-		case RED: return rtf;
-		case BLUE: return btf;
-		case GREEN: return gtf;
-		default: throw new RuntimeException();
-		}
-	}
-	
-	public TowerFactory getGabionFactory(GabionType gt){
-		switch(gt){
-		case CONCRETE: return cgf;
-		case OYSTER: return ogf;
-		default: throw new RuntimeException();
-		}
-	}
-	
 	public void draw(Graphics g){
 		rtf.draw(g);
 		btf.draw(g);
@@ -80,5 +61,43 @@ public class Inventory {
 		cgf.draw(g);
 		ogf.draw(g);
 	}
+	
+	public void replaceTower(GridItem gi){
+		if(gi instanceof RedTower){
+			rtf.replaceTower();
+		} else if(gi instanceof BlueTower){
+			btf.replaceTower();
+		} else if(gi instanceof GreenTower){
+			gtf.replaceTower();
+		} else if(gi instanceof OysterGabion){
+			ogf.replaceTower();
+		} else if(gi instanceof ConcreteGabion){
+			cgf.replaceTower();
+		} else {
+			throw new TriedToAddATrailItemToTowerFactoryException();
+		}
+	}
+
+	public RedTowerFactory getRtf() {
+		return rtf;
+	}
+
+	public BlueTowerFactory getBtf() {
+		return btf;
+	}
+
+	public GreenTowerFactory getGtf() {
+		return gtf;
+	}
+
+	public ConcreteGabionFactory getCgf() {
+		return cgf;
+	}
+
+	public OysterGabionFactory getOgf() {
+		return ogf;
+	}
+	
+	
 
 }

@@ -4,7 +4,7 @@ import model.drawing.Animation;
 import model.drawing.Coord;
 import model.drawing.DrawableObject;
 import model.grid.Grid;
-import model.grid.GridColor;
+import model.grid.griditem.GridColor;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridItem;
 
@@ -18,7 +18,7 @@ import model.grid.griditem.GridItem;
  *
  */
 
-public abstract class MovableObject extends GridItem {
+public abstract class MovableObject extends GridItem implements Movable {
 
 	public MovableObject(Coord coord, Animation animation, GridPosition gridPosition, GridColor gc, Velocity velocity) {
 		super(coord, animation, gridPosition, gc);
@@ -26,9 +26,11 @@ public abstract class MovableObject extends GridItem {
 	}
 
 	private Velocity velocity;
-	final double MAXVELOCITY = Grid.getInstance().getWidthByHeight()/50;
+	//final double MAXVELOCITY = Grid.getInstance().getWidthByHeight()/50;
+	
 	
 	public void move(long elapsedTime){
+		/*
 		// Get Acceleration
 		Acceleration a = Grid.getInstance().getAcceleration(this.getGridPosition(), elapsedTime);
 		//double vx = this.getVelocity().getX() + (a.getX() *0.0005);
@@ -70,6 +72,7 @@ public abstract class MovableObject extends GridItem {
 		//get coor position for checking pixel
 		//GridPosition gridPos = Grid.getGridPosition(coord);
 		//this.setGridPosition(Grid.getInstance().getGridPosition(this.getCoord()));
+		
 		
 		
 	}
