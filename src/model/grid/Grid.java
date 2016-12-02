@@ -33,9 +33,12 @@ public class Grid extends Component {
 		gabions = new ArrayList<Gabion>();
 		towers = new ArrayList<Tower>();
 		trailItems = new ArrayList<TrailItem>();
+		board = new Board("grid.txt");
+		pixelGrid = new PixelGrid(board);
 		Animation.initialize();
 		new Touch();
 		instance = this;
+		
 	}
 	
 	public Grid(int x, int y, int w, int l){
@@ -48,6 +51,8 @@ public class Grid extends Component {
 	private Collection<Tower> towers;
 	private Collection<Path> paths;
 	private static Grid instance;
+	private static Board board;
+	private static PixelGrid pixelGrid;
 	
 	public static Grid getInstance(){
 		return instance;
@@ -289,5 +294,13 @@ public class Grid extends Component {
 
 	public void setTowers(Collection<Tower> towers) {
 		this.towers = towers;
+	}
+	
+	public Board getBoard(){
+		return board;
+	}
+	
+	public PixelGrid getPixelGrid(){
+		return pixelGrid;
 	}
 }

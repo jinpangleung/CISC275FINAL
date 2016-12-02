@@ -41,8 +41,6 @@ public class Model {
 		// Initialize component mapping
 		defaultComponent = new DefaultComponent(0, 0, screenWidth, screenHeight);
 		componentMapping = new ComponentMapping(defaultComponent, screenWidth, screenHeight);
-		// Initialize Animation
-		Animation.initialize();
 		// Initialize Touch
 		touch = new Touch();
 		// Initialize Grid component
