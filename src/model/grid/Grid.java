@@ -138,7 +138,7 @@ public class Grid extends Component {
 		throw new PathNotFoundException();
 	}
 
-	//@Override
+	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		Iterator<TrailItem> it = trailItems.iterator();
 		while(it.hasNext()){
@@ -152,7 +152,7 @@ public class Grid extends Component {
 		}
 	}
 
-	//@Override
+	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		if(!Touch.getInstance().isHolding()){
 			return;
@@ -241,7 +241,7 @@ public class Grid extends Component {
 		}
 	}
 	
-	//@Override
+	@Override
 		public void draw(Graphics g){
 			g.setColor(Color.CYAN);
 			g.fillRect(this.getTopLeft().getX(), this.getTopLeft().getY(),

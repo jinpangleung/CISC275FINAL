@@ -10,13 +10,13 @@ public class DefaultComponent extends Component {
 		this(new ComponentPosition(x, y), width, height);
 	}
 
-	//@Override
+	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		// Ignore mouse clicks
 		
 	}
 
-	//@Override
+	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		// Should snap

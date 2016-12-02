@@ -56,5 +56,15 @@ public class PixelGrid {
 	public GridCell getGridCell(int x, int y){
 		return this.board.getGridCell(this.getGridPosition(x, y));
 	}
+	
+	/**
+	 * Returns the GridCell corresponding to the given GridPosition. Method
+	 * is included to give clients access to specific GridCells.
+	 * @param pos a GridPosition corresponding to the GridCell the client wishes to get.
+	 * @author Gifan Thadathil
+	 */
+	public GridCell getGridCell(GridPosition pos){
+		return this.board.getGridCell(pos);
+	}
 
 }
