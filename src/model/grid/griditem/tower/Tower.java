@@ -101,7 +101,7 @@ public abstract class Tower extends GridItem {
 		}
 	}
 	
-	@Override
+	//@Override
 	public void update(long elapsedTime){
 		if(cooldownRemaining > 0){
 			cooldownRemaining -= elapsedTime;

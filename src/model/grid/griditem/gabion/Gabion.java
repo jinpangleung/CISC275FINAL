@@ -35,7 +35,7 @@ public abstract class Gabion extends GridItem {
 		this.health -= 10;
 	}
 	
-	@Override
+	//@Override
 	public void update(long elapsedTime) {
 		// TODO Auto-generated method stub
 		

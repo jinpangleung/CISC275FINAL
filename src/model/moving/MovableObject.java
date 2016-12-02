@@ -99,7 +99,7 @@ public abstract class MovableObject extends GridItem implements Movable {
 		this.velocity = velocity;
 	}
 	
-	@Override
+	//@Override
 	public void update(long timeElapsed){
 		//System.out.println(this);
 		move(timeElapsed);
