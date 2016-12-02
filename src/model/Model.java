@@ -24,6 +24,9 @@ public class Model {
 	private Touch touch;
 	private Grid grid;
 	private Inventory inventory;
+	private static Model instance;
+	private int screenWidth;
+	private int screenHeight;
 	
 	public static final double GRID_HEIGHT = .8;
 	public static final double GRID_WIDTH = .7;
@@ -33,6 +36,8 @@ public class Model {
 	
 	public void initialize(int screenWidth, int screenHeight){
 		System.out.println("\tModel is being initialized");
+		this.screenHeight = screenHeight;
+		this.screenWidth = screenWidth;
 		// Initialize component mapping
 		defaultComponent = new DefaultComponent(0, 0, screenWidth, screenHeight);
 		componentMapping = new ComponentMapping(defaultComponent, screenWidth, screenHeight);
@@ -54,7 +59,21 @@ public class Model {
 		this.componentMapping.addComponent(inventory.getCgf());
 		this.componentMapping.addComponent(inventory.getOgf());
 		
+		Model.instance = this;
+		
 		System.out.println("\tModel has been initialized");
+	}
+	
+	public static Model getInstance(){
+		return Model.instance;
+	}
+	
+	public int getScreenWidth(){
+		return this.screenWidth;
+	}
+	
+	public int getScreenHeight(){
+		return this.screenHeight;
 	}
 	
 	public void update(long timeElapsed){

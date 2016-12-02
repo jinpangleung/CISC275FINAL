@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.*;
 
 import model.drawing.Animation;
+import model.grid.gridcell.GridCell;
 import model.grid.griditem.GridItem;
 import model.grid.griditem.gabion.Gabion;
 import model.grid.griditem.tower.Tower;
@@ -172,11 +173,39 @@ public class Grid extends Component {
 	}
 	
 	public void placeTower(int x, int y){
-		// TODO
+		
+		GridCell gc = PixelGrid.getInstance().getGridCell(x, y);
+		if(!gc.isCanPlaceTower()){
+			Path.snap();
+			return;
+		}
+		for(Tower t : towers){
+			if(t.getGridPosition().equals(gc.getGridPosition())){
+				Path.snap();
+				return;
+			}
+		}
+		
+		GridItem tower = Touch.getInstance().unClamp();
+		this.addItem(tower);
+		
 	}
 	
 	public void placeGabion(int x, int y){
-		// TODO
+		GridCell gc = PixelGrid.getInstance().getGridCell(x, y);
+		if(!gc.isCanPlaceGabion()){
+			Path.snap();
+			return;
+		}
+		for(Gabion t : gabions){
+			if(t.getGridPosition().equals(gc.getGridPosition())){
+				Path.snap();
+				return;
+			}
+		}
+		
+		GridItem gabion = Touch.getInstance().unClamp();
+		this.addItem(gabion);
 	}
 	
 	public void update(long timeElapsed){
@@ -261,7 +290,4 @@ public class Grid extends Component {
 	public void setTowers(Collection<Tower> towers) {
 		this.towers = towers;
 	}
-	
-	
-
 }

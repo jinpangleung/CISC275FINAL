@@ -35,6 +35,15 @@ public class PixelGrid {
 		return PixelGrid.instance;
 	}
 	
+	public double getPixelWidth(){
+		return this.squareWidth;
+	}
+	
+	public double getPixelHeight(){
+		return this.squareHeight;
+	}
+	
+	
 	public GridPosition getGridPosition(int x, int y){
 		int gpX = (int) (((double) x - this.offset.getX()) / this.squareWidth);
 		int gpY = (int) (((double) y - this.offset.getY()) / this.squareHeight);

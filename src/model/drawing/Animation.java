@@ -1,6 +1,8 @@
 package model.drawing;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +10,9 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import model.Model;
 import model.Time;
+import model.grid.PixelGrid;
 
 /**
  * Animation
@@ -42,14 +46,86 @@ public class Animation {
 		}
 	}
 	
-	/**
-	 * initialize
-	 * Load all images into image library
-	 */
+	private static void insertScreenImage(String fileName, String imageName){
+		BufferedImage img = null;
+		try {
+			double x = Model.getInstance().getScreenWidth();
+			double y = Model.getInstance().getScreenHeight();
+		    img = ImageIO.read(new File(fileName));
+		    imageLibrary.put(imageName, resize(img, (int) x, (int) y));
+		} catch (IOException e) {
+			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
+			imageLibrary.put(imageName, null);
+		}
+	}
+	
+	private static void insertTowerImage(String fileName, String imageName){
+		BufferedImage img = null;
+		//get grid cell size, call it x and y
+		double x = PixelGrid.getInstance().getPixelWidth();
+		double y = PixelGrid.getInstance().getPixelHeight();
+		try {
+		    img = ImageIO.read(new File(fileName));
+		    imageLibrary.put(imageName, resize(img, (int) x, (int) y));
+		} catch (IOException e) {
+			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
+			imageLibrary.put(imageName, null);
+		}
+	}
+	
+	
+	private static void insertTrailItemImage(String fileName, String imageName){
+		BufferedImage img = null;
+		//get grid cell size, call it x and y
+		double x = PixelGrid.getInstance().getPixelWidth();
+		double y = PixelGrid.getInstance().getPixelHeight();
+		x = x*0.7;
+		y = y*0.7;
+		try {
+		    img = ImageIO.read(new File(fileName));
+		    imageLibrary.put(imageName, resize(img, (int) x, (int) y));
+		} catch (IOException e) {
+			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
+			imageLibrary.put(imageName, null);
+		}
+	}
+
+
+	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
+	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+	    Graphics2D g2d = dimg.createGraphics();
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+
+	    return dimg;
+	} 
+	
 	public static void initialize(){
-		imageLibrary = new HashMap<String, BufferedImage>();
-		// Load all required images
-		insertImage("images/null.png", "null");
+		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
+		insertImage("images/EH1.png", "EH1");
+		insertImage("images/EH2.png", "EH2");
+		insertImage("images/EH3.png", "EH3");
+		insertImage("images/EH4.png", "EH4");
+		insertTowerImage("images/Fisherman.png", "Fisherman");
+		insertImage("images/Losing Screen.png", "LosingScreen");
+		insertTowerImage("images/OysterGabion.png", "OysterGabion");
+		insertImage("images/Rain.png", "rain");
+		insertImage("images/Storm.png", "storm");
+		insertScreenImage("images/background.png", "background");
+		insertTrailItemImage("images/invasive_item.png", "invasive_item");
+		insertTrailItemImage("images/invasive_item_tower.png", "invasive_item_tower");
+		insertTrailItemImage("images/larvae.png", "larvae");
+		insertTrailItemImage("images/oyster.png", "oyster");
+		insertTowerImage("images/oyster_tower.png", "oyster_tower");
+		insertTrailItemImage("images/pollutant1.png", "pollutant1");
+		insertTrailItemImage("images/pollutant2.png", "pollutant2");
+		insertTrailItemImage("images/pollutant3.png", "pollutant3");
+		insertTrailItemImage("images/pollutant4.png", "pollutant4");
+		insertTowerImage("images/pollutant_tower.png", "pollutant_tower");
+		insertImage("images/bcg.png", "bcg");
+		
 	}
 	
 	/**
@@ -202,9 +278,4 @@ public class Animation {
 	public void setElapsedTime(long elapsedTime) {
 		this.elapsedTime = elapsedTime;
 	}
-	
-	
-	
-	
-
 }

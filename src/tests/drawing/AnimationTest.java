@@ -1,35 +1,52 @@
 package tests.drawing;
 
 import static org.junit.Assert.*;
+
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.junit.Test;
-import model.drawing.Animation;
 
 public class AnimationTest {
-	
+
 	@Test
-	public void testUpdate(){
-		Animation.initialize();
-		Animation a1 = new Animation("null");
-		assertEquals(a1.getImageWidth(), 100);
-		assertEquals(a1.getImageHeight(), 100);
-		assertEquals(a1.getxOffset(), 50);
-		assertEquals(a1.getyOffset(), 50);
-		assertEquals(a1.getAnimationTime(), 33333333L);
-		assertEquals(a1.getFrameTime(), 33333333L);
-		assertEquals(a1.getElapsedTime(), 0);
-		assertEquals(a1.getIndex(), 0);
-		
-		a1.update(33333332L);
-		assertEquals(a1.getAnimationTime(), 33333333L);
-		assertEquals(a1.getFrameTime(), 33333333L);
-		assertEquals(a1.getElapsedTime(), 33333332L);
-		assertEquals(a1.getIndex(), 0);
-		
-		a1.update(1L);
-		assertEquals(a1.getAnimationTime(), 33333333L);
-		assertEquals(a1.getFrameTime(), 33333333L);
-		assertEquals(a1.getElapsedTime(), 0L);
-		assertEquals(a1.getIndex(), 0);
+	public void test() {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File("images/EH1.png"));
+		} catch (IOException e) {
+			System.out.println(" failed");
+		}
+		int originalWidth = img.getWidth();
+		int originalHeight = img.getHeight();
+		System.out.println(originalWidth);
+		System.out.println(originalHeight);
+		BufferedImage newImg = resize(img, 1, 1);
+		System.out.println(newImg.getWidth());
+		System.out.println(newImg.getHeight());
+		assertEqual(1, newImg.getWidth(), 1);
+		assertEqual(1, newImg.getHeight(), 1);
 	}
+	
+	private void assertEqual(int i, int width, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
+	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+	    Graphics2D g2d = dimg.createGraphics();
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+
+	    return dimg;
+	} 
 
 }
