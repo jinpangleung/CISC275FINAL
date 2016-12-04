@@ -150,7 +150,7 @@ public class Grid extends Component {
 		throw new PathNotFoundException();
 	}
 
-	//@Override
+	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		Iterator<TrailItem> it = trailItems.iterator();
 		while(it.hasNext()){
@@ -164,7 +164,7 @@ public class Grid extends Component {
 		}
 	}
 
-	//@Override
+	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		if(!Touch.getInstance().isHolding()){
 			return;
@@ -196,14 +196,17 @@ public class Grid extends Component {
 			Path.snap();
 			return;
 		}
+		
+		Tower tower = (Tower) Touch.getInstance().getHolding();
+		
 		for(Tower t : towers){
-			if(t.getGridPosition().equals(gc.getGridPosition())){
+			if(tower.isInRange(t.getCoord())){
 				Path.snap();
 				return;
 			}
 		}
 		
-		GridItem tower = Touch.getInstance().unClamp();
+		Touch.getInstance().unClamp();
 		this.addItem(tower);
 		
 	}
@@ -246,7 +249,7 @@ public class Grid extends Component {
 		}
 	}
 	
-	//@Override
+	@Override
 	public void draw(Graphics g){
 		super.draw(g);
 		for(GridItem gi : items){

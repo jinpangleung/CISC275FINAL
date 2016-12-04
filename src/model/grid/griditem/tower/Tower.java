@@ -1,5 +1,8 @@
 package model.grid.griditem.tower;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.gridcell.GridPosition;
@@ -28,11 +31,15 @@ public abstract class Tower extends GridItem {
 	
 	protected static int range;
 	
-	private static final double RANGE_PERCENT = 0.2; // percent of screen width the range should be
+	private static final double RANGE_PERCENT = 0.1; // percent of screen width the range should be
 	
-	public Tower(Coord coord, Animation animation, GridPosition gp, GridColor gc) {
+	protected Color color;
+	private static final int OPACITY = 100;
+	
+	public Tower(Coord coord, Animation animation, GridPosition gp, GridColor gc, Color c) {
 		super(coord, animation, gp, gc);
 		cooldownRemaining = 10;
+		this.color = c;
 	}
 	
 	public static void initialize(int screenWidth, int screenHeight){
@@ -54,8 +61,8 @@ public abstract class Tower extends GridItem {
 	}
 	
 	public boolean isInRange(Coord cd){
-		return Tower.getRange() <= Math.sqrt(Math.pow(cd.getX() + this.getCoord().getX(), 2) +
-											Math.pow(cd.getY() + this.getCoord().getY(), 2));
+		return Tower.getRange() >= Math.sqrt(Math.pow(cd.getX() - this.getCoord().getX(), 2) +
+											Math.pow(cd.getY() - this.getCoord().getY(), 2));
 	}
 	
 	public String toString(){
@@ -101,11 +108,30 @@ public abstract class Tower extends GridItem {
 		}
 	}
 	
-	//@Override
+	@Override
 	public boolean update(long elapsedTime){
 		if(cooldownRemaining > 0){
 			cooldownRemaining -= elapsedTime;
 		}
 		return false;
+	}
+	
+	protected static int getOpacity(){
+		return Tower.OPACITY;
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		if(Touch.getInstance().isHolding()){
+				if(Touch.getInstance().getHolding().equals(this)){
+					g.setColor(this.color);
+					g.fillOval(this.getCoord().getX().intValue() - range, this.getCoord().getY().intValue() - range, 
+							range*2, range*2);
+				}
+		}
+		g.setColor(Color.RED);
+		g.drawOval(this.getCoord().getX().intValue() - range, this.getCoord().getY().intValue() - range, 
+				range*2, range*2);
+		super.draw(g);
 	}
 }

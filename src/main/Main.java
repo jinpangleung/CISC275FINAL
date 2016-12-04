@@ -8,6 +8,7 @@ import view.View;
  * Main
  * Calls main method
  * @author Eric
+ *
  */
 
 public class Main {
@@ -29,8 +30,7 @@ public class Main {
 		long minimumTime = 10000000; // 1/100 seconds
 			
 		long previousTime = System.nanoTime();
-		int alpha = 0;
-    	while(alpha > 2){
+    	while(true){
     		long currentTime = System.nanoTime();
     		long elapsedTime = currentTime - previousTime;
     		previousTime = currentTime;
@@ -44,7 +44,6 @@ public class Main {
     				
     			}
     		}
-    		alpha++;
     	}
 	}
 }

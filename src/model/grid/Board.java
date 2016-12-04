@@ -67,7 +67,7 @@ public class Board {
 		    		gridCells[j][i] = gg;
 		    	}
 		    }
-		    for (int k = 0; k < height; k++){
+		    for (int k = 0; k < width; k++){
 		    	String st = lines.get(0);
 		    	char h = st.charAt(k);
 		    	GridCell gc = makeGridCell(h, k, 0);

@@ -71,6 +71,8 @@ public class Touch {
 	public void draw(Graphics g){
 		if(isHolding){
 			holding.draw(g);
+		} else {
+			g.fillRect(0, 0, 100, 100);
 		}
 	}
 	

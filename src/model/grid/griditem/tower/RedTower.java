@@ -1,5 +1,7 @@
 package model.grid.griditem.tower;
 
+import java.awt.Color;
+
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
@@ -25,7 +27,8 @@ import model.grid.gridcell.GridPosition;
 public class RedTower extends Tower {
 
 	public RedTower(Coord coord){
-		super(coord, new Animation("pollutant_tower"), new GridPosition(0, 0), GridColor.RED);
+		super(coord, new Animation("pollutant_tower"), new GridPosition(0, 0), GridColor.RED, 
+				new Color(255, 0, 0, getOpacity()));
 	}
 	
 	//@Override

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import model.drawing.Animation;
 import model.grid.Grid;
+import model.grid.griditem.tower.Tower;
 import model.gui.component.*;
 import model.gui.touch.Touch;
 import model.inventory.Inventory;
@@ -57,6 +58,8 @@ public class Model {
 		this.componentMapping.addComponent(inventory.getGtf());
 		this.componentMapping.addComponent(inventory.getCgf());
 		this.componentMapping.addComponent(inventory.getOgf());
+		
+		Tower.initialize(screenWidth, screenHeight);
 		
 		Model.instance = this;
 		

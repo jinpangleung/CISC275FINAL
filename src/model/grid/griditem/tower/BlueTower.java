@@ -1,5 +1,7 @@
 package model.grid.griditem.tower;
 
+import java.awt.Color;
+
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
@@ -20,6 +22,7 @@ import model.grid.gridcell.GridPosition;
 public class BlueTower extends Tower{
 	
 	public BlueTower(Coord coord){
-		super(coord, new Animation("oyster_tower"), new GridPosition(0, 0), GridColor.BLUE);
+		super(coord, new Animation("oyster_tower"), new GridPosition(0, 0), GridColor.BLUE,
+				new Color(0, 0, 255, getOpacity()));
 	}
 }
