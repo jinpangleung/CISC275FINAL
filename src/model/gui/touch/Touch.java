@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import model.drawing.DrawableObject;
 import model.grid.griditem.GridItem;
+import model.grid.griditem.tower.Tower;
 import model.drawing.Coord;
 
 /**

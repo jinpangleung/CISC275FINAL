@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import model.drawing.Animation;
 import model.drawing.Coord;
+import model.grid.Grid;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridColor;
 import model.grid.griditem.GridItem;
@@ -129,9 +130,19 @@ public abstract class Tower extends GridItem {
 							range*2, range*2);
 				}
 		}
-		g.setColor(Color.RED);
-		g.drawOval(this.getCoord().getX().intValue() - range, this.getCoord().getY().intValue() - range, 
-				range*2, range*2);
+		if(!snapping){
+			
+			switch(getGridColor()){
+			case RED: g.setColor(Color.RED); break;
+			case BLUE: g.setColor(Color.BLUE); break;
+			case GREEN: g.setColor(Color.GREEN); break;
+			default: g.setColor(Color.WHITE); System.out.println("THERE'S NO COLOR"); break;
+			}
+			
+			
+			g.drawOval(this.getCoord().getX().intValue() - range, this.getCoord().getY().intValue() - range, 
+					range*2, range*2);
+		}
 		super.draw(g);
 	}
 }

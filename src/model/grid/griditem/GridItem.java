@@ -24,6 +24,8 @@ public abstract class GridItem extends DrawableObject {
 	protected GridPosition gridPosition;
 	protected GridColor gridColor;
 	
+	public boolean snapping = false;
+	
 	public GridPosition getGridPosition(){
 		return gridPosition;
 	}

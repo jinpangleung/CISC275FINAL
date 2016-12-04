@@ -4,6 +4,7 @@ import model.Time;
 import model.drawing.Coord;
 import model.grid.Grid;
 import model.grid.griditem.GridItem;
+import model.grid.griditem.tower.Tower;
 import model.grid.griditem.trailitem.TrailItem;
 import model.gui.touch.Touch;
 
@@ -51,6 +52,7 @@ public class Path {
 		if(gi instanceof TrailItem){
 			p = new Path(gi, destination, new BackToGridBehavior());
 		} else {
+			gi.snapping = true;
 			p = new Path(gi, destination, new TowerBehavior());
 		}
 		Grid.getInstance().addPath(p);
