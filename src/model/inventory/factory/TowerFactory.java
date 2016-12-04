@@ -28,10 +28,10 @@ public abstract class TowerFactory extends Component {
 		this(new ComponentPosition(x, y), width, height);
 	}
 	
-	//@Override
+	@Override
 	public abstract void mouseClicked(int mouseX, int mouseY);
 	
-	//@Override
+	@Override
 	public void mouseReleased(int mouseX, int mouseY){
 		if(Touch.getInstance().isHolding()){
 			Path.snap();

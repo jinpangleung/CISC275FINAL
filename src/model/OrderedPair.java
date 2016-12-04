@@ -26,7 +26,7 @@ public abstract class OrderedPair<T> {
 		this.y = y;
 	}
 	
-	//@Override
+	@Override
 	public boolean equals(Object o){
 		if(this.getClass() != o.getClass()){
 			return false;

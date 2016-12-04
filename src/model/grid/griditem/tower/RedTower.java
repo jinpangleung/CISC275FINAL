@@ -28,7 +28,7 @@ public class RedTower extends Tower {
 		super(coord, new Animation("pollutant_tower"), new GridPosition(0, 0), GridColor.RED);
 	}
 	
-	//@Override
+	@Override
 	public void release(int mouseX, int mouseY){
 		if(Touch.getInstance().isHolding()){
 			GridItem gi = Touch.getInstance().unClamp();

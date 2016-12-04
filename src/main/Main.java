@@ -8,7 +8,6 @@ import view.View;
  * Main
  * Calls main method
  * @author Eric
- *
  */
 
 public class Main {

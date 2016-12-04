@@ -22,7 +22,7 @@ public class BlueTowerFactory extends TowerFactory {
 		this(new ComponentPosition(x, y), width, height);
 	}
 	
-	//@Override
+	@Override
 	public void mouseClicked(int mouseX, int mouseY){
 		// If applicable, clamp new tower to touch
 		if(getCurrency() >= getCostPer()){
