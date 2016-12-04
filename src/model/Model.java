@@ -58,7 +58,7 @@ public class Model {
 		this.componentMapping.addComponent(inventory.getCgf());
 		this.componentMapping.addComponent(inventory.getOgf());
 		
-		
+		Model.instance = this;
 		
 		System.out.println("\tModel has been initialized");
 	}
@@ -80,6 +80,7 @@ public class Model {
 	}
 	
 	public void draw(Graphics g){
+		g.drawImage(Animation.getImage("bcg"), 0, 0, null);
 		inventory.draw(g);
 		grid.draw(g);
 		touch.draw(g);
