@@ -13,8 +13,10 @@ public class DefaultTouchObject extends GridItem {
 	}
 
 	@Override
-	public void update(long elapsedTime) {
+	public boolean update(long elapsedTime) {
 		// Do Nothing
+		System.out.println("DefaultTouchObject was updated");
+		throw new RuntimeException();
 	}
 
 }

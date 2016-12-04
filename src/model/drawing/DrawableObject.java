@@ -26,8 +26,9 @@ public abstract class DrawableObject implements Drawable{
 		animation.draw(g, coord);
 	}
 	
-	public void update(long elapsedTime){
+	public boolean update(long elapsedTime){
 		this.animation.update(elapsedTime);
+		return false;
 	}
 	
 	public Coord getCoord(){

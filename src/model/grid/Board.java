@@ -35,7 +35,7 @@ public class Board {
 	}
 	
 	public Board(){
-		this("grid.txt");
+		this("board_text_files/grid.txt");
 	}
 	
 	public GridCell getGridCell(int x, int y){
@@ -52,14 +52,13 @@ public class Board {
 	public void initialize(){
 		try{
 			// Read from grid.txt
-			Path path = Paths.get("grid.txt");
+			Path path = Paths.get(this.fileName);
 		    List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 		    width = lines.get(0).length();
 		    height = lines.size();
 		    System.out.println("Grid Size " + Integer.toString(width));
 		    gridCells = new GridCell[width][height];
 		    spawnPositions = new ArrayList<GridPosition>();
-		    spawnPositions.add(new GridPosition(0, 0));
 		    for(int i = 1; i < height; i++){ // i is the y component
 		    	String str = lines.get(i);
 		    	for(int j = 0; j < width; j++){ // j is the x component
@@ -109,6 +108,10 @@ public class Board {
 
 	public int getHeight() {
 		return height;
+	}
+
+	public List<GridPosition> getSpawnPositions() {
+		return spawnPositions;
 	}
 	
 	

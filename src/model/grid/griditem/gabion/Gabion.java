@@ -36,9 +36,9 @@ public abstract class Gabion extends GridItem {
 	}
 	
 	@Override
-	public void update(long elapsedTime) {
+	public boolean update(long elapsedTime) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 }

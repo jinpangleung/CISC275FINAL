@@ -1,6 +1,5 @@
 package model.grid;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.*;
 
@@ -34,15 +33,28 @@ public class Grid extends Component {
 		towers = new ArrayList<Tower>();
 		trailItems = new ArrayList<TrailItem>();
 		instance = this;
-		board = new Board("grid.txt");
+		board = new Board("board_text_files/grid.txt");
 		pixelGrid = new PixelGrid(board);
-		
-		
-		
 	}
 	
 	public Grid(int x, int y, int w, int l){
 		this(new ComponentPosition(x, y), w, l);
+	}
+	
+	public Grid(ComponentPosition topLeft, int width, int height, String testBoard) {
+		super(topLeft, width, height);
+		items = new ArrayList<GridItem>();
+		paths = new ArrayList<Path>();
+		gabions = new ArrayList<Gabion>();
+		towers = new ArrayList<Tower>();
+		trailItems = new ArrayList<TrailItem>();
+		instance = this;
+		board = new Board(testBoard);
+		pixelGrid = new PixelGrid(board);
+	}
+	
+	public Grid(int x, int y, int w, int l, String testBoard){
+		this(new ComponentPosition(x, y), w, l, testBoard);
 	}
 	
 	private Collection<GridItem> items;
@@ -51,8 +63,8 @@ public class Grid extends Component {
 	private Collection<Tower> towers;
 	private Collection<Path> paths;
 	private static Grid instance;
-	private static Board board;
-	private static PixelGrid pixelGrid;
+	private Board board;
+	private PixelGrid pixelGrid;
 	
 	public static Grid getInstance(){
 		return instance;
@@ -214,16 +226,12 @@ public class Grid extends Component {
 	}
 	
 	public void update(long timeElapsed){
-		try{
 		Iterator<GridItem> git = items.iterator();
 		while(git.hasNext()){
 			GridItem gi = git.next();
-			gi.update(timeElapsed);
-			if(gi instanceof TrailItem){
-				if(gi.getCoord().getX() > 2000){
-					git.remove();
-					trailItems.remove(gi);
-				}
+			if(gi.update(timeElapsed)){
+				git.remove();
+				trailItems.remove(gi);
 			}
 		}
 		Iterator<Path> pit = paths.iterator();
@@ -236,25 +244,18 @@ public class Grid extends Component {
 		for(Path p : paths){
 			p.update(timeElapsed);
 		}
-		} catch (Exception e){
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
-		public void draw(Graphics g){
-			g.setColor(Color.CYAN);
-			g.fillRect(this.getTopLeft().getX(), this.getTopLeft().getY(),
-					this.getBottomRight().getX() - this.getTopLeft().getX(),
-					this.getBottomRight().getY() - this.getTopLeft().getY());
-			g.drawImage(Animation.getImage("bcg"), getTopLeft().getX(), getTopLeft().getY(), null);
-			for(GridItem gi : items){
-				gi.draw(g);
-			}
-			for(Path p : paths){
-				p.getGridItem().draw(g);
-			}
+	public void draw(Graphics g){
+		super.draw(g);
+		for(GridItem gi : items){
+			gi.draw(g);
 		}
+		for(Path p : paths){
+			p.getGridItem().draw(g);
+		}
+	}
 	
 	public Collection<Tower> getTowers(){
 		return towers;
@@ -296,11 +297,6 @@ public class Grid extends Component {
 		this.towers = towers;
 	}
 	
-	public Board getBoard(){
-		return board;
-	}
 	
-	public PixelGrid getPixelGrid(){
-		return pixelGrid;
-	}
+
 }

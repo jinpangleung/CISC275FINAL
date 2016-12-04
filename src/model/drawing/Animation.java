@@ -28,6 +28,26 @@ public class Animation {
 	// Image Library
 	private static HashMap<String, BufferedImage> imageLibrary;
 	
+	// Resizing
+	private static final double RESIZE_X_PERCENT = 0.7;
+	private static final double RESIZE_Y_PERCENT = 0.8;
+	
+	/**
+	 * readImageFromFile
+	 * Read a BufferedImage from a file
+	 * @param String fileName
+	 * @return BufferedImage from given file
+	 */
+	public static BufferedImage readImageFromFile(String fileName){
+		try {
+		    BufferedImage img = ImageIO.read(new File(fileName));
+		    return img;
+		} catch (IOException e) {
+			System.out.println(fileName + " failed to load\n" + "Returning null.");
+			return null;
+		}
+	}
+	
 	/**
 	 * insertImage
 	 * Open image at given file name, load into ImageLibrary with given image name
@@ -35,62 +55,31 @@ public class Animation {
 	 * @param String fileName
 	 * @param String imageName
 	 */
-	private static void insertImage(String fileName, String imageName){
-		BufferedImage img = null;
-		try {
-		    img = ImageIO.read(new File(fileName));
-		    imageLibrary.put(imageName, img);
-		} catch (IOException e) {
-			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
-			imageLibrary.put(imageName, null);
-		}
+	public static void insertImage(String fileName, String imageName){
+		insertBufferedImage(readImageFromFile(fileName), imageName);
 	}
 	
-	private static void insertScreenImage(String fileName, String imageName){
-		BufferedImage img = null;
-		try {
-			double x = Model.getInstance().getScreenWidth();
-			double y = Model.getInstance().getScreenHeight();
-		    img = ImageIO.read(new File(fileName));
-		    imageLibrary.put(imageName, resize(img, (int) x, (int) y));
-		} catch (IOException e) {
-			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
-			imageLibrary.put(imageName, null);
-		}
+	/**
+	 * insertBufferedImage
+	 * 
+	 * Insert BufferedImage With Given Name
+	 * @param BufferedImage bi
+	 * @param String imageName
+	 */
+	public static void insertBufferedImage(BufferedImage bi, String imageName){
+		imageLibrary.put(imageName, bi);
 	}
 	
-	private static void insertTowerImage(String fileName, String imageName){
-		BufferedImage img = null;
-		//get grid cell size, call it x and y
-		double x = PixelGrid.getInstance().getPixelWidth();
-		double y = PixelGrid.getInstance().getPixelHeight();
-		try {
-		    img = ImageIO.read(new File(fileName));
-		    imageLibrary.put(imageName, resize(img, (int) x, (int) y));
-		} catch (IOException e) {
-			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
-			imageLibrary.put(imageName, null);
-		}
-	}
-	
-	
-	private static void insertTrailItemImage(String fileName, String imageName){
-		BufferedImage img = null;
-		//get grid cell size, call it x and y
-		double x = PixelGrid.getInstance().getPixelWidth();
-		double y = PixelGrid.getInstance().getPixelHeight();
-		x = x*0.7;
-		y = y*0.7;
-		try {
-		    img = ImageIO.read(new File(fileName));
-		    imageLibrary.put(imageName, resize(img, (int) x, (int) y));
-		} catch (IOException e) {
-			System.out.println(fileName + " failed to load\n" + imageName + " set to null.");
-			imageLibrary.put(imageName, null);
-		}
-	}
-
-
+	/**
+	 * resize
+	 * 
+	 * Resize given BufferedImage to desired pixel width and height
+	 * 
+	 * @param BufferedImage img
+	 * @param int newW
+	 * @param int newH
+	 * @return resize buffered image
+	 */
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
 	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
 	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -102,32 +91,69 @@ public class Animation {
 	    return dimg;
 	} 
 	
+	/**
+	 * insertScreenImage
+	 * Image should be loaded from file, then resized to the size of the entire screen
+	 * 
+	 * @param String fileName
+	 * @param String imageName
+	 */
+	public static void insertScreenImage(String fileName, String imageName){
+		int x = Model.getInstance().getScreenWidth();
+		int y = Model.getInstance().getScreenHeight();
+	    BufferedImage img = readImageFromFile(fileName);
+	    if(img == null){
+	    	insertBufferedImage(null, imageName);
+	    } else {
+	    	insertBufferedImage(resize(img, x, y), imageName);
+	    }
+	}
+	
+	/**
+	 * insertTowerImage
+	 * Read image from file, then resize it to be slightly larger than a trail item
+	 * @param String fileName
+	 * @param String imageName
+	 */
+	public static void insertTowerImage(String fileName, String imageName){
+		double x = PixelGrid.getInstance().getSquareWidth();
+		double y = PixelGrid.getInstance().getSquareHeight();
+	    BufferedImage img = readImageFromFile(fileName);
+	    if(img == null){
+	    	insertBufferedImage(null, imageName);
+	    } else {
+	    	insertBufferedImage(resize(img, (int) x, (int) y), imageName);
+	    }
+	}
+	
+	/**
+	 * insertTrailItemImage
+	 * Read image from file, the resize to be slightly smaller than a square
+	 * @param String fileName
+	 * @param String imageName
+	 */
+	public static void insertTrailItemImage(String fileName, String imageName){
+		double x = PixelGrid.getInstance().getSquareWidth();
+		double y = PixelGrid.getInstance().getSquareHeight();
+		x = x * RESIZE_X_PERCENT;
+		y = y * RESIZE_Y_PERCENT;
+		BufferedImage img = readImageFromFile(fileName);
+		if(img == null){
+			insertBufferedImage(null, imageName);
+		} else {
+			insertBufferedImage(resize(img, (int) x, (int) y), imageName);
+		}
+	}
+	
+	/**
+	 * initialize
+	 * Load all images into image library 
+	 */
 	public static void initialize(){
 		imageLibrary = new HashMap<String, BufferedImage>();
+		// Load all required images
 		insertImage("images/null.png", "null");
-		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
-		insertImage("images/EH1.png", "EH1");
-		insertImage("images/EH2.png", "EH2");
-		insertImage("images/EH3.png", "EH3");
-		insertImage("images/EH4.png", "EH4");
-		insertTowerImage("images/Fisherman.png", "Fisherman");
-		insertImage("images/Losing Screen.png", "LosingScreen");
-		insertTowerImage("images/OysterGabion.png", "OysterGabion");
-		insertImage("images/Rain.png", "rain");
-		insertImage("images/Storm.png", "storm");
-		insertScreenImage("images/background.png", "background");
-		insertTrailItemImage("images/invasive_item.png", "invasive_item");
-		insertTrailItemImage("images/invasive_item_tower.png", "invasive_item_tower");
-		insertTrailItemImage("images/larvae.png", "larvae");
-		insertTrailItemImage("images/oyster.png", "oyster");
-		insertTowerImage("images/oyster_tower.png", "oyster_tower");
-		insertTrailItemImage("images/pollutant1.png", "pollutant1");
-		insertTrailItemImage("images/pollutant2.png", "pollutant2");
-		insertTrailItemImage("images/pollutant3.png", "pollutant3");
-		insertTrailItemImage("images/pollutant4.png", "pollutant4");
-		insertTowerImage("images/pollutant_tower.png", "pollutant_tower");
-		insertImage("images/bcg.png", "bcg");
-		
+		insertScreenImage("images/test1.png", "bcg");
 	}
 	
 	/**
@@ -164,6 +190,7 @@ public class Animation {
 	private long animationTime;
 	private long frameTime;
 	private long elapsedTime;
+	private boolean completedCycle;
 	
 	// Constructor
 	public Animation(String sprite){
@@ -181,11 +208,12 @@ public class Animation {
 		this.animationTime = (long) nanoOneCycle;
 		this.frameTime = (long) (nanoOneCycle / (double) this.length);
 		this.elapsedTime = 0;
+		this.completedCycle = false;
 	}
 	
-	// Draw Image at curent index
+	// Draw Image at current index
 	public void draw(Graphics g, double x, double y){
-		g.drawImage(Animation.getImage(sprites[index]), (int) x + xOffset, (int) y + yOffset, null);
+		g.drawImage(Animation.getImage(sprites[index]), (int) x - xOffset, (int) y - yOffset, null);
 	}
 	
 	// Draw Image given coord
@@ -194,11 +222,17 @@ public class Animation {
 	}
 	
 	// Update the index based on how much time has passed
-	public void update(long elapsedTime){
+	public boolean update(long elapsedTime){
 		this.elapsedTime += elapsedTime;
 		this.elapsedTime = this.elapsedTime % this.animationTime;
 		long newIndex = this.elapsedTime / this.frameTime;
 		this.index = (int) newIndex;
+		if(this.index >= 1){
+			this.completedCycle = true;
+		} else if (this.completedCycle){
+			return true;
+		}
+		return false;
 	}
 
 	public String[] getSprites() {

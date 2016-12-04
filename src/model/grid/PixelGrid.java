@@ -1,5 +1,6 @@
 package model.grid;
 
+import model.drawing.Coord;
 import model.grid.gridcell.GridCell;
 import model.grid.gridcell.GridPosition;
 import model.gui.component.ComponentPosition;
@@ -35,15 +36,6 @@ public class PixelGrid {
 		return PixelGrid.instance;
 	}
 	
-	public double getPixelWidth(){
-		return this.squareWidth;
-	}
-	
-	public double getPixelHeight(){
-		return this.squareHeight;
-	}
-	
-	
 	public GridPosition getGridPosition(int x, int y){
 		int gpX = (int) (((double) x - this.offset.getX()) / this.squareWidth);
 		int gpY = (int) (((double) y - this.offset.getY()) / this.squareHeight);
@@ -65,6 +57,20 @@ public class PixelGrid {
 	 */
 	public GridCell getGridCell(GridPosition pos){
 		return this.board.getGridCell(pos);
+	}
+	
+	public double getSquareWidth(){
+		return this.squareWidth;
+	}
+	
+	public double getSquareHeight(){
+		return this.squareHeight;
+	}
+	
+	public Coord getCoord(GridPosition gp){
+		double x = this.offset.getX() + (this.squareWidth * gp.getX()) + (this.squareWidth / 2.0);
+		double y = this.offset.getY() + (this.squareHeight * gp.getY()) + 1; // stop off by 1 out of bounds errors
+		return new Coord(x, y);
 	}
 
 }

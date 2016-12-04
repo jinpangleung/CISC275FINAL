@@ -40,6 +40,6 @@ public abstract class GridItem extends DrawableObject {
 		this.gridColor = gc;
 	}
 
-	public abstract void update(long elapsedTime);
+	public abstract boolean update(long elapsedTime);
 
 }
