@@ -1,6 +1,7 @@
 package model.gui.component;
 
 import model.gui.path.Path;
+import model.gui.touch.Touch;
 
 public class DefaultComponent extends Component {
 
@@ -12,15 +13,17 @@ public class DefaultComponent extends Component {
 		this(new ComponentPosition(x, y), width, height);
 	}
 
-	@Override
+	//@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		// Ignore mouse clicks
 		
 	}
 
-	@Override
+	//@Override
 	public void mouseReleased(int mouseX, int mouseY) {
-		Path.snap();
+		if(Touch.getInstance().isHolding()){
+			Path.snap();
+		}
 		
 	}
 

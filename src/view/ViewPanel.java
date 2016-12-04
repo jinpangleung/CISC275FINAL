@@ -30,7 +30,7 @@ public class ViewPanel extends JPanel{
 		this.addMouseMotionListener(mc);
 	}
 	
-	@Override
+	//@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		model.draw(g);
