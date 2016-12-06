@@ -27,11 +27,9 @@ public abstract class TrailItem extends MovableObject {
 	
 	public boolean click(){
 		for (Tower a : Grid.getInstance().getTowers()){
-			if (a.getGridColor() == this.getGridColor() || this.getGridColor() == GridColor.WHITE){
-				if (a.isInRange(this.getCoord())){
-					Touch.getInstance().clamp(this);
-					return true;
-				}
+			if (a.isInRange(this.getCoord())){
+				Touch.getInstance().clamp(this);
+				return true;
 			}
 		}
 		return false;

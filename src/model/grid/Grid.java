@@ -27,6 +27,8 @@ public class Grid extends Component {
 	private Difficulty difficulty;
 	private Collection<GridItem> toBeAdded;
 	private Collection<GridItem> toBeRemoved;
+	private Collection<Path> pathsToBeRemoved;
+	private Collection<Path> pathsToBeAdded;
 	
 	public static Grid getInstance(){
 		return instance;
@@ -52,6 +54,8 @@ public class Grid extends Component {
 		difficulty = new Difficulty();
 		toBeAdded = new ArrayList<GridItem>();
 		toBeRemoved = new HashSet<GridItem>();
+		pathsToBeAdded = new ArrayList<Path>();
+		pathsToBeRemoved = new HashSet<Path>();
 	}
 	
 	public Grid(int x, int y, int w, int l, String testBoard){
@@ -111,19 +115,27 @@ public class Grid extends Component {
 	}
 	
 	public void addPath(Path p){
-		paths.add(p);
+		pathsToBeAdded.add(p);
 	}
 	
 	public void removePath(Path toBeRemoved){
-		Iterator<Path> it = paths.iterator();
-		while(it.hasNext()){
-			Path p = it.next();
-			if(p.equals(toBeRemoved)){
-				it.remove();
-				return;
+		pathsToBeRemoved.add(toBeRemoved);
+	}
+	
+	public void addPaths(){
+		paths.addAll(pathsToBeAdded);
+		pathsToBeAdded.clear();
+	}
+	
+	public void removePaths(){
+		Iterator<Path> pit = paths.iterator();
+		while(pit.hasNext()){
+			Path p = pit.next();
+			if(pathsToBeRemoved.contains(p)){
+				pit.remove();
+				pathsToBeRemoved.remove(p);
 			}
 		}
-		throw new PathNotFoundException();
 	}
 
 	
@@ -210,6 +222,8 @@ public class Grid extends Component {
 	public void update(long timeElapsed){
 		addItems();
 		removeItems();
+		addPaths();
+		removePaths();
 		Iterator<TrailItem> tit = trailItems.iterator();
 		while(tit.hasNext()){
 			TrailItem ti = tit.next();
@@ -238,11 +252,13 @@ public class Grid extends Component {
 		items.addAll(trailItems);
 		items.addAll(gabions);
 		items.addAll(towers);
+		Collection<Path> pathSnapShot = new ArrayList<Path>();
+		pathSnapShot.addAll(paths);
 		//super.draw(g);
 		for(GridItem gi : items){
 			gi.draw(g);
 		}
-		for(Path p : paths){
+		for(Path p : pathSnapShot){
 			p.getGridItem().draw(g);
 		}
 	}

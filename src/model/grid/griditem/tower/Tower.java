@@ -87,11 +87,15 @@ public abstract class Tower extends GridItem {
 	
 	public void release(int mouseX, int mouseY){
 		if(Touch.getInstance().isHolding()){
-			GridItem gi = Touch.getInstance().unClamp();
-			if(gi instanceof TrailItem){
-				this.react(gi);
-			}
-			else {
+			if(this.isInRange(Touch.getInstance().getStartPosition())){
+				GridItem gi = Touch.getInstance().unClamp();
+				if(gi instanceof TrailItem){
+					this.react(gi);
+				}
+				else {
+					Path.snap();
+				}
+			} else {
 				Path.snap();
 			}
 		}

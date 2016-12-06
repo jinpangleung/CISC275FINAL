@@ -1,11 +1,13 @@
 package model.player;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import model.Model;
+import model.grid.Grid;
 import model.grid.griditem.GridItem;
 import model.gui.path.Path;
 
@@ -43,6 +45,13 @@ public class Player {
 		Color c = new Color((int) red,(int) green,(int) blue, alpha);
 		g.setColor(c);
 		g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
+		
+		//draw numerical estuarary happiness
+		int x = (int) (Grid.getInstance().getWidth());
+		int y = (int) (Grid.getInstance().getHeight()*.25);
+
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 100)); 
+		g.drawString(Integer.toString(getHappiness()), x, y);
 	}
 	
 	

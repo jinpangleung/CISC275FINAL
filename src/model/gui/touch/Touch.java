@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import model.drawing.DrawableObject;
+import model.grid.Board;
 import model.grid.Grid;
 import model.grid.PixelGrid;
+import model.grid.gridcell.GridCell;
 import model.grid.griditem.GridItem;
 import model.grid.griditem.gabion.Gabion;
 import model.grid.griditem.tower.Tower;
@@ -75,18 +77,40 @@ public class Touch {
 	
 	public void draw(Graphics g){
 		if(isHolding){
-			holding.draw(g);
 			if(holding instanceof Gabion){
-				int rowHeight = (int) PixelGrid.getInstance().getSquareHeight();
-				int leftX = Grid.getInstance().getTopLeft().getX();
-				int leftY = Grid.getInstance().getBottomRight().getY() - rowHeight;
-				int gridWidth = Grid.getInstance().getWidth();
-				Color c = new Color(255, 255, 0, 150);
-				g.setColor(c);
-				g.fillRect(leftX, leftY, gridWidth, rowHeight);
+				highLight(g);
 			}
-		} 
+			holding.draw(g);
 		}
+	}
+	
+	public void highLight(Graphics g){
+		int width = Board.getInstance().getWidth();
+		int height = Board.getInstance().getHeight();
+		double squareWidth = PixelGrid.getInstance().getSquareWidth();
+		double squareHeight = PixelGrid.getInstance().getSquareHeight();
+		int smallWidth = (int)( squareWidth * 0.7);
+		int smallHeight = (int) (squareHeight * 0.7);
+		g.setColor(Color.YELLOW);
+		for(int i = 0; i < width; i++){
+			GridCell gc = Board.getInstance().getGridCell(i, height - 1);
+			if(gc.isCanPlaceGabion() && noGabion(gc.getGridPosition().getX())){
+				Coord center = PixelGrid.getInstance().getCenter(gc.getGridPosition());
+				int x = center.getX().intValue();
+				int y = center.getY().intValue();
+				g.fillRect(x - (smallWidth / 2), y - (smallHeight / 2), smallWidth, smallHeight);
+			}
+		}
+	}
+	
+	public boolean noGabion(int x){
+		for(Gabion g : Grid.getInstance().getGabions()){
+			if(g.getGridPosition().getX() == x){
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	
 	public GridItem getHolding() {
