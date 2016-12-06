@@ -4,9 +4,12 @@ import model.drawing.Animation;
 import model.drawing.Coord;
 import model.drawing.DrawableObject;
 import model.grid.Grid;
+import model.grid.PixelGrid;
 import model.grid.griditem.GridColor;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridItem;
+import model.grid.gridcell.Acceleration;
+import model.grid.gridcell.GridCell;
 
 /**
  * MovableObject
@@ -23,72 +26,69 @@ public abstract class MovableObject extends GridItem implements Movable {
 	public MovableObject(Coord coord, Animation animation, GridPosition gridPosition, GridColor gc, Velocity velocity) {
 		super(coord, animation, gridPosition, gc);
 		this.velocity = velocity;
+		this.maxVelocity = 10;
 	}
 
 	private Velocity velocity;
-	//final double MAXVELOCITY = Grid.getInstance().getWidthByHeight()/50;
+	private double maxVelocity;
 	
-	
+	/**
+	 * Moves all MovableObjects in the correct direction (by adjusting its velocity and position) 
+	 * depending on where the object lies on the Board and the time passed since the last runthrough of the game loop.
+	 * 
+	 * @param elapsedTime a long representing the number of nanoseconds since the last
+	 * runthrough of the game loop.
+	 * @author Gifan Thadathil
+	 */
 	public void move(long elapsedTime){
-		/*
-		// Get Acceleration
-		Acceleration a = Grid.getInstance().getAcceleration(this.getGridPosition(), elapsedTime);
-		//double vx = this.getVelocity().getX() + (a.getX() *0.0005);
-		//double vy = this.getVelocity().getY() + (a.getY() * 0.0005);	
-		double vy = this.getVelocity().getY() * 0.000005 * elapsedTime;
-		System.out.println(elapsedTime);
-		this.getCoord().setY(this.getCoord().getY() + vy);
-		/*
-		Acceleration a = Grid.getInstance().getAcceleration(this.getGridPosition(), elapsedTime);//grabs acceleration of current
-		double ax = a.getX();//for specifics
-		double ay = a.getY();
-		Velocity v = this.getVelocity();//grabs velocity of current
-		double vx = v.getX();//for specifics
-		double vy = v.getY();
+		// Sets up some variables we want access to and gets the Acceleration corresponding to this objects GridPosition.
+		GridPosition objectPosition = this.getGridPosition();
+		GridCell objectCell = PixelGrid.getInstance().getGridCell(objectPosition);
+		Acceleration objectAccel = objectCell.getAcceleration();
 		
-		//specifics for readability, xx and yy represent acceleration + velocity which is velocity
-		double xx =  ax + vx;
-		double yy = ay + vy;
+		// Update this object's velocity according to objectAccel.
+		// Save original velocities first
+		double oldXVel = this.velocity.getX();
+		double oldYVel = this.velocity.getY();
+		double newXVel = this.velocity.getX() + (objectAccel.getX()*elapsedTime);
+		double newYVel = this.velocity.getY() + (objectAccel.getY()*elapsedTime);
+		if(newXVel > maxVelocity){
+			newXVel = maxVelocity;
+		}
+		if(newYVel > maxVelocity){
+			newYVel = maxVelocity;
+		}
 		
-		//changes velocity
-		v.setX(xx);
-		v.setY(yy);
+		this.velocity.setX(newXVel);
+		this.velocity.setY(newYVel);
 		
-		//coordinate for positon
-		double cx = this.getCoord().getX(); 
-		double cy = this.getCoord().getY();
+		// Update pixel coordinates of this object
+		// Save original coordinates first
+		Coord objectCoord = this.getCoord();
+		double oldXCoord = objectCoord.getX();
+		double oldYCoord = objectCoord.getY();
+		this.setCoord(objectCoord.getX() + this.velocity.getX(), objectCoord.getY() + this.velocity.getY());
 		
+		// Update this object's grid position
+		GridPosition newObjectPosition = PixelGrid.getInstance().getGridPosition((int) Math.round(this.getCoord().getX()), 
+				(int) Math.round(this.coord.getY()));
 		
-		//calculations for coordinate
-		cx = cx + (xx * elapsedTime);
-		cy = cy + (yy * elapsedTime);
-		*/
-		
-		
-		//checks if goes into next grid, if yes update grid position.
-		//this.setGridPosition(Grid.getInstance().getGridCell(getCoord()).getGridPosition());
-			
-		//get grid position for checking block
-		//get coor position for checking pixel
-		//GridPosition gridPos = Grid.getGridPosition(coord);
-		//this.setGridPosition(Grid.getInstance().getGridPosition(this.getCoord()));
-		
-		
-		
+		// If the item has not gone off the trail then update grid position, otherwise reset to old velocity and position.
+		if(PixelGrid.getInstance().getGridCell(newObjectPosition).isTrail()){
+			this.setGridPosition(newObjectPosition);
+		}
+		else{
+			this.velocity.setX(oldXVel);
+			this.velocity.setY(oldYVel);
+			this.setCoord(oldXCoord, oldYCoord);
+		}
 	}
-	//eventually move code from move() to this for readability
-	public void updateVelocity(){
-		//nothing yet
-	}
+
 	public String toString(){
 		String str = "";
 		str += this.getCoord().toString() + "\n";
 		str += this.getVelocity().toString() + "\n";
 		return str;
-	}
-	//eventually move code from move() to this for readability
-	public void applyVelocity(){
-		//nothing yet
 	}
 	
 	public Velocity getVelocity(){
@@ -99,6 +99,14 @@ public abstract class MovableObject extends GridItem implements Movable {
 		this.velocity = velocity;
 	}
 	
+	public double getMaxVelocity() {
+		return maxVelocity;
+	}
+
+	public void setMaxVelocity(double maxVelocity) {
+		this.maxVelocity = maxVelocity;
+	}
+
 	//@Override
 	public boolean update(long timeElapsed){
 		//System.out.println(this);

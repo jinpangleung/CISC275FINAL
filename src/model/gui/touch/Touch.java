@@ -1,9 +1,13 @@
 package model.gui.touch;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import model.drawing.DrawableObject;
+import model.grid.Grid;
+import model.grid.PixelGrid;
 import model.grid.griditem.GridItem;
+import model.grid.griditem.gabion.Gabion;
 import model.grid.griditem.tower.Tower;
 import model.drawing.Coord;
 
@@ -72,10 +76,20 @@ public class Touch {
 	public void draw(Graphics g){
 		if(isHolding){
 			holding.draw(g);
+			if(holding instanceof Gabion){
+				int rowHeight = (int) PixelGrid.getInstance().getSquareHeight();
+				int leftX = Grid.getInstance().getTopLeft().getX();
+				int leftY = Grid.getInstance().getBottomRight().getY() - rowHeight;
+				int gridWidth = Grid.getInstance().getWidth();
+				Color c = new Color(255, 255, 0, 150);
+				g.setColor(c);
+				g.fillRect(leftX, leftY, gridWidth, rowHeight);
+			}
 		} else {
 			g.fillRect(0, 0, 100, 100);
 		}
 	}
+	
 	
 	public GridItem getHolding() {
 		return holding;
