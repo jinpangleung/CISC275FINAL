@@ -59,6 +59,10 @@ public class PixelGrid {
 		return this.board.getGridCell(pos);
 	}
 	
+	public boolean isOutsideGrid(Coord c){
+		return c.getY().doubleValue() >= (double) Grid.getInstance().getBottomRight().getY();
+	}
+	
 	public double getSquareWidth(){
 		return this.squareWidth;
 	}

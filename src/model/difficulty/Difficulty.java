@@ -42,6 +42,11 @@ public class Difficulty {
 	private int pollutantCollected = 1;
 	private int larvaeCollected = 1;
 	private int totalSpawned = 1;
+	//private final static double MAX_VEL = MovableObject.getMaxVelocity();
+	private final static double MIN_VEL = 3;
+	private final static long MAX_SPAWN = 6000000000L;
+	private final static long MIN_SPAWN = 1000000000L;
+	
 	
 	public Difficulty(){
 		timeToSpawn = SPAWN_TIME;
@@ -52,6 +57,7 @@ public class Difficulty {
 	 * <p>
 	 * Look at the current Grid and decide how to scale difficulty and when to spawn new objects
 	 */
+	//Difficulty.getSpawnRate()
 	public void update(long timeElapsed){
 		if(timeToSpawn > 0){
 			timeToSpawn -= timeElapsed;
@@ -74,23 +80,10 @@ public class Difficulty {
 		GridPosition spawnPoint = new GridPosition(randomPosition.getX(), randomPosition.getY());
 		Coord inGrid = PixelGrid.getInstance().getCoord(spawnPoint);
 		Coord outsideGrid = new Coord(inGrid.getX(), -PixelGrid.getInstance().getSquareHeight());
-		TrailItem toBeSpawned = randomItem(outsideGrid);
-		//TrailItem toBeSpawned = decideSpawn(outsideGrid);
+		TrailItem toBeSpawned = decideSpawn(outsideGrid);
 		toBeSpawned.setGridPosition(spawnPoint);
 		Grid.getInstance().addPath(new Path(toBeSpawned, inGrid, new BackToGridBehavior()));
 		totalSpawned++;
-	}
-	
-	public TrailItem randomItem(Coord c){
-		Random rand = new Random();
-		int r = rand.nextInt(3);
-		switch(r){
-		case 0: return new Pollutant(c);
-		case 1: return new Oyster(c);
-		case 2: return new InvasiveItem(c);
-		case 3: return new Larvae(c);
-		default: throw new RuntimeException();
-		}
 	}
 	
 	/**
@@ -113,55 +106,59 @@ public class Difficulty {
 		Random rand = new Random();
 		int r = rand.nextInt(100);
 		
-		if (r <= getPercentCollected(oysterCollected, getTotalCollected())){
+		float oyster = getPercentCollected(oysterCollected, getTotalCollected());
+		float pollutant = oyster + getPercentCollected(pollutantCollected, getTotalCollected());
+		float invasiveItem = oyster + pollutant + getPercentCollected(invasiveCollected, getTotalCollected());
+		
+		if (r <= oyster){
 			return new Oyster(startCoord);
-		}else if (r <= getPercentCollected(oysterCollected, getTotalCollected()) + getPercentCollected(pollutantCollected, getTotalCollected())){
+		}else if (r <= pollutant){
 			return new Pollutant(startCoord);
-		}else if (r <= getPercentCollected(oysterCollected, getTotalCollected()) + getPercentCollected(pollutantCollected, getTotalCollected())
-		+ getPercentCollected(invasiveCollected, getTotalCollected())){
+		}else if (r <= invasiveItem){
 			return new InvasiveItem(startCoord);
 		}else{
 			return new Larvae(startCoord);
 		}
 	}
-	public void decideVelocityAndSpawnRate(){
-		double maxVel = 15;
-		double minVel = 5;
+	
+	public void setSpawnRate(long spawnRate){
+		this.timeToSpawn = spawnRate;
+	}
+	
+	/*public void decideVelocityAndSpawnRate(){
 		double currentVel = MovableObject.getVelocity();
-		int maxSpawn = 8;//sec
-		int minSpawn = 2;//sec
-		int currentSpawn = MovableObject.getSpawnRate();
 		
 		//I will make this its own function, no time now
-		if(currentSpawn >= minSpawn && currentSpawn <= maxSpawn){
+		if(timeToSpawn >= MIN_SPAWN && timeToSpawn <= MAX_SPAWN){
 			decideHelper();
 		}
-		if(currentVel >= minVel && currentVel <= maxVel){
+		if(currentVel >= MIN_VEL && currentVel <= MAX_VEL){
 			decideHelper();
 		}
 	}
 	public void decideHelper(){
 		if (getPercentTotal(getTotalCollected(), totalSpawned) < 16){
 			MovableObject.setVelocity(MovableObject.getVelocity()/.1);
-			MovableObject.setSpawnRate(MoveableObject.getSpawnRate()/.1);
+			setSpawnRate((long) (timeToSpawn/.1));
 		}else if (getPercentTotal(getTotalCollected(), totalSpawned) < 31){
 			MovableObject.setVelocity(MovableObject.getVelocity()/.05);
-			MovableObject.setSpawnRate(MoveableObject.getSpawnRate()/.05);
+			setSpawnRate((long) (timeToSpawn/.05));
 		}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 46){
 			MovableObject.setVelocity(MovableObject.getVelocity()/.02);
-			MovableObject.setSpawnRate(MoveableObject.getSpawnRate()/.02);
+			setSpawnRate((long) (timeToSpawn/.02));
 		}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 66){
 			MovableObject.setVelocity(MovableObject.getVelocity()*.03);
-			MovableObject.setSpawnRate(MoveableObject.getSpawnRate()*.03);
+			setSpawnRate((long) (timeToSpawn*.03));
 		}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 81){
 			MovableObject.setVelocity(MovableObject.getVelocity()*.07);
-			MovableObject.setSpawnRate(MoveableObject.getSpawnRate()*.07);
+			setSpawnRate((long) (timeToSpawn*.07));
 		}else{
 			MovableObject.setVelocity(MovableObject.getVelocity()*.1);
-			MovableObject.setSpawnRate(MoveableObject.getSpawnRate()*.1);
+			setSpawnRate((long) (timeToSpawn*.1));
 		}
 	}
-	
+*/
+
 	public void collect(TrailItem item){
 		if (item instanceof Oyster){
 			oysterCollected++;

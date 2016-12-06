@@ -8,6 +8,7 @@ import model.grid.griditem.tower.Tower;
 import model.gui.component.*;
 import model.gui.touch.Touch;
 import model.inventory.Inventory;
+import model.player.Player;
 
 /**
  * Model
@@ -24,6 +25,7 @@ public class Model {
 	private ComponentMapping componentMapping;
 	private Touch touch;
 	private Grid grid;
+	private Player player;
 	private Inventory inventory;
 	private static Model instance;
 	private int screenWidth;
@@ -53,6 +55,7 @@ public class Model {
 		// Initialize Inventory and its components
 		inventory = new Inventory();
 		inventory.initialize(screenWidth, screenHeight);
+		player = new Player();
 		this.componentMapping.addComponent(inventory.getRtf());
 		this.componentMapping.addComponent(inventory.getBtf());
 		this.componentMapping.addComponent(inventory.getGtf());
@@ -87,6 +90,7 @@ public class Model {
 		inventory.draw(g);
 		grid.draw(g);
 		touch.draw(g);
+		player.draw(g);
 	}
 	
 	public void mouseClicked(int mouseX, int mouseY){

@@ -2,6 +2,8 @@ package main;
 
 import controller.Controller;
 import model.Model;
+import model.Time;
+import model.player.Player;
 import view.View;
 
 /**
@@ -30,7 +32,9 @@ public class Main {
 		long minimumTime = 10000000; // 1/100 seconds
 			
 		long previousTime = System.nanoTime();
-    	while(true){
+		
+		boolean isGameDone = false;
+    	while(!isGameDone){
     		long currentTime = System.nanoTime();
     		long elapsedTime = currentTime - previousTime;
     		previousTime = currentTime;
@@ -44,6 +48,12 @@ public class Main {
     				
     			}
     		}
+    		
+    		if(controller.getTime() > Time.nanosecond * 60){
+    			isGameDone = true;
+    		}
     	}
+    	
+    	System.out.println("Game Done. Your score is: " + Player.getInstance().getHappiness());
 	}
 }

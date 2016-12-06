@@ -16,6 +16,7 @@ public class Controller {
 	
 	private Model model;
 	private View view;
+	private long time;
 	
 	public Controller(Model model, View view){
 		this.model = model;
@@ -23,8 +24,12 @@ public class Controller {
 	}
 	
 	public void run(long elapsedTime){
+		this.time += elapsedTime;
 		this.model.update(elapsedTime);
 		this.view.draw();
 	}
-
+	
+	public long getTime(){
+		return time;
+	}
 }

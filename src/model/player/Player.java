@@ -3,6 +3,7 @@ package model.player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import model.Model;
 import model.grid.griditem.GridItem;
@@ -18,42 +19,45 @@ import model.gui.path.Path;
 
 public class Player {
 	
-	private long time;
 	private Happiness happiness;
 	private static Player instance;
-	private double red = 25 + happiness.getHappiness()*2.3;
-	private double green = 25 + Math.sqrt(1-happiness.getHappiness()*happiness.getHappiness());
-	private double blue = 25 + happiness.getHappiness()*2.3;
+	private double red;
+	private double green;
+	private double blue;
 	private final int alpha;
 	
 	public Player(){
 		happiness = new Happiness();
-		time = 0;
 		instance = this;
-		alpha = 30;
+		alpha = 100;
 	}
 	
 	
 	public void draw(Graphics g){
+//		red = 255 - happiness.getHappiness() * 0;
+//		blue = 235 + happiness.getHappiness() * .2;
+//		green = 55 + happiness.getHappiness() * 2;
+		red = 255 - happiness.getHappiness() * 2.3;
+		blue = 25 + happiness.getHappiness();
+		green = 0 + happiness.getHappiness();
 		Color c = new Color((int) red,(int) green,(int) blue, alpha);
-		BufferedImage image = new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
-		Graphics graphics = image.getGraphics(); 
-		graphics.setColor(c);
-		graphics.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
-		graphics.dispose();
-		
-//		super.draw(g);
-//		for(GridItem gi : items){
-//			gi.draw(g);
-//		}
-//		for(Path p : paths){
-//			p.getGridItem().draw(g);
-//		}
+		g.setColor(c);
+		g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
 	}
 	
 	
 	public void update(long timeElapsed){
-		this.time += timeElapsed;
+//		Random rand = new Random();
+//		int  n = rand.nextInt(1000) + 1;
+		
+//		this.time += timeElapsed;
+//		System.out.println("red = " + red);
+//		System.out.println("green = " + green);
+//		System.out.println("blue = " + blue);
+//		System.out.println(happiness.getHappiness());
+//		if (n == 1){
+//			happiness.decreaseHappiness(1);
+//		}
 	}
 	
 	public static Player getInstance(){
@@ -67,9 +71,8 @@ public class Player {
 	public boolean decreaseHappiness(int h){
 		return happiness.decreaseHappiness(h);
 	}
-	
-	public long getElapsedTime(){
-		return time;
-	}
 
+	public int getHappiness(){
+		return happiness.getHappiness();
+	}
 }

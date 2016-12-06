@@ -1,5 +1,7 @@
 package model.moving;
 
+import model.Model;
+import model.Time;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.drawing.DrawableObject;
@@ -8,6 +10,9 @@ import model.grid.PixelGrid;
 import model.grid.griditem.GridColor;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridItem;
+import model.gui.path.DestroyBehavior;
+import model.gui.path.Path;
+import model.player.Player;
 import model.grid.gridcell.Acceleration;
 import model.grid.gridcell.GridCell;
 
@@ -26,7 +31,7 @@ public abstract class MovableObject extends GridItem implements Movable {
 	public MovableObject(Coord coord, Animation animation, GridPosition gridPosition, GridColor gc, Velocity velocity) {
 		super(coord, animation, gridPosition, gc);
 		this.velocity = velocity;
-		this.maxVelocity = .0008;
+		this.maxVelocity = PixelGrid.getInstance().getSquareHeight()/Time.nanosecond;
 	}
 
 	private Velocity velocity;
@@ -56,11 +61,16 @@ public abstract class MovableObject extends GridItem implements Movable {
 		double newYVel = this.velocity.getY() + (objectAccel.getY()*elapsedTime);
 		if(newXVel > maxVelocity){
 			newXVel = maxVelocity;
+		} 
+		else if(newXVel < -maxVelocity){
+			newXVel = -maxVelocity;
 		}
 		if(newYVel > maxVelocity){
 			newYVel = maxVelocity;
 		}
-		
+		else if(newYVel < -maxVelocity){
+			newYVel = -maxVelocity;
+		}
 		this.velocity.setX(newXVel);
 		this.velocity.setY(newYVel);
 		
@@ -72,7 +82,15 @@ public abstract class MovableObject extends GridItem implements Movable {
 		Coord objectCoord = this.getCoord();
 		double oldXCoord = objectCoord.getX();
 		double oldYCoord = objectCoord.getY();
-		this.setCoord(objectCoord.getX() + this.velocity.getX(), objectCoord.getY() + this.velocity.getY());
+		this.setCoord(objectCoord.getX() + (this.velocity.getX()*elapsedTime), objectCoord.getY() + (this.velocity.getY()*elapsedTime));
+		
+		if(PixelGrid.getInstance().isOutsideGrid(this.getCoord())){
+			Grid.getInstance().removeItem(this);
+			Grid.getInstance().addPath(new Path(this, new Coord(this.getCoord().getX(),
+						Model.getInstance().getScreenHeight() + 50), new DestroyBehavior()));
+			Player.getInstance().decreaseHappiness(5);
+			return;
+		}
 		
 		// Update this object's grid position
 		GridPosition newObjectPosition = PixelGrid.getInstance().getGridPosition((int) Math.round(this.getCoord().getX()), 
@@ -83,9 +101,9 @@ public abstract class MovableObject extends GridItem implements Movable {
 			this.setGridPosition(newObjectPosition);
 		}
 		else{		
-			this.velocity.setX(oldXVel);
-			this.velocity.setY(oldYVel);
-			this.setCoord(oldXCoord, oldYCoord);
+			//this.velocity.setX(oldXVel);
+			//this.velocity.setY(oldYVel);
+			//this.setCoord(oldXCoord, oldYCoord);
 		}
 		
 		//System.out.println(this.getVelocity().getX() + ", " + this.getVelocity().getY());

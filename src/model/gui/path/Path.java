@@ -14,7 +14,7 @@ import model.gui.touch.Touch;
 
 public class Path {
 	
-	private static final long TIME_TO_COMPLETE_PATH = Time.nanosecond;
+	private static final long TIME_TO_COMPLETE_PATH = Time.nanosecond/3;
 	
 	private GridItem gi;
 	private Coord destination;
