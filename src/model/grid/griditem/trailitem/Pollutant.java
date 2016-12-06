@@ -25,7 +25,7 @@ import model.moving.Velocity;
 public class Pollutant extends TrailItem{
 
 	public Pollutant(Coord c){
-		super(c, new Animation("null"), new GridPosition(0,0), new Velocity(0, 0.01),  GridColor.RED);
+		super(c, new Animation("null"), new GridPosition(0,0), new Velocity(0, 0.0001),  GridColor.RED);
 		int randomNum = (int)(Math.random() * 3);
 		switch(randomNum){
 		case 0: this.setAnimation(new Animation("pollutant1")); break;

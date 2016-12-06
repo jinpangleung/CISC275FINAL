@@ -21,12 +21,11 @@ import model.moving.Velocity;
  * @attributes isBad - if it is bad to click on it
  * 
  */
-
 public class Oyster extends TrailItem{
 
 	public Oyster(Coord c){
 		super(c, new Animation("oyster"), 
-				new GridPosition(0,0), new Velocity(0, 0.01),  GridColor.BLUE);
+				new GridPosition(0,0), new Velocity(0, 0.0001),  GridColor.BLUE);
 	}
 	
 }

@@ -85,10 +85,8 @@ public class Touch {
 				g.setColor(c);
 				g.fillRect(leftX, leftY, gridWidth, rowHeight);
 			}
-		} else {
-			g.fillRect(0, 0, 100, 100);
+		} 
 		}
-	}
 	
 	
 	public GridItem getHolding() {

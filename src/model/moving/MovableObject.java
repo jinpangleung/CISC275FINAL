@@ -26,7 +26,7 @@ public abstract class MovableObject extends GridItem implements Movable {
 	public MovableObject(Coord coord, Animation animation, GridPosition gridPosition, GridColor gc, Velocity velocity) {
 		super(coord, animation, gridPosition, gc);
 		this.velocity = velocity;
-		this.maxVelocity = 10;
+		this.maxVelocity = .0008;
 	}
 
 	private Velocity velocity;
@@ -46,6 +46,8 @@ public abstract class MovableObject extends GridItem implements Movable {
 		GridCell objectCell = PixelGrid.getInstance().getGridCell(objectPosition);
 		Acceleration objectAccel = objectCell.getAcceleration();
 		
+
+		
 		// Update this object's velocity according to objectAccel.
 		// Save original velocities first
 		double oldXVel = this.velocity.getX();
@@ -62,6 +64,9 @@ public abstract class MovableObject extends GridItem implements Movable {
 		this.velocity.setX(newXVel);
 		this.velocity.setY(newYVel);
 		
+		// Apply friction depending on acceleration of grid cell
+		applyFriction(objectAccel.getX() == 0, objectAccel.getY() == 0);
+		
 		// Update pixel coordinates of this object
 		// Save original coordinates first
 		Coord objectCoord = this.getCoord();
@@ -77,13 +82,30 @@ public abstract class MovableObject extends GridItem implements Movable {
 		if(PixelGrid.getInstance().getGridCell(newObjectPosition).isTrail()){
 			this.setGridPosition(newObjectPosition);
 		}
-		else{
+		else{		
 			this.velocity.setX(oldXVel);
 			this.velocity.setY(oldYVel);
 			this.setCoord(oldXCoord, oldYCoord);
 		}
+		
+		//System.out.println(this.getVelocity().getX() + ", " + this.getVelocity().getY());
+		//System.out.println(this.getGridPosition().getX() + ", " + this.getGridPosition().getY() +" : " + PixelGrid.getInstance().getGridCell(this.getGridPosition()).getDirection());
+	}
+	
+	public void applyFriction(boolean x, boolean y){
+		if(x){
+			this.getVelocity().setX(toZero(this.getVelocity().getX()));
+		}
+
+		if(y){
+			this.getVelocity().setY(toZero(this.getVelocity().getY()));
+		}	
 	}
 
+	private double toZero(double d){
+		return d * .999993;
+	}
+	
 	public String toString(){
 		String str = "";
 		str += this.getCoord().toString() + "\n";

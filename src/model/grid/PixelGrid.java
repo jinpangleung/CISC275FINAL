@@ -72,5 +72,15 @@ public class PixelGrid {
 		double y = this.offset.getY() + (this.squareHeight * gp.getY()) + 1; // stop off by 1 out of bounds errors
 		return new Coord(x, y);
 	}
+	
+	public Coord getCenter(GridPosition gp){
+		double x = this.offset.getX() + (this.squareWidth * gp.getX()) + (this.squareWidth / 2);
+		double y = this.offset.getY() + (this.squareHeight * gp.getY()) + (this.squareHeight / 2);
+		return new Coord(x, y);
+	}
+	
+	public GridPosition getGridPosition(Coord c){
+		return getGridPosition(c.getX().intValue(), c.getY().intValue());
+	}
 
 }

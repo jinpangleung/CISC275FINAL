@@ -28,14 +28,20 @@ public class Board {
 	private GridCell[][] gridCells;
 	private String fileName;
 	private List<GridPosition> spawnPositions;
+	private static Board instance;
 	
 	public Board(String fileName){
 		this.fileName = fileName;
+		instance = this;
 		initialize();
 	}
 	
 	public Board(){
 		this("board_text_files/grid.txt");
+	}
+	
+	public static Board getInstance(){
+		return instance;
 	}
 	
 	public GridCell getGridCell(int x, int y){
@@ -57,6 +63,7 @@ public class Board {
 		    width = lines.get(0).length();
 		    height = lines.size();
 		    System.out.println("Grid Size " + Integer.toString(width));
+		    GridCell.initialize();
 		    gridCells = new GridCell[width][height];
 		    spawnPositions = new ArrayList<GridPosition>();
 		    for(int i = 1; i < height; i++){ // i is the y component

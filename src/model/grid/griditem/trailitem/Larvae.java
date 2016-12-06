@@ -25,7 +25,7 @@ import model.moving.Velocity;
 public class Larvae extends TrailItem{
 
 	public Larvae(Coord c) {
-		super(c, new Animation("larvae"), new GridPosition(0,0), new Velocity(0, 0.01),  GridColor.WHITE);
+		super(c, new Animation("larvae"), new GridPosition(0,0), new Velocity(0, 0.0001),  GridColor.WHITE);
 	}
 
 }

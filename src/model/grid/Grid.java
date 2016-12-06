@@ -3,6 +3,7 @@ package model.grid;
 import java.awt.Graphics;
 import java.util.*;
 
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.gridcell.GridCell;
 import model.grid.griditem.GridItem;
@@ -14,27 +15,25 @@ import model.gui.component.ComponentPosition;
 import model.gui.path.Path;
 import model.gui.touch.Touch;
 
-/**
- * Grid
- * the grid is the area where the player is going to be playing on the game on
- * you can only click in the grid area plus drag and drop it on grid
- * 
- * @author Roy, Eric
- *
- */
-
 public class Grid extends Component {
-
+	
+	private Collection<TrailItem> trailItems;
+	private Collection<Gabion> gabions;
+	private Collection<Tower> towers;
+	private Collection<Path> paths;
+	private static Grid instance;
+	private Board board;
+	private PixelGrid pixelGrid;
+	private Difficulty difficulty;
+	private Collection<GridItem> toBeAdded;
+	private Collection<GridItem> toBeRemoved;
+	
+	public static Grid getInstance(){
+		return instance;
+	}
+	
 	public Grid(ComponentPosition topLeft, int width, int height) {
-		super(topLeft, width, height);
-		items = new ArrayList<GridItem>();
-		paths = new ArrayList<Path>();
-		gabions = new ArrayList<Gabion>();
-		towers = new ArrayList<Tower>();
-		trailItems = new ArrayList<TrailItem>();
-		instance = this;
-		board = new Board("board_text_files/grid.txt");
-		pixelGrid = new PixelGrid(board);
+		this(topLeft, width, height, "board_text_files/grid.txt");
 	}
 	
 	public Grid(int x, int y, int w, int l){
@@ -43,7 +42,6 @@ public class Grid extends Component {
 	
 	public Grid(ComponentPosition topLeft, int width, int height, String testBoard) {
 		super(topLeft, width, height);
-		items = new ArrayList<GridItem>();
 		paths = new ArrayList<Path>();
 		gabions = new ArrayList<Gabion>();
 		towers = new ArrayList<Tower>();
@@ -51,87 +49,65 @@ public class Grid extends Component {
 		instance = this;
 		board = new Board(testBoard);
 		pixelGrid = new PixelGrid(board);
+		difficulty = new Difficulty();
+		toBeAdded = new ArrayList<GridItem>();
+		toBeRemoved = new HashSet<GridItem>();
 	}
 	
 	public Grid(int x, int y, int w, int l, String testBoard){
 		this(new ComponentPosition(x, y), w, l, testBoard);
 	}
 	
-	private Collection<GridItem> items;
-	private Collection<TrailItem> trailItems;
-	private Collection<Gabion> gabions;
-	private Collection<Tower> towers;
-	private Collection<Path> paths;
-	private static Grid instance;
-	private Board board;
-	private PixelGrid pixelGrid;
-	
-	public static Grid getInstance(){
-		return instance;
-	}
-	
 	public void addItem(GridItem gi){
-		items.add(gi);
-		
-		if(gi instanceof TrailItem){
-			trailItems.add((TrailItem) gi);
-		} else if (gi instanceof Tower){
-			towers.add((Tower) gi);
-		} else if (gi instanceof Gabion){
-			gabions.add((Gabion) gi);
-		}
+		toBeAdded.add(gi);
 	}
 	
-	private void removeTrailItem(TrailItem toBeRemoved){
-		Iterator<TrailItem> it = trailItems.iterator();
-		while(it.hasNext()){
-			TrailItem ti = it.next();
-			if(ti.equals(toBeRemoved)){
-				it.remove();
-				return;
+	public void removeItem(GridItem gi){
+		toBeRemoved.add(gi);
+	}
+	
+	private void addItems(){
+		Iterator<GridItem> git = toBeAdded.iterator();
+		while(git.hasNext()){
+			GridItem gi = git.next();
+			if(gi instanceof TrailItem){
+				trailItems.add((TrailItem) gi);
+				git.remove();
+			} else if (gi instanceof Tower){
+				towers.add((Tower) gi);
+				git.remove();
+			} else if (gi instanceof Gabion){
+				gabions.add((Gabion) gi);
+				git.remove();
 			}
 		}
 	}
 	
-	private void removeTower(Tower toBeRemoved){
-		Iterator<Tower> it = towers.iterator();
-		while(it.hasNext()){
-			Tower t = it.next();
-			if(t.equals(toBeRemoved)){
-				it.remove();
-				return;
+	private void removeItems(){
+		Iterator<TrailItem> tit = trailItems.iterator();
+		while(tit.hasNext()){
+			TrailItem ti = tit.next();
+			if(toBeRemoved.contains(ti)){
+				tit.remove();
+				toBeRemoved.remove(ti);
 			}
 		}
-	}
-	
-	private void removeGabion(Gabion toBeRemoved){
-		Iterator<Gabion> it = gabions.iterator();
-		while(it.hasNext()){
-			Gabion g = it.next();
-			if(g.equals(toBeRemoved)){
-				it.remove();
-				return;
+		Iterator<Tower> towit = towers.iterator();
+		while(towit.hasNext()){
+			Tower tow = towit.next();
+			if(toBeRemoved.contains(tow)){
+				towit.remove();
+				toBeRemoved.remove(tow);
 			}
 		}
-	}
-	
-	public void removeItem(GridItem toBeRemoved){
-		Iterator<GridItem> it = items.iterator();
-		while(it.hasNext()){
-			GridItem gi = it.next();
-			if(gi.equals(toBeRemoved)){
-				it.remove();
-				if(toBeRemoved instanceof TrailItem){
-					removeTrailItem((TrailItem) toBeRemoved);
-				} else if (toBeRemoved instanceof Tower){
-					removeTower((Tower) toBeRemoved);
-				} else if (toBeRemoved instanceof Gabion){
-					removeGabion((Gabion) toBeRemoved);
-				}
-				return;
+		Iterator<Gabion> git = gabions.iterator();
+		while(git.hasNext()){
+			Gabion g = git.next();
+			if(toBeRemoved.contains(g)){
+				git.remove();
+				toBeRemoved.remove(g);
 			}
 		}
-		throw new GridItemNotFoundException();
 	}
 	
 	public void addPath(Path p){
@@ -150,6 +126,7 @@ public class Grid extends Component {
 		throw new PathNotFoundException();
 	}
 
+	
 	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		Iterator<TrailItem> it = trailItems.iterator();
@@ -225,17 +202,25 @@ public class Grid extends Component {
 		}
 		
 		GridItem gabion = Touch.getInstance().unClamp();
+		gabion.setGridPosition(PixelGrid.getInstance().getGridPosition(gabion.getCoord()));
+		gabion.setCoord(PixelGrid.getInstance().getCenter(gabion.getGridPosition()));
 		this.addItem(gabion);
 	}
 	
 	public void update(long timeElapsed){
-		Iterator<GridItem> git = items.iterator();
-		while(git.hasNext()){
-			GridItem gi = git.next();
-			if(gi.update(timeElapsed)){
-				git.remove();
-				trailItems.remove(gi);
+		addItems();
+		removeItems();
+		Iterator<TrailItem> tit = trailItems.iterator();
+		while(tit.hasNext()){
+			TrailItem ti = tit.next();
+			if(ti.update(timeElapsed)){
+				removeItem(ti);
 			}
+		}
+		Iterator<Tower> towit = towers.iterator();
+		while(towit.hasNext()){
+			Tower t = towit.next();
+			t.update(timeElapsed);
 		}
 		Iterator<Path> pit = paths.iterator();
 		while(pit.hasNext()){
@@ -244,14 +229,16 @@ public class Grid extends Component {
 				pit.remove();
 			}
 		}
-		for(Path p : paths){
-			p.update(timeElapsed);
-		}
+		difficulty.update(timeElapsed);
 	}
 	
 	@Override
 	public void draw(Graphics g){
-		super.draw(g);
+		Collection<GridItem> items = new ArrayList<GridItem>();
+		items.addAll(trailItems);
+		items.addAll(gabions);
+		items.addAll(towers);
+		//super.draw(g);
 		for(GridItem gi : items){
 			gi.draw(g);
 		}
@@ -262,14 +249,6 @@ public class Grid extends Component {
 	
 	public Collection<Tower> getTowers(){
 		return towers;
-	}
-
-	public Collection<GridItem> getItems() {
-		return items;
-	}
-
-	public void setItems(Collection<GridItem> items) {
-		this.items = items;
 	}
 
 	public Collection<TrailItem> getTrailItems() {
@@ -299,7 +278,5 @@ public class Grid extends Component {
 	public void setTowers(Collection<Tower> towers) {
 		this.towers = towers;
 	}
-	
-	
 
 }

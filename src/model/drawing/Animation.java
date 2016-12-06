@@ -154,6 +154,28 @@ public class Animation {
 		// Load all required images
 		insertImage("images/null.png", "null");
 		insertScreenImage("images/test1.png", "bcg");
+		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
+		insertImage("images/EH1.png", "EH1");
+		insertImage("images/EH2.png", "EH2");
+		insertImage("images/EH3.png", "EH3");
+		insertImage("images/EH4.png", "EH4");
+		insertTowerImage("images/Fisherman.png", "Fisherman");
+		insertImage("images/Losing Screen.png", "LosingScreen");
+		insertTowerImage("images/OysterGabion.png", "OysterGabion");
+		insertImage("images/Rain.png", "rain");
+		insertImage("images/Storm.png", "storm");
+		insertScreenImage("images/background.png", "background");
+		insertTrailItemImage("images/invasive_item.png", "invasive_item");
+		insertTrailItemImage("images/invasive_item_tower.png", "invasive_item_tower");
+		insertTrailItemImage("images/larvae.png", "larvae");
+		insertTrailItemImage("images/oyster.png", "oyster");
+		insertTowerImage("images/oyster_tower.png", "oyster_tower");
+		insertTrailItemImage("images/pollutant1.png", "pollutant1");
+		insertTrailItemImage("images/pollutant2.png", "pollutant2");
+		insertTrailItemImage("images/pollutant3.png", "pollutant3");
+		insertTrailItemImage("images/pollutant4.png", "pollutant4");
+		insertTowerImage("images/pollutant_tower.png", "pollutant_tower");
+		insertScreenImage("images/bcg.png", "bcg");
 	}
 	
 	/**

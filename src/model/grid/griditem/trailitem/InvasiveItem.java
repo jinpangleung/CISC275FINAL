@@ -24,7 +24,7 @@ import model.moving.Velocity;
 public class InvasiveItem extends TrailItem{
 	
 	public InvasiveItem(Coord c) {
-		super(c, new Animation("invasive_item"), new GridPosition(0,0), new Velocity(0,0.01),  GridColor.GREEN);
+		super(c, new Animation("invasive_item"), new GridPosition(0,0), new Velocity(0,0.0001),  GridColor.GREEN);
 	}
 	
 	

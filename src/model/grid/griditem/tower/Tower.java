@@ -13,6 +13,8 @@ import model.grid.griditem.trailitem.Oyster;
 import model.grid.griditem.trailitem.TrailItem;
 import model.gui.path.Path;
 import model.gui.touch.Touch;
+import model.inventory.Inventory;
+import model.player.Player;
 /**
  * A Tower is an abstract object that extends GridItem. 
  * 
@@ -99,13 +101,16 @@ public abstract class Tower extends GridItem {
 		if(gi.getGridColor() == this.getGridColor()){
 			if(gi instanceof Oyster){
 				//ADD OYSTER
+				Inventory.getInstance().getOgf().increaseCurrency(1);
 			}
 			else{
 				//INCREASE HAPPINESS
+				Player.getInstance().increaseHappiness(1);
 			}
 		}
 		else{
 			//DECREASE HAPPINESS
+			Player.getInstance().decreaseHappiness(1);
 		}
 	}
 	
