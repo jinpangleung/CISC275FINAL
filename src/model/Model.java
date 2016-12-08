@@ -118,6 +118,7 @@ public class Model {
 	}
 	
 	public void update(long timeElapsed){
+		if(Controller.getTime() <= 300 * Time.nanosecond){
 		if(!titleScreen){
 			//int numOfStorm = (int) (timeElapsed/timeToStorm);
 			grid.update(timeElapsed);
@@ -146,8 +147,10 @@ public class Model {
 //			timeToStorm = timeToStorm + timeToStorm;
 //		}
 	}
+	}
 	
 	public void draw(Graphics g){
+		if(Controller.getTime() <= 300 * Time.nanosecond){
 		if(!titleScreen){
 			g.drawImage(Animation.getImage("bcg"), 0, 0, null);
 			player.draw(g);
@@ -172,17 +175,17 @@ public class Model {
 			g.drawString("Time " + Long.toString(minutes) + ":" + sec, 10, 23);
 			
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-			g.drawString("100", Model.getInstance().getScreenWidth()-150, 65);
+			g.drawString("0", Model.getInstance().getScreenWidth()-180, 65);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-			g.drawString(Integer.toString(Player.getInstance().getHappiness()), Model.getInstance().getScreenWidth() - 75, 65);
-			g.drawString("0", Model.getInstance().getScreenWidth()-20, 65);
+			g.drawString(Integer.toString(Player.getInstance().getHappiness()), Model.getInstance().getScreenWidth() - 110, 65);
+			g.drawString("100", Model.getInstance().getScreenWidth()-50, 65);
 			for (int i=100; i>=0; i--){
 				red = 255 - i * 2.3;
 				blue = 25 + i;
 				green = 0 + i;
-				Color c = new Color((int) red,(int) green,(int) blue, 6);
+				Color c = new Color((int) red,(int) green,(int) blue, 100);
 				g.setColor(c);
-				g.fillRect(Model.getInstance().getScreenWidth()-(i+1)-50, 10, Model.getInstance().getScreenWidth()-i-50, 25);
+				g.fillRect(Model.getInstance().getScreenWidth()-200+2*i, 10, 2, 25);
 			
 //				if (minutes >= 5){
 //					if (player.getInstance().getHappiness() >= 50){
@@ -203,6 +206,9 @@ public class Model {
 			}
 		} else {
 			ts.draw(g);
+		}
+		} else {
+			g.drawImage(Animation.getImage("end"), 0, 0, null);
 		}
 	}
 	
@@ -254,6 +260,7 @@ public class Model {
 		}}*/
 	
 	public void mouseClicked(int mouseX, int mouseY){
+		if(Controller.getTime() <= 300 * Time.nanosecond){
 		if(!titleScreen){
 			if(Grid.getInstance().getReadyButton().isWithin(mouseX, mouseY)){
 				Grid.getInstance().getReadyButton().mouseClicked(mouseX, mouseY);
@@ -262,17 +269,22 @@ public class Model {
 		} else {
 			ts.click(mouseX, mouseY);
 		}
+		}
 	}
 	
 	public void mouseReleased(int mouseX, int mouseY){
+		if(Controller.getTime() <= 300 * Time.nanosecond){
 		if(!titleScreen){
 			componentMapping.mouseReleased(mouseX, mouseY);
+		}
 		}
 	}
 	
 	public void mouseDragged(int mouseX, int mouseY){
+		if(Controller.getTime() <= 300*Time.nanosecond){
 		if(!titleScreen){
 			touch.mouseDragged(mouseX, mouseY);
+		}
 		}
 	}
 
