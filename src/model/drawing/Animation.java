@@ -212,10 +212,31 @@ public class Animation {
 		insertTrailItemImage("images/pollutant4.png", "pollutant4");
 		insertTowerImage("images/pollutant_tower.png", "pollutant_tower");
 		insertScreenImage("images/bcg.png", "bcg");
-		for (int i=1; i<=71; i++){
+		for (int i=1; i<=34; i++){
 			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*i - 1));
 			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*i));
 		}
+		for (int i=16; i<=34; i++){
+			int a = i + 19;
+			int b = a + 19;
+			int c = b + 19;
+			int d = c + 19;
+			//System.out.println(d);
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*a - 1));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*a));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*b - 1));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*b));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*c - 1));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*c));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*d - 1));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*d));
+		}
+		for (int i=35; i<=71; i++){
+			int a = i + 76;
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*a - 1));
+			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*a));
+		}
+		
 //		insertCloudImage("images/cloud east0021.png", "cloud1");
 //		insertCloudImage("images/cloud east0022.png", "cloud2");
 //		insertCloudImage("images/cloud east0023.png", "cloud3");

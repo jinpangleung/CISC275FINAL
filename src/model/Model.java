@@ -3,6 +3,7 @@ package model;
 import java.awt.Graphics;
 
 import controller.Controller;
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.Grid;
 import model.grid.griditem.tower.Tower;
@@ -35,7 +36,14 @@ public class Model {
 	private int screenWidth;
 	private int screenHeight;
 	private Storm storm;
-	private long timeToStorm = 7000000000L;
+	private Storm storm2;
+	private Storm storm3;
+	private Storm storm4;
+	//private long timeToStorm = 120000000000L;
+	private long timeToStorm = 7000000000L; //test
+	private long timeToStorm2 = 240000000000L;
+	private long timeToStorm3 = 360000000000L;
+	private long timeToStorm4 = 480000000000L;
 	private int numOfStorm;
 	
 	public static final double GRID_HEIGHT = .8;
@@ -74,6 +82,9 @@ public class Model {
 		Model.instance = this;
 		
 		this.storm = new Storm();
+		this.storm2 = new Storm();
+		this.storm3 = new Storm();
+		this.storm4 = new Storm();
 		
 		System.out.println("\tModel has been initialized");
 	}
@@ -97,6 +108,15 @@ public class Model {
 		if (timeToStorm <= 0){
 			storm.update(timeElapsed);
 		}
+		if (timeToStorm2 <= 0){
+			storm2.update(timeElapsed);
+		}
+		if (timeToStorm3 <= 0){
+			storm3.update(timeElapsed);
+		}
+		if (timeToStorm4 <= 0){
+			storm4.update(timeElapsed);
+		}
 //		if(numOfStorm == 1){
 //			storm.update(timeElapsed);
 //			timeToStorm = timeToStorm + timeToStorm;
@@ -111,6 +131,15 @@ public class Model {
 		touch.draw(g);
 		if (timeToStorm <= 0){
 			storm.draw(g);
+		}
+		if (timeToStorm2 <= 0){
+			storm2.draw(g);
+		}
+		if (timeToStorm3 <= 0){
+			storm3.draw(g);
+		}
+		if (timeToStorm4 <= 0){
+			storm4.draw(g);
 		}
 		long timeRemaining = Controller.getTime();
 		long seconds = timeRemaining / Time.nanosecond;

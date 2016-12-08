@@ -25,10 +25,10 @@ public class Storm {
 	private int alpha;
 	protected Coord coord;
 	protected Animation animation;
-	protected Animation cloudAnimation = new Animation("cloud", 142);
+	protected Animation cloudAnimation = new Animation("cloud", 294);
 	protected Animation rainAnimation = new Animation("rain", 10);
 
-	private long timeLeft = (long) (4.7333333333 * 1000000000L);
+	private long timeLeft = (long) (9.8 * 1000000000L);
 	
 	public Storm(){
 		wave1 = new Wave();

@@ -30,7 +30,7 @@ public class Wave {
 	private double gabionY;
 	protected Animation waveAnimation;
 	
-	private static final double TIME = 10.0; // 10 seconds
+	private static final double TIME = 4.0; // 10 seconds
 	private static final double TOP = 0; // half screen height
 	
 	public Wave(){
@@ -40,7 +40,7 @@ public class Wave {
 		this.startY = this.y;
 		this.speed = (double) (this.y - TOP)  / (TIME * Time.nanosecond); // Move the en= new Animation("wave", 13);tire screen in 10 seconds
 		this.hasHitGabion = false;
-		this.gabionY = Grid.getInstance().getBottomRight().getY() * 0.8;
+		this.gabionY = Grid.getInstance().getBottomRight().getY() - 180;
 		waveAnimation = new Animation("wave", 13);
 		waveAnimation.setxOffset(0);
 		waveAnimation.setyOffset(0);
@@ -91,11 +91,6 @@ public class Wave {
 	}
 	
 	public void draw(Graphics g){
-		// TODO
-		int x = 0;
-		int y = (int) this.y;
-		int width = Model.getInstance().getScreenWidth();
-		int height = Model.getInstance().getScreenHeight();
 		// System.out.println(Integer.toString(x) + " " + Integer.toString(y) + " " + Integer.toString(width) + " " + Integer.toString(height));
 		if(this.hasHitGabion){
 			waveAnimation.draw(g, 0, y);

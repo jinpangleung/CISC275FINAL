@@ -173,6 +173,7 @@ public class Grid extends Component {
 		if(!Touch.getInstance().isHolding()){
 			return;
 		}
+		
 		GridItem gi = Touch.getInstance().getHolding();
 			
 		if(gi instanceof TrailItem){
@@ -292,11 +293,6 @@ public class Grid extends Component {
 		while(towit.hasNext()){
 			Tower t = towit.next();
 			t.update(timeElapsed);
-		}
-		Iterator<Gabion> gib = gabions.iterator();
-		while(gib.hasNext()){
-			Gabion g = gib.next();
-			g.update(timeElapsed);
 		}
 		Iterator<Path> pit = paths.iterator();
 		while(pit.hasNext()){
