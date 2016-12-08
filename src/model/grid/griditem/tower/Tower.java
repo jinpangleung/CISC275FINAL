@@ -2,6 +2,7 @@ package model.grid.griditem.tower;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import model.drawing.Animation;
 import model.drawing.Coord;
@@ -153,5 +154,9 @@ public abstract class Tower extends GridItem {
 					range*2, range*2);
 		}
 		super.draw(g);
+	}
+	
+	public void mouseDragged(int x, int y){
+		// Do nothing except for red tower
 	}
 }

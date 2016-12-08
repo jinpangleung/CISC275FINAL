@@ -1,5 +1,8 @@
 package model.inventory.factory;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import model.gui.component.Component;
 import model.gui.component.ComponentPosition;
 import model.gui.path.Path;
@@ -67,6 +70,13 @@ public abstract class TowerFactory extends Component {
 	
 	public void setCostPer(int c){
 		this.costPer = c;
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		super.draw(g);
+		g.setColor(Color.RED);
+		g.drawString(Integer.toString(getCurrency()), (int) getTopLeft().getX(), (int) getTopLeft().getY());
 	}
 
 }

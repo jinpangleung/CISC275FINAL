@@ -16,17 +16,15 @@ import java.awt.Graphics;
 
 public class Storm {
 	
-	private Wave wave1;
-	private Wave wave2;
+	private Wave wave;
 	
 	public Storm(){
-		wave1 = new Wave(0);
-		wave2 = new Wave(0);
+		wave = new Wave();
 		// TODO
 	}
 	
 	public boolean update(long elapsedTime){
-		if(wave1.update(elapsedTime) && wave2.update(elapsedTime)){
+		if(wave.update(elapsedTime)){
 			return true;
 		} else {
 			return false;
@@ -34,8 +32,7 @@ public class Storm {
 	}
 	
 	public void draw(Graphics g){
-		wave1.draw(g);
-		wave2.draw(g);
+		wave.draw(g);
 	}
 
 }

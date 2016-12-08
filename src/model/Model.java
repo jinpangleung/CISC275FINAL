@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Graphics;
 
+import controller.Controller;
 import model.drawing.Animation;
 import model.grid.Grid;
 import model.grid.griditem.tower.Tower;
@@ -9,6 +10,9 @@ import model.gui.component.*;
 import model.gui.touch.Touch;
 import model.inventory.Inventory;
 import model.player.Player;
+import model.storm.Storm;
+
+import java.awt.Font;
 
 /**
  * Model
@@ -30,6 +34,7 @@ public class Model {
 	private static Model instance;
 	private int screenWidth;
 	private int screenHeight;
+	private Storm storm;
 	
 	public static final double GRID_HEIGHT = .8;
 	public static final double GRID_WIDTH = .7;
@@ -66,6 +71,8 @@ public class Model {
 		
 		Model.instance = this;
 		
+		this.storm = new Storm();
+		
 		System.out.println("\tModel has been initialized");
 	}
 	
@@ -83,14 +90,25 @@ public class Model {
 	
 	public void update(long timeElapsed){
 		grid.update(timeElapsed);
+		storm.update(timeElapsed);
 	}
 	
 	public void draw(Graphics g){
 		g.drawImage(Animation.getImage("bcg"), 0, 0, null);
+		player.draw(g);
 		inventory.draw(g);
 		grid.draw(g);
 		touch.draw(g);
-		player.draw(g);
+		storm.draw(g);
+		long timeRemaining = Controller.getTime();
+		long seconds = timeRemaining / Time.nanosecond;
+		long minutes = seconds / 60;
+		String sec = Long.toString(seconds%60);
+		if(sec.length() == 1){
+			sec = "0" + sec;
+		}
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		g.drawString("Time " + Long.toString(minutes) + ":" + sec, 100, 100);
 	}
 	
 	public void mouseClicked(int mouseX, int mouseY){

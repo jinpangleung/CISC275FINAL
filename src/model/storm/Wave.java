@@ -1,5 +1,6 @@
 package model.storm;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import model.Model;
@@ -18,19 +19,21 @@ public class Wave {
 	private static final int DAMAGE = 100;
 	
 	private WaveState state;
-	private int x;
 	private double y;
 	private double startY;
 	private double speed;
 	private boolean hasHitGabion;
 	private double gabionY;
 	
-	public Wave(int x){
+	private static final double TIME = 10.0; // 10 seconds
+	private static final double TOP = Model.getInstance().getScreenHeight() / 2; // half scrren height
+	
+	public Wave(){
 		this.state = WaveState.ADVANCING;
-		this.x = x;
 		this.y = Model.getInstance().getScreenHeight();
+		System.out.println(y);
 		this.startY = this.y;
-		this.speed = this.y * 10 / Time.nanosecond; // Move the entire screen in 10 seconds
+		this.speed = (double) TOP / (TIME * Time.nanosecond); // Move the entire screen in 10 seconds
 		this.hasHitGabion = false;
 		this.gabionY = Grid.getInstance().getBottomRight().getY();
 	}
@@ -46,7 +49,7 @@ public class Wave {
 	
 	private boolean advancingUpdate(long elapsedTime){
 		this.y -= this.speed * elapsedTime;
-		if(this.y <= 0){
+		if(this.y <= TOP){
 			flood();
 		}
 		if(!this.hasHitGabion){
@@ -75,6 +78,13 @@ public class Wave {
 	
 	public void draw(Graphics g){
 		// TODO
+		int x = 0;
+		int y = (int) this.y;
+		int width = Model.getInstance().getScreenWidth();
+		int height = Model.getInstance().getScreenHeight();
+		// System.out.println(Integer.toString(x) + " " + Integer.toString(y) + " " + Integer.toString(width) + " " + Integer.toString(height));
+		g.setColor(Color.BLUE);
+		g.fillRect(x, y, width, height);
 	}
 	
 	private void crash(){
@@ -89,6 +99,7 @@ public class Wave {
 	
 	private void flood(){
 		// TODO
+		this.state = WaveState.RETREATING;
 	}
 
 }

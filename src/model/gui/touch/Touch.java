@@ -48,6 +48,9 @@ public class Touch {
 		if(this.isHolding){
 			this.holding.setCoord(mouseX, mouseY);
 		}
+		for(Tower t : Grid.getInstance().getTowers()){
+			t.mouseDragged(mouseX, mouseY);
+		}
 	}
 	
 	public void clamp(GridItem objectToBeClamped){

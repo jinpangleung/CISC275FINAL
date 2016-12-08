@@ -1,6 +1,7 @@
 package controller;
 
 import model.Model;
+import model.Time;
 import view.View;
 
 /**
@@ -16,7 +17,7 @@ public class Controller {
 	
 	private Model model;
 	private View view;
-	private long time;
+	private static long time;
 	
 	public Controller(Model model, View view){
 		this.model = model;
@@ -29,7 +30,7 @@ public class Controller {
 		this.view.draw();
 	}
 	
-	public long getTime(){
+	public static long getTime(){
 		return time;
 	}
 }

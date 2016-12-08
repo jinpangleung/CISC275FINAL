@@ -202,17 +202,17 @@ public class Animation {
 	private static final int DESIRED_FPS = 30;
 	
 	// Attributes
-	private String[] sprites;
-	private int length;
-	private int index;
-	private int xOffset;
-	private int yOffset;
-	private int imageWidth;
-	private int imageHeight;
-	private long animationTime;
-	private long frameTime;
-	private long elapsedTime;
-	private boolean completedCycle;
+	protected String[] sprites;
+	protected int length;
+	protected int index;
+	protected int xOffset;
+	protected int yOffset;
+	protected int imageWidth;
+	protected int imageHeight;
+	protected long animationTime;
+	protected long frameTime;
+	protected long elapsedTime;
+	protected boolean completedCycle;
 	
 	// Constructor
 	public Animation(String sprite){
@@ -233,6 +233,30 @@ public class Animation {
 		this.completedCycle = false;
 	}
 	
+	public Animation(String base, int num){
+		this.sprites = new String[num];
+		for(int i = 0; i < num; i++){
+			this.sprites[i] = base + Integer.toString(i+1);
+		}
+		this.index = 0;
+		this.length = num;
+		BufferedImage img = getImage(this.sprites[1]);
+		this.imageWidth = img.getWidth();
+		this.imageHeight = img.getHeight();
+		this.xOffset = this.imageWidth / 2;
+		this.yOffset = this.imageHeight / 2;
+		double secondsOneCycle = 1.0 / ((double) DESIRED_FPS / (double) this.length);
+		double nanoOneCycle = secondsOneCycle * Time.nanosecond;
+		this.animationTime = (long) nanoOneCycle;
+		this.frameTime = (long) (nanoOneCycle / (double) this.length);
+		this.elapsedTime = 0;
+		this.completedCycle = false;
+	}
+	
+	public void reverseUpdate(long elapsedTime){
+		// Do nothing
+	}
+	
 	// Draw Image at current index
 	public void draw(Graphics g, double x, double y){
 		g.drawImage(Animation.getImage(sprites[index]), (int) x - xOffset, (int) y - yOffset, null);
@@ -244,17 +268,11 @@ public class Animation {
 	}
 	
 	// Update the index based on how much time has passed
-	public boolean update(long elapsedTime){
+	public void update(long elapsedTime){
 		this.elapsedTime += elapsedTime;
 		this.elapsedTime = this.elapsedTime % this.animationTime;
 		long newIndex = this.elapsedTime / this.frameTime;
 		this.index = (int) newIndex;
-		if(this.index >= 1){
-			this.completedCycle = true;
-		} else if (this.completedCycle){
-			return true;
-		}
-		return false;
 	}
 
 	public String[] getSprites() {

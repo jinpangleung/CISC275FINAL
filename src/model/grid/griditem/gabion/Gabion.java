@@ -3,6 +3,7 @@ package model.grid.griditem.gabion;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
+import model.grid.Grid;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridItem;
 
@@ -37,7 +38,9 @@ public abstract class Gabion extends GridItem {
 	
 	//@Override
 	public boolean update(long elapsedTime) {
-		// TODO Auto-generated method stub
+		if(health <= 0){
+			Grid.getInstance().removeItem(this);
+		}
 		return false;
 	}
 

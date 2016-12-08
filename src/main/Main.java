@@ -49,7 +49,7 @@ public class Main {
     			}
     		}
     		
-    		if(controller.getTime() > Time.nanosecond * 60){
+    		if(controller.getTime() > Time.nanosecond * 180){
     			isGameDone = true;
     		}
     	}
