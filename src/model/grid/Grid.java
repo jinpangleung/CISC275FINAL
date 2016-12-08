@@ -294,5 +294,10 @@ public class Grid extends Component {
 	public void setTowers(Collection<Tower> towers) {
 		this.towers = towers;
 	}
+	
+	public Difficulty getDifficulty(){
+		return difficulty;
+	}
+
 
 }

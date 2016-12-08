@@ -36,8 +36,12 @@ public class MovableObject extends GridItem {
 		double xAccel = accel.getX()*elapsedTime;
 		double yAccel = accel.getY()*elapsedTime;
 		
-		double xVel = this.getVelocity().getX() + xAccel;
-		double yVel = this.getVelocity().getY() + yAccel;
+		double xVel = this.velocity.getX() + xAccel;
+		double yVel = this.velocity.getY() + yAccel;
+		
+		xVel = xVel * Grid.getInstance().getDifficulty().getVelocityScale();
+		yVel = yVel * Grid.getInstance().getDifficulty().getVelocityScale();
+		
 		
 		if(xVel >= maxVelocity)
 			xVel = maxVelocity;

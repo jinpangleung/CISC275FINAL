@@ -19,6 +19,7 @@ import model.grid.griditem.trailitem.Pollutant;
 import model.grid.griditem.trailitem.TrailItem;
 import model.gui.path.*;
 import model.moving.MovableObject;
+import model.moving.Velocity;
 
 /**
  * Difficulty
@@ -31,8 +32,9 @@ import model.moving.MovableObject;
 public class Difficulty {
 	
 	private long timeToSpawn;
-	private final long SPAWN_TIME = 4000000000L;
+	private long spawn_time = 2400000000L;
 	private long timeToStorm = 240000000000L;
+	private double velocityScale = 1;
 	private int oysterCount = 1;
 	private int invasiveCount = 1;
 	private int pollutantCount = 1;
@@ -41,15 +43,15 @@ public class Difficulty {
 	private int invasiveCollected = 1;
 	private int pollutantCollected = 1;
 	private int larvaeCollected = 1;
-	private int totalSpawned = 1;
-	//private final static double MAX_VEL = MovableObject.getMaxVelocity();
-	private final static double MIN_VEL = 3;
+	private int totalSpawned = 4;
+	private final static double MAX_VEL = PixelGrid.getInstance().getSquareHeight()/Time.nanosecond;//MovableObject.getInstance().getMaxVelocity();//this is causing error
+	private final static double MIN_VEL = (PixelGrid.getInstance().getSquareHeight()/Time.nanosecond)-0000000005;
 	private final static long MAX_SPAWN = 6000000000L;
 	private final static long MIN_SPAWN = 1000000000L;
 	
 	
 	public Difficulty(){
-		timeToSpawn = SPAWN_TIME;
+		timeToSpawn = spawn_time;
 	}
 	
 	/**
@@ -57,14 +59,13 @@ public class Difficulty {
 	 * <p>
 	 * Look at the current Grid and decide how to scale difficulty and when to spawn new objects
 	 */
-	//Difficulty.getSpawnRate()
 	public void update(long timeElapsed){
 		if(timeToSpawn > 0){
 			timeToSpawn -= timeElapsed;
 			timeToStorm -= timeElapsed;
 		} else {
 			spawn();
-			timeToSpawn = SPAWN_TIME;
+			timeToSpawn = spawn_time;
 			timeToStorm -= timeElapsed;
 		}
 	}
@@ -76,14 +77,14 @@ public class Difficulty {
 	
 	public void spawn(){
 		int randomIndex = ThreadLocalRandom.current().nextInt(0, Board.getInstance().getSpawnPositions().size());
-		GridPosition randomPosition = Board.getInstance().getSpawnPositions().get(randomIndex);
-		GridPosition spawnPoint = new GridPosition(randomPosition.getX(), randomPosition.getY());
+		GridPosition spawnPoint = Board.getInstance().getSpawnPositions().get(randomIndex);
 		Coord inGrid = PixelGrid.getInstance().getCoord(spawnPoint);
 		Coord outsideGrid = new Coord(inGrid.getX(), -PixelGrid.getInstance().getSquareHeight());
 		TrailItem toBeSpawned = decideSpawn(outsideGrid);
 		toBeSpawned.setGridPosition(spawnPoint);
 		Grid.getInstance().addPath(new Path(toBeSpawned, inGrid, new BackToGridBehavior()));
 		totalSpawned++;
+		decideVelocityAndSpawnRate();
 	}
 	
 	/**
@@ -101,8 +102,8 @@ public class Difficulty {
 		return totalCollect * 100f / totalSpawn;
 	}
 	
+	//this decides when to spawn
 	public TrailItem decideSpawn(Coord startCoord){
-		
 		Random rand = new Random();
 		int r = rand.nextInt(100);
 		
@@ -111,53 +112,80 @@ public class Difficulty {
 		float invasiveItem = oyster + pollutant + getPercentCollected(invasiveCollected, getTotalCollected());
 		
 		if (r <= oyster){
+			oysterCount++;
 			return new Oyster(startCoord);
 		}else if (r <= pollutant){
+			pollutantCount++;
 			return new Pollutant(startCoord);
 		}else if (r <= invasiveItem){
+			invasiveCount++;
 			return new InvasiveItem(startCoord);
 		}else{
+			larvaeCount++;
 			return new Larvae(startCoord);
 		}
 	}
-	
+	//this will give time to spawn its new spawn rate
 	public void setSpawnRate(long spawnRate){
-		this.timeToSpawn = spawnRate;
+		this.spawn_time = spawnRate;
 	}
 	
-	/*public void decideVelocityAndSpawnRate(){
-		double currentVel = MovableObject.getVelocity();
+	public void decideVelocityAndSpawnRate(){
+		//Double currentVel = MovableObject.getInstance().getVelocity();
+		//Velocity currentVel = MovableObject.getInstance().getVelocity();
 		
-		//I will make this its own function, no time now
-		if(timeToSpawn >= MIN_SPAWN && timeToSpawn <= MAX_SPAWN){
-			decideHelper();
+//		Double velX = MovableObject.getInstance().getVelocityX();
+//		Double velY = MovableObject.getInstance().getVelocityY();
+		//System.out.println("spawn time " + spawn_time + ", min spawn, " + MIN_SPAWN + ", max spawn" + MAX_SPAWN);
+		
+		decideHelper();
+		if(spawn_time < MIN_SPAWN){
+			spawn_time = MIN_SPAWN;
 		}
-		if(currentVel >= MIN_VEL && currentVel <= MAX_VEL){
-			decideHelper();
+		else if(spawn_time > MAX_SPAWN){
+			spawn_time = MAX_SPAWN;
 		}
+//		System.out.println("velx " + velX + "vely" + velY + "Min vel " + MIN_VEL + "max vel" + MAX_VEL);
+//		if((velX >= MIN_VEL || velY >= MIN_VEL) && (velX <= MAX_VEL || velY <= MAX_VEL)){
+//			System.out.println("goes to decide helper");
+//			decideHelper();
+//		}
 	}
 	public void decideHelper(){
-		if (getPercentTotal(getTotalCollected(), totalSpawned) < 16){
-			MovableObject.setVelocity(MovableObject.getVelocity()/.1);
-			setSpawnRate((long) (timeToSpawn/.1));
-		}else if (getPercentTotal(getTotalCollected(), totalSpawned) < 31){
-			MovableObject.setVelocity(MovableObject.getVelocity()/.05);
-			setSpawnRate((long) (timeToSpawn/.05));
-		}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 46){
-			MovableObject.setVelocity(MovableObject.getVelocity()/.02);
-			setSpawnRate((long) (timeToSpawn/.02));
-		}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 66){
-			MovableObject.setVelocity(MovableObject.getVelocity()*.03);
-			setSpawnRate((long) (timeToSpawn*.03));
-		}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 81){
-			MovableObject.setVelocity(MovableObject.getVelocity()*.07);
-			setSpawnRate((long) (timeToSpawn*.07));
-		}else{
-			MovableObject.setVelocity(MovableObject.getVelocity()*.1);
-			setSpawnRate((long) (timeToSpawn*.1));
+		//System.out.println("spawn_time before helper: " + spawn_time);
+		//System.out.println("total collected/total spawned: " + 
+		//getTotalCollected() + "/" + totalSpawned + "=" + getPercentTotal(getTotalCollected(), totalSpawned));
+		
+		if (totalSpawned > 5){
+			if (getPercentTotal(getTotalCollected(), totalSpawned) < 16){
+				setVelocityScale(.995);
+				//System.out.println("< 16 case");
+				setSpawnRate(this.spawn_time + 500000000);
+			}else if (getPercentTotal(getTotalCollected(), totalSpawned) < 31){
+				setVelocityScale(.996);
+				//System.out.println("< 31 case");
+				setSpawnRate(this.spawn_time + 300000000);
+			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 46){
+				setVelocityScale(.997);
+				//System.out.println("< 46 case");
+				setSpawnRate(this.spawn_time + 100000000);
+			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 66){
+				setVelocityScale(1.001);
+				//System.out.println("< 66 case");
+				setSpawnRate(this.spawn_time - 200000000);
+			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 81){
+				setVelocityScale(1.002);
+				//System.out.println("< 81 case");
+				setSpawnRate(this.spawn_time - 400000000);
+			}else{
+				setVelocityScale(1.003);
+				//System.out.println("else case");
+				setSpawnRate(this.spawn_time - 600000000);
+			}
 		}
+		//System.out.println("spawn_time after helper: " + this.spawn_time + "\n");
 	}
-*/
+
 
 	public void collect(TrailItem item){
 		if (item instanceof Oyster){
@@ -174,5 +202,13 @@ public class Difficulty {
 	}
 	public int getTotalCollected(){
 		return oysterCollected + pollutantCollected + larvaeCollected + invasiveCollected;
+	}
+
+	public double getVelocityScale() {
+		return velocityScale;
+	}
+
+	public void setVelocityScale(double velocityScale) {
+		this.velocityScale = velocityScale;
 	}
 }
