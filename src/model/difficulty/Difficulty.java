@@ -101,9 +101,11 @@ public class Difficulty {
 		TrailItem toBeSpawned;
 		if(step == TutorialStep.SPAWN_ITEM){
 			toBeSpawned = new Pollutant(outsideGrid);
+			pollutantCount++;
 		}
 		else{
 			toBeSpawned = new Oyster(outsideGrid);
+			oysterCount++;
 		}
 		toBeSpawned.setGridPosition(spawnPoint);
 		Grid.getInstance().addPath(new Path(toBeSpawned, inGrid, new BackToGridBehavior()));
@@ -148,6 +150,7 @@ public class Difficulty {
 			return new Larvae(startCoord);
 		}
 		else{
+			larvaeCount++;
 			return new Larvae(startCoord);
 		}
 	}

@@ -2,6 +2,7 @@ package model.moving;
 
 import model.Model;
 import model.Time;
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.Grid;
@@ -11,6 +12,8 @@ import model.grid.gridcell.GridCell;
 import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridColor;
 import model.grid.griditem.GridItem;
+import model.grid.griditem.trailitem.Larvae;
+import model.grid.griditem.trailitem.TrailItem;
 import model.gui.path.DestroyBehavior;
 import model.gui.path.Path;
 import model.player.Player;
@@ -65,7 +68,12 @@ public class MovableObject extends GridItem {
 			Grid.getInstance().removeItem(this);
 			Grid.getInstance().addPath(new Path(this, new Coord(this.getCoord().getX(),
 						Model.getInstance().getScreenHeight() + 50), new DestroyBehavior()));
-			Player.getInstance().decreaseHappiness(5);
+			if ((TrailItem)this instanceof Larvae){
+				Player.getInstance().increaseHappiness(1);
+				Difficulty.collect((TrailItem)this);
+			}else{	
+				Player.getInstance().decreaseHappiness(5);
+			}
 			return;
 		}
 		
@@ -111,7 +119,12 @@ public class MovableObject extends GridItem {
 			Grid.getInstance().removeItem(this);
 			Grid.getInstance().addPath(new Path(this, new Coord(this.getCoord().getX(),
 						Model.getInstance().getScreenHeight() + 50), new DestroyBehavior()));
-			Player.getInstance().decreaseHappiness(5);
+			if ((TrailItem)this instanceof Larvae){
+				Player.getInstance().increaseHappiness(1);
+				Difficulty.collect((TrailItem)this);
+			}else{	
+				Player.getInstance().decreaseHappiness(5);
+			}
 			return;
 		}
 		

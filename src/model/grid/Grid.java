@@ -325,6 +325,7 @@ public class Grid extends Component {
 		while(tit.hasNext()){
 			TrailItem ti = tit.next();
 			if(ti.update(timeElapsed)){
+				Difficulty.collect(ti);
 				removeItem(ti);
 			}
 		}
