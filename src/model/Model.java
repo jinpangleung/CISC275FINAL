@@ -3,6 +3,7 @@ package model;
 import java.awt.Graphics;
 
 import controller.Controller;
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.Grid;
 import model.grid.griditem.tower.Tower;
@@ -175,6 +176,21 @@ public class Model {
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
 			g.drawString("Time " + Long.toString(minutes) + ":" + sec, 10, 23);
 			}
+			
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+			g.drawString("100", Model.getInstance().getScreenWidth()-150, 65);
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+			g.drawString("0", Model.getInstance().getScreenWidth()-20, 65);
+			for (int i=100; i>=0; i--){
+				red = 255 - i * 2.3;
+				blue = 25 + i;
+				green = 0 + i;
+				
+				Color c = new Color((int) red,(int) green,(int) blue, 6);
+				g.setColor(c);
+				g.fillRect(Model.getInstance().getScreenWidth()-(i+1)-50, 10, Model.getInstance().getScreenWidth()-i-50, 25);
+			}
+			
 		} else {
 			ts.draw(g);
 		}
