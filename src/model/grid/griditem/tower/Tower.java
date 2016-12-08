@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.Serializable;
 
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.Grid;
@@ -91,6 +92,7 @@ public abstract class Tower extends GridItem {
 			if(this.isInRange(Touch.getInstance().getStartPosition())){
 				GridItem gi = Touch.getInstance().unClamp();
 				if(gi instanceof TrailItem){
+					Difficulty.collect((TrailItem) gi);
 					this.react(gi);
 				}
 				else {

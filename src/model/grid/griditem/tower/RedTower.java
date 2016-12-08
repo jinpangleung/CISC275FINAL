@@ -2,6 +2,7 @@ package model.grid.griditem.tower;
 
 import java.awt.Color;
 
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
@@ -40,6 +41,7 @@ public class RedTower extends Tower {
 			if(this.isInRange(Touch.getInstance().getStartPosition())){
 				GridItem gi = Touch.getInstance().unClamp();
 				if(gi instanceof TrailItem){
+					Difficulty.collect((TrailItem) gi);
 					if(mouseX >= this.getCoord().getX()){
 						this.reactTrash(gi);
 					} else {

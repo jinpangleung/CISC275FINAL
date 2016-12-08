@@ -29,7 +29,7 @@ public class Storm {
 	protected Animation cloudAnimation = new Animation("cloud", 52);
 	protected Animation rainAnimation = new Animation("rain", 10);
 	
-	private long timeLeft = 2000000000L;
+	private long timeLeft = 5000000000L;
 	
 	public Storm(){
 		wave1 = new Wave();
@@ -51,8 +51,13 @@ public class Storm {
 	public void draw(Graphics g){
 		//while time is less than 2 sec
 		while (timeLeft > 0){
+			if (alpha == 100){
+				//alpha doesn't increment
+			}
+			else{
+				alpha = alpha + 1;
+			}
 			Color c = new Color(0, 0, 0, alpha);
-			alpha = alpha + 1;
 			g.setColor(c);
 			g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
 		}

@@ -22,12 +22,16 @@ public class MovableObject extends GridItem {
 		this.velocity = velocity;
 	}
 	
-	private static final double INITIAL_VELOCITY = PixelGrid.getInstance().getSquareHeight(); // per second
+	private static final double INITIAL_VELOCITY = PixelGrid.getInstance().getSquareHeight()*10; // per second
 	private static double maxVelocity = INITIAL_VELOCITY / Time.nanosecond;
 	
 	private static final double FRICTION = 0.9999;
 	
 	private Velocity velocity;
+	
+	public static void setMaxSpeed(double speed){
+		maxVelocity = speed/Time.nanosecond;
+	}
 
 	public void move(long elapsedTime) {
 		GridCell currentGridCell = PixelGrid.getInstance().getGridCell(PixelGrid.getInstance().getGridPosition(this.getCoord()));
@@ -38,9 +42,6 @@ public class MovableObject extends GridItem {
 		
 		double xVel = this.velocity.getX() + xAccel;
 		double yVel = this.velocity.getY() + yAccel;
-		
-		xVel = xVel * Grid.getInstance().getDifficulty().getVelocityScale();
-		yVel = yVel * Grid.getInstance().getDifficulty().getVelocityScale();
 		
 		
 		if(xVel >= maxVelocity)
