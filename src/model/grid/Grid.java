@@ -476,7 +476,7 @@ public class Grid extends Component {
 	public void draw(Graphics g){
 		
 		boolean messageA = false;
-		String message1="Red towers pick up pollution.";
+		String message1="Red towers pick up pollution. Left is recycling, right is garbage.";
 		String message2="Blue towers pick up oyster shells.";
 		String message3="Green towers pick up invasive species.";
 		boolean messageB = false;
@@ -532,7 +532,7 @@ public class Grid extends Component {
 				isHorizontal = true;
 				break;
 			case CLICK_ITEM:
-				message = "Items can only be dragged within the tower's range.";
+				message = "Items can only be dragged within the tower's range. Drag the trash to the trash can.";
 				break;
 			case CLICK_TOWER:
 				message = "Welcome to our tutorial!";

@@ -232,6 +232,7 @@ public class Animation {
 		insertTowerImage("images/pollutant_tower6.png", "pollutant_tower6");
 		insertTowerImage("images/pollutant_tower7.png", "pollutant_tower7");
 		insertScreenImage("images/bcg.png", "bcg");
+		insertScreenImage("images/end.png", "end");
 		insertTowerImage("images/BlueTowerIcon.png", "BlueTowerIcon");
 		insertTowerImage("images/RedTowerIcon.png", "RedTowerIcon");
 		insertTowerImage("images/GreenTowerIcon.png", "GreenTowerIcon");
