@@ -89,8 +89,9 @@ public abstract class TowerFactory extends Component {
 	
 	@Override
 	public void draw(Graphics g){
-		animation.draw(g, (this.getBottomRight().getX() - this.getTopLeft().getX()) / 2, 
-				(this.getBottomRight().getY() - this.getTopLeft().getY()));
+		int x = this.getBottomRight().getX() - ((this.getBottomRight().getX() - this.getTopLeft().getX()) / 2);
+		int y = this.getBottomRight().getY() - ((this.getBottomRight().getY() - this.getTopLeft().getY()) / 2);
+		animation.draw(g, x, y);
 	}
 
 }

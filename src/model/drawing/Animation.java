@@ -14,6 +14,7 @@ import model.Model;
 import model.Time;
 import model.grid.Grid;
 import model.grid.PixelGrid;
+import model.grid.ReadyButton;
 
 /**
  * Animation
@@ -177,6 +178,28 @@ public class Animation {
 	    	insertBufferedImage(null, imageName);
 	    } else {
 	    	insertBufferedImage(resize(img, (int) x, (int) y), imageName);
+	    }
+	}
+	
+	public static void insertTitleButtonImage(String fileName, String imageName){
+		int x =(int) (Model.getInstance().getScreenWidth() * 0.3);
+		int y =(int) (Model.getInstance().getScreenHeight() * 0.3);
+		BufferedImage img = readImageFromFile(fileName);
+	    if(img == null){
+	    	insertBufferedImage(null, imageName);
+	    } else {
+	    	insertBufferedImage(resize(img, x, y), imageName);
+	    }
+	}
+	
+	public static void insertReadyToGoButton(String fileName, String imageName){
+		int x = (int) (Model.getInstance().getScreenWidth() * 0.2);
+		int y = (int) (Model.getInstance().getScreenHeight() * 0.2);
+		BufferedImage img = readImageFromFile(fileName);
+	    if(img == null){
+	    	insertBufferedImage(null, imageName);
+	    } else {
+	    	insertBufferedImage(resize(img, x, y), imageName);
 	    }
 	}
 	
