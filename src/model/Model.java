@@ -3,7 +3,6 @@ package model;
 import java.awt.Graphics;
 
 import controller.Controller;
-import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.Grid;
 import model.grid.griditem.tower.Tower;
@@ -134,6 +133,10 @@ public class Model {
 	
 	public void mouseDragged(int mouseX, int mouseY){
 		touch.mouseDragged(mouseX, mouseY);
+	}
+
+	public void updateTutorial(long elapsedTime) {
+		grid.updateTutorial(elapsedTime);
 	}
 
 }

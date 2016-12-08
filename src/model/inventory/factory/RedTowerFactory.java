@@ -1,6 +1,9 @@
 package model.inventory.factory;
 
+import controller.Controller;
+import model.TutorialStep;
 import model.drawing.Coord;
+import model.grid.Grid;
 import model.grid.griditem.tower.RedTower;
 import model.gui.component.ComponentPosition;
 import model.gui.touch.Touch;
@@ -26,6 +29,11 @@ public class RedTowerFactory extends TowerFactory {
 	
 	//@Override
 	public void mouseClicked(int mouseX, int mouseY){
+		// If tutorial is running then tell grid to perform correct step
+		if(Controller.isRunningTutorial() && Grid.getInstance().getStep() == TutorialStep.CLICK_TOWER){
+			Grid.getInstance().doneClickTower();
+		}
+		
 		// If applicable, clamp new tower to touch
 		if(getCurrency() >= getCostPer()){
 			reduceCurrency(getCostPer());

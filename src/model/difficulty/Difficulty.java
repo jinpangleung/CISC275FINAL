@@ -88,6 +88,29 @@ public class Difficulty {
 	}
 	
 	/**
+	 * Place the trail item into the Grid for the tutorial
+	 * 
+	 */
+	
+	public void spawnTutorial(TutorialStep step){
+		// 0 is the first spawn point
+		int index = 0;
+		GridPosition spawnPoint = Board.getInstance().getSpawnPositions().get(index);
+		Coord inGrid = PixelGrid.getInstance().getCoord(spawnPoint);
+		Coord outsideGrid = new Coord(inGrid.getX(), -PixelGrid.getInstance().getSquareHeight());
+		TrailItem toBeSpawned;
+		if(step == TutorialStep.SPAWN_ITEM){
+			toBeSpawned = new Pollutant(outsideGrid);
+		}
+		else{
+			toBeSpawned = new Oyster(outsideGrid);
+		}
+		toBeSpawned.setGridPosition(spawnPoint);
+		Grid.getInstance().addPath(new Path(toBeSpawned, inGrid, new BackToGridBehavior()));
+		totalSpawned++;
+	}
+	
+	/**
 	 * Returns void
 	 * <p>
 	 * Use the difficulty and what has been spawned recently to decide

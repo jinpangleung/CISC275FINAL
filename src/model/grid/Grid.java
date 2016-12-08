@@ -1,11 +1,21 @@
 package model.grid;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.util.*;
 
+import controller.Controller;
+import model.Time;
+import model.TutorialStep;
 import model.difficulty.Difficulty;
 import model.drawing.Animation;
+import model.drawing.Coord;
 import model.grid.gridcell.GridCell;
+import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridItem;
 import model.grid.griditem.gabion.Gabion;
 import model.grid.griditem.tower.Tower;
@@ -14,13 +24,16 @@ import model.gui.component.Component;
 import model.gui.component.ComponentPosition;
 import model.gui.path.Path;
 import model.gui.touch.Touch;
+import model.inventory.Inventory;
+import model.inventory.factory.TowerFactory;
+import model.player.Player;
 
 public class Grid extends Component {
 	
-	private Collection<TrailItem> trailItems;
-	private Collection<Gabion> gabions;
-	private Collection<Tower> towers;
-	private Collection<Path> paths;
+	private List<TrailItem> trailItems;
+	private List<Gabion> gabions;
+	private List<Tower> towers;
+	private List<Path> paths;
 	private static Grid instance;
 	private Board board;
 	private PixelGrid pixelGrid;
@@ -29,6 +42,7 @@ public class Grid extends Component {
 	private Collection<GridItem> toBeRemoved;
 	private Collection<Path> pathsToBeRemoved;
 	private Collection<Path> pathsToBeAdded;
+	private TutorialStep step;
 	
 	public static Grid getInstance(){
 		return instance;
@@ -56,6 +70,7 @@ public class Grid extends Component {
 		toBeRemoved = new HashSet<GridItem>();
 		pathsToBeAdded = new ArrayList<Path>();
 		pathsToBeRemoved = new HashSet<Path>();
+		step = TutorialStep.CLICK_TOWER;
 	}
 	
 	public Grid(int x, int y, int w, int l, String testBoard){
@@ -159,6 +174,7 @@ public class Grid extends Component {
 			return;
 		}
 		GridItem gi = Touch.getInstance().getHolding();
+			
 		if(gi instanceof TrailItem){
 			dropGridItem(mouseX, mouseY);
 		} else if (gi instanceof Tower){
@@ -171,6 +187,16 @@ public class Grid extends Component {
 	public void dropGridItem(int x, int y){
 		for(Tower t : towers){
 			if(t.isWithin(x, y)){
+				// If tutorial is running and player has placed item then call correct action
+				if(Controller.isRunningTutorial()){
+					if(step == TutorialStep.PLACE_ITEM){
+						donePlaceItem();
+					}
+					else{
+						donePlaceWrongItem();
+					}
+				}
+					
 				t.release(x, y);
 				return;
 			}
@@ -182,6 +208,15 @@ public class Grid extends Component {
 		
 		GridCell gc = PixelGrid.getInstance().getGridCell(x, y);
 		if(!gc.isCanPlaceTower()){
+			
+			// If tutorial is running and player is holding tower then call correct action
+			if(Controller.isRunningTutorial() && step == TutorialStep.PLACE_TOWER){
+				doneClickTowerUndo();
+			}
+			if(Controller.isRunningTutorial() && step == TutorialStep.PLACE_GABBION){
+				doneClickGabbionUndo();
+			}
+			
 			Path.snap();
 			return;
 		}
@@ -198,6 +233,10 @@ public class Grid extends Component {
 		Touch.getInstance().unClamp();
 		this.addItem(tower);
 		
+		// If tutorial is running and player has placed tower then call correct action
+		if(Controller.isRunningTutorial() && step == TutorialStep.PLACE_TOWER){
+			donePlaceTower();
+		}
 	}
 	
 	public void placeGabion(int x, int y){
@@ -217,6 +256,11 @@ public class Grid extends Component {
 		gabion.setGridPosition(PixelGrid.getInstance().getGridPosition(gabion.getCoord()));
 		gabion.setCoord(PixelGrid.getInstance().getCenter(gabion.getGridPosition()));
 		this.addItem(gabion);
+		
+		// If tutorial is running and player has placed tower then call correct action
+		if(Controller.isRunningTutorial() && step == TutorialStep.PLACE_GABBION){
+			donePlaceGabbion();
+		}
 	}
 	
 	public void update(long timeElapsed){
@@ -251,6 +295,133 @@ public class Grid extends Component {
 		difficulty.update(timeElapsed);
 	}
 	
+	// This method also contains checks for certain tutorial steps
+	public void updateTutorial(long timeElapsed) {
+		long originalTimeElapsed = timeElapsed;
+		
+		// Check if game is paused if so then only keep paths moving
+		if(Controller.isPaused()){
+			timeElapsed = 0;
+		}
+		// Same as update() but without updating difficulty, which stops spawning
+		addItems();
+		removeItems();
+		addPaths();
+		removePaths();
+		Iterator<TrailItem> tit = trailItems.iterator();
+		while(tit.hasNext()){
+			TrailItem ti = tit.next();
+			if(ti.update(timeElapsed)){
+				removeItem(ti);
+			}
+		}
+		Iterator<Tower> towit = towers.iterator();
+		while(towit.hasNext()){
+			Tower t = towit.next();
+			t.update(timeElapsed);
+		}
+		Iterator<Path> pit = paths.iterator();
+		while(pit.hasNext()){
+			Path p = pit.next();
+			if(p.update(originalTimeElapsed)){
+				pit.remove();
+			}
+		}
+		
+		// Special update instructions
+		switch(step){
+		case CLICK_ITEM:
+			if(!towers.isEmpty() && !trailItems.isEmpty()){
+				// At this step only one item so index 0
+				Tower tower = towers.get(0);
+				Coord itemCoord = trailItems.get(0).getCoord();
+				if(tower.isInRange(itemCoord)){
+					Controller.setPaused(true);
+					step = TutorialStep.PLACE_ITEM;
+				}
+			}
+			break;
+		case CLICK_WRONG_ITEM:
+			if(!towers.isEmpty() && !trailItems.isEmpty()){
+				// At this step only one item so index 0
+				Tower tower = towers.get(0);
+				Coord itemCoord = trailItems.get(0).getCoord();
+				if(tower.isInRange(itemCoord)){
+					Controller.setPaused(true);
+					step = TutorialStep.PLACE_WRONG_ITEM;
+				}
+			}
+			break;
+		}
+	}
+	
+	public void doneClickTower(){
+		System.out.println("Tower was clicked");
+		step = TutorialStep.PLACE_TOWER;
+	}
+	
+	public void doneClickTowerUndo() {
+		System.out.println("Tower was unclicked.");
+		step = TutorialStep.CLICK_TOWER;
+	}
+	
+	public void donePlaceTower(){
+		System.out.println("Tower was placed.");
+		step = TutorialStep.SPAWN_ITEM;
+		Controller.setPaused(false);
+		difficulty.spawnTutorial(step);
+		doneSpawnItem();
+	}
+	
+	public void doneSpawnItem(){
+		System.out.println("Item was spawned");
+		step = TutorialStep.CLICK_ITEM;
+	}
+	
+	public void donePlaceItem(){
+		System.out.println("Item was placed in tower");
+		step = TutorialStep.SPAWN_WRONG_ITEM;
+		Controller.setPaused(false);
+		difficulty.spawnTutorial(step);
+		doneSpawnWrongItem();
+	}
+	
+	public void doneSpawnWrongItem(){
+		System.out.println("Wrong Item was spawned");
+		step = TutorialStep.CLICK_WRONG_ITEM;
+	}
+	
+	public void donePlaceWrongItem(){
+		System.out.println("Wrong Item was placed in tower");
+		// Drastic decrease in health to show effect
+		Player.getInstance().decreaseHappiness(25);
+		step = TutorialStep.CLICK_GABBION;
+	}
+	
+	public void doneClickGabbion(){
+		System.out.println("Gabbion was clicked");
+		step = TutorialStep.PLACE_GABBION;
+	}
+	
+	public void doneClickGabbionUndo() {
+		System.out.println("Gabbion was unclicked.");
+		step = TutorialStep.CLICK_GABBION;
+	}
+	
+	public void donePlaceGabbion(){
+		System.out.println("Gabbion was placed.");
+		step = TutorialStep.DONE;
+		Controller.setPaused(false);
+		doneDone();
+	}
+	
+	public void doneDone(){
+		System.out.println("Tutorial is done continue game.");
+		// Restore happiness
+		Player.getInstance().increaseHappiness(25);
+		Controller.setRunningTutorial(false);
+	}
+	
 	@Override
 	public void draw(Graphics g){
 		Collection<GridItem> items = new ArrayList<GridItem>();
@@ -266,37 +437,163 @@ public class Grid extends Component {
 		for(Path p : pathSnapShot){
 			p.getGridItem().draw(g);
 		}
+		
+		
+		int leftX = this.getTopLeft().getX();
+		int leftY = this.getBottomRight().getY();
+		leftX = (int) (leftX + this.getWidth() * .4);
+		leftY = (int) (leftY - this.getHeight() * .9);
+		int boxLength = (int) (this.getWidth() * .4);
+		int boxHeight = (int) (this.getHeight() * .1);
+		int arrowX = -50;
+		int arrowY = -50;
+		
+		String message = "";
+		boolean draw = true;
+		boolean rotated = false;
+		
+		if(Controller.isRunningTutorial()){
+			// Draw stuff for specific steps
+			switch(step){
+			case CLICK_GABBION:
+				message = "Gabbions are used to stop the storm from hurting your towers.";
+				TowerFactory gabFactory = Inventory.getInstance().getCgf();
+				arrowX = (int) (gabFactory.getTopLeft().getX() - (gabFactory.getWidth() * 1.5));
+				arrowY = (int) (gabFactory.getBottomRight().getY() - (gabFactory.getHeight()));
+				rotated = true;
+				break;
+			case CLICK_ITEM:
+				message = "Items can only be touched within the tower's range.";
+				break;
+			case CLICK_TOWER:
+				message = "Welcome to our tutorial!";
+				TowerFactory redFactory = Inventory.getInstance().getRtf();
+				arrowX = (int) (redFactory.getTopLeft().getX() - (redFactory.getWidth() * 1.5));
+				arrowY = (int) (redFactory.getBottomRight().getY() - (redFactory.getHeight()));
+				rotated = true;
+				break;
+			case CLICK_WRONG_ITEM:
+				draw = false;
+				break;
+			case DONE:
+				draw = false;
+				break;
+			case PLACE_GABBION:
+				message = "Place the gabbion and the game will start!";
+				
+				int width = Board.getInstance().getWidth();
+				int height = Board.getInstance().getHeight();
+				double squareWidth = PixelGrid.getInstance().getSquareWidth();
+				double squareHeight = PixelGrid.getInstance().getSquareHeight();
+				int smallWidth = (int)( squareWidth * 0.7);
+				int smallHeight = (int) (squareHeight * 0.7);
+				GridCell gc = Board.getInstance().getGridCell(Math.floorDiv(width, 3), height - 1);
+				Coord center = PixelGrid.getInstance().getCenter(gc.getGridPosition());
+				int centerX = center.getX().intValue();
+				int centerY = center.getY().intValue();
+				
+				arrowX = centerX - (smallWidth / 2);
+				arrowY = centerY + smallHeight;
+				break;
+			case PLACE_ITEM:
+				message = "Items must be dragged to the correct tower to earn points.";
+				if(!trailItems.isEmpty()){
+					Coord itemCoord = trailItems.get(0).getCoord();
+					arrowX = itemCoord.getX().intValue();
+					arrowY = itemCoord.getY().intValue();
+				}
+				break;
+			case PLACE_TOWER:
+				message = "Strategic tower placing will help you win.";
+				
+				double squareWidth2 = PixelGrid.getInstance().getSquareWidth();
+				double squareHeight2 = PixelGrid.getInstance().getSquareHeight();
+				int smallWidth2 = (int)( squareWidth2 * 0.7);
+				int smallHeight2 = (int) (squareHeight2 * 0.7);
+				Coord center2 = PixelGrid.getInstance().getCenter(new GridPosition(5,5));
+				int center2X = center2.getX().intValue();
+				int center2Y = center2.getY().intValue();
+				
+				arrowX = center2X - (smallWidth2 / 2);
+				arrowY = center2X + smallHeight2;
+				break;
+			case PLACE_WRONG_ITEM:
+				message = "Dragging an item to the wrong tower loses you points.";
+				if(!trailItems.isEmpty()){
+					Coord itemCoord = trailItems.get(0).getCoord();
+					arrowX = (int) Math.round(itemCoord.getX());
+					arrowY = (int) Math.round(itemCoord.getY());
+				}
+				break;
+			case SPAWN_ITEM:
+				draw = false;
+				break;
+			case SPAWN_WRONG_ITEM:
+				draw = false;
+				break;
+			}
+			
+			if(draw){
+				g.setColor(Color.WHITE);
+				g.fillRect(leftX, leftY, boxLength, boxHeight);
+				g.setColor(Color.BLACK);
+				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+				g.drawString(message,
+					(int) (leftX + (boxLength * .1)),
+					(int) (leftY + (boxHeight * .5) + 8));
+				BufferedImage arrow = Animation.getImage("Arrow");
+				
+				
+				// Scale arrow
+				BufferedImage scaledArrow;
+				AffineTransform at = new AffineTransform();
+				if(rotated){
+					scaledArrow = new BufferedImage(arrow.getHeight(), arrow.getWidth(), BufferedImage.TYPE_INT_ARGB);
+					at.scale(.6, .3);
+					at.rotate(Math.toRadians(90), arrow.getWidth()/2, arrow.getHeight()/2);
+				}
+				else{
+					scaledArrow = new BufferedImage(arrow.getWidth(), arrow.getHeight(), BufferedImage.TYPE_INT_ARGB);
+					at.scale(.3, .6);
+				}
+				
+				AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+				scaledArrow = scaleOp.filter(arrow, scaledArrow);
+				
+				g.drawImage(scaledArrow, arrowX, arrowY, null);
+			}
+		}
 	}
 	
-	public Collection<Tower> getTowers(){
+	public List<Tower> getTowers(){
 		return towers;
 	}
 
-	public Collection<TrailItem> getTrailItems() {
+	public List<TrailItem> getTrailItems() {
 		return trailItems;
 	}
 
-	public void setTrailItems(Collection<TrailItem> trailItems) {
+	public void setTrailItems(List<TrailItem> trailItems) {
 		this.trailItems = trailItems;
 	}
 
-	public Collection<Gabion> getGabions() {
+	public List<Gabion> getGabions() {
 		return gabions;
 	}
 
-	public void setGabions(Collection<Gabion> gabions) {
+	public void setGabions(List<Gabion> gabions) {
 		this.gabions = gabions;
 	}
 
-	public Collection<Path> getPaths() {
+	public List<Path> getPaths() {
 		return paths;
 	}
 
-	public void setPaths(Collection<Path> paths) {
+	public void setPaths(List<Path> paths) {
 		this.paths = paths;
 	}
 
-	public void setTowers(Collection<Tower> towers) {
+	public void setTowers(List<Tower> towers) {
 		this.towers = towers;
 	}
 	
@@ -304,5 +601,8 @@ public class Grid extends Component {
 		return difficulty;
 	}
 
+	public TutorialStep getStep() {
+		return step;
+	}
 
 }

@@ -194,6 +194,7 @@ public class Animation {
 		insertImage("images/EH2.png", "EH2");
 		insertImage("images/EH3.png", "EH3");
 		insertImage("images/EH4.png", "EH4");
+		insertImage("images/arrow.png", "Arrow");
 		insertTowerImage("images/Fisherman.png", "Fisherman");
 		insertImage("images/Losing Screen.png", "LosingScreen");
 		insertTowerImage("images/OysterGabion.png", "OysterGabion");

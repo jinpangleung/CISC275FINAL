@@ -3,6 +3,9 @@ package model.inventory.factory;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import controller.Controller;
+import model.TutorialStep;
+import model.grid.Grid;
 import model.gui.component.Component;
 import model.gui.component.ComponentPosition;
 import model.gui.path.Path;
@@ -37,6 +40,14 @@ public abstract class TowerFactory extends Component {
 	//@Override
 	public void mouseReleased(int mouseX, int mouseY){
 		if(Touch.getInstance().isHolding()){
+			// If tutorial is running and player is holding tower then call correct action
+			if(Controller.isRunningTutorial() && Grid.getInstance().getStep() == TutorialStep.PLACE_TOWER){
+				Grid.getInstance().doneClickTowerUndo();
+			}
+			if(Controller.isRunningTutorial() && Grid.getInstance().getStep() == TutorialStep.PLACE_GABBION){
+				Grid.getInstance().doneClickGabbionUndo();
+			}
+			
 			Path.snap();
 		}
 	}
