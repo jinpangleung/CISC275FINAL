@@ -46,12 +46,13 @@ public class Player {
 		g.setColor(c);
 		g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
 		
+		Color c1 = new Color(79, 79, 79, 150);
+		g.setColor(c1);
+		g.fillRect((int) (Model.getInstance().getScreenWidth() * 0.75), (int) (Model.getInstance().getScreenHeight() * 0.2), (int) (Model.getInstance().getScreenWidth() * 0.2), (int) (Model.getInstance().getScreenHeight() * 0.6));
+
 		//draw numerical estuarary happiness
 		int x = (int) (Grid.getInstance().getWidth());
 		int y = (int) (Grid.getInstance().getHeight()*.25);
-
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 100)); 
-		g.drawString(Integer.toString(getHappiness()), x, y);
 	}
 	
 	

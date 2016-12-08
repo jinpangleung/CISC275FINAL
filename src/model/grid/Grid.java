@@ -474,6 +474,7 @@ public class Grid extends Component {
 	
 	@Override
 	public void draw(Graphics g){
+		
 		Collection<GridItem> items = new ArrayList<GridItem>();
 		items.addAll(trailItems);
 		items.addAll(gabions);
@@ -509,7 +510,7 @@ public class Grid extends Component {
 			// Draw stuff for specific steps
 			switch(step){
 			case CLICK_GABBION:
-				message = "Gabbions are used to stop the storm from hurting your towers.";
+				message = "Gabions are used to stop the storm from hurting your towers.";
 				TowerFactory gabFactory = Inventory.getInstance().getCgf();
 				arrowX = (int) (gabFactory.getTopLeft().getX() - (gabFactory.getWidth() * 1.5));
 				arrowY = (int) (gabFactory.getBottomRight().getY() - (gabFactory.getHeight()));
@@ -519,7 +520,7 @@ public class Grid extends Component {
 				isHorizontal = true;
 				break;
 			case CLICK_ITEM:
-				message = "Items can only be touched within the tower's range.";
+				message = "Items can only be dragged within the tower's range.";
 				break;
 			case CLICK_TOWER:
 				message = "Welcome to our tutorial!";
@@ -538,7 +539,7 @@ public class Grid extends Component {
 				draw = false;
 				break;
 			case PLACE_GABBION:
-				message = "Place the gabbion and the game will start!";
+				message = "Place the gabion and the game will start!";
 				
 				int width = Board.getInstance().getWidth();
 				int height = Board.getInstance().getHeight();

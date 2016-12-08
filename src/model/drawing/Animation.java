@@ -211,7 +211,6 @@ public class Animation {
 		imageLibrary = new HashMap<String, BufferedImage>();
 		// Load all required images
 		insertImage("images/null.png", "null");
-		insertScreenImage("images/test1.png", "bcg");
 		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
 		insertImage("images/arrow.png", "Arrow");
 		insertImage("images/Losing Screen.png", "LosingScreen");
