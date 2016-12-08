@@ -2,6 +2,7 @@ package controller;
 
 import model.Model;
 import model.Time;
+import model.grid.Grid;
 import view.View;
 
 /**
@@ -37,7 +38,9 @@ public class Controller {
 		}
 		else{
 			this.model.update(elapsedTime);
-			this.time += elapsedTime;
+			if(Grid.getInstance().getReadyToGo()){
+				this.time += elapsedTime;
+			}
 		}
 
 		this.view.draw();

@@ -3,7 +3,6 @@ package model;
 import java.awt.Graphics;
 
 import controller.Controller;
-import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.Grid;
 import model.grid.griditem.tower.Tower;
@@ -50,6 +49,9 @@ public class Model {
 	private double blue;
 	private double green;
 	
+	private TitleScreen ts;
+	private boolean titleScreen;
+	
 	public static final double GRID_HEIGHT = .8;
 	public static final double GRID_WIDTH = .7;
 	public static final double Y_PADDING = .1;
@@ -90,6 +92,11 @@ public class Model {
 		this.storm3 = new Storm();
 		this.storm4 = new Storm();
 		
+		titleScreen = true;
+		ts = new TitleScreen();
+		
+		grid.initReadyButton();
+		
 		System.out.println("\tModel has been initialized");
 	}
 	
@@ -105,12 +112,24 @@ public class Model {
 		return this.screenHeight;
 	}
 	
+	public void endTitleScreen(){
+		this.titleScreen = false;
+	}
+	
 	public void update(long timeElapsed){
-		//int numOfStorm = (int) (timeElapsed/timeToStorm);
-		grid.update(timeElapsed);
-		timeToStorm -= timeElapsed;
-		if (timeToStorm <= 0){
-			storm.update(timeElapsed);
+		if(!titleScreen){
+			//int numOfStorm = (int) (timeElapsed/timeToStorm);
+			grid.update(timeElapsed);
+			if(Grid.getInstance().getReadyToGo()){
+				timeToStorm -= timeElapsed;
+				if (timeToStorm <= 0){
+					storm.update(timeElapsed);
+				}
+			}
+	//		if(numOfStorm == 1){
+	//			storm.update(timeElapsed);
+	//			timeToStorm = timeToStorm + timeToStorm;
+	//		}
 		}
 		if (timeToStorm2 <= 0){
 			storm2.update(timeElapsed);
@@ -128,6 +147,40 @@ public class Model {
 	}
 	
 	public void draw(Graphics g){
+		if(!titleScreen){
+			g.drawImage(Animation.getImage("bcg"), 0, 0, null);
+			player.draw(g);
+			inventory.draw(g);
+			grid.draw(g);
+			touch.draw(g);
+			if (timeToStorm <= 0){
+				storm.draw(g);
+			}
+			
+			long timeRemaining = Controller.getTime();
+			long seconds = timeRemaining / Time.nanosecond;
+			long minutes = seconds / 60;
+			String sec = Long.toString(seconds%60);
+			if(sec.length() == 1){
+				sec = "0" + sec;
+			}
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, 150, 30);
+			if(timeToStorm <= 5 * Time.nanosecond){
+				g.setColor(Color.RED);
+				g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+				g.drawString("Storm Soon", 0, 23);
+			} else{
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+			g.drawString("Time " + Long.toString(minutes) + ":" + sec, 10, 23);
+			}
+		} else {
+			ts.draw(g);
+		}
+	}
+	
+	/*public void draw(Graphics g){
 		g.drawImage(Animation.getImage("bcg"), 0, 0, null);
 		player.draw(g);
 		inventory.draw(g);
@@ -173,18 +226,29 @@ public class Model {
 //			g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
 //			g.drawString("0", Model.getInstance().getScreenWidth(), 35);
 		}
-	}
+	}*/
 	
 	public void mouseClicked(int mouseX, int mouseY){
-		componentMapping.mouseClicked(mouseX, mouseY);
+		if(!titleScreen){
+			if(Grid.getInstance().getReadyButton().isWithin(mouseX, mouseY)){
+				Grid.getInstance().getReadyButton().mouseClicked(mouseX, mouseY);
+			}
+			componentMapping.mouseClicked(mouseX, mouseY);
+		} else {
+			ts.click(mouseX, mouseY);
+		}
 	}
 	
 	public void mouseReleased(int mouseX, int mouseY){
-		componentMapping.mouseReleased(mouseX, mouseY);
+		if(!titleScreen){
+			componentMapping.mouseReleased(mouseX, mouseY);
+		}
 	}
 	
 	public void mouseDragged(int mouseX, int mouseY){
-		touch.mouseDragged(mouseX, mouseY);
+		if(!titleScreen){
+			touch.mouseDragged(mouseX, mouseY);
+		}
 	}
 
 	public void updateTutorial(long elapsedTime) {

@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 import controller.Controller;
+import model.Button;
+import model.Model;
 import model.Time;
 import model.TutorialStep;
 import model.difficulty.Difficulty;
@@ -43,6 +45,8 @@ public class Grid extends Component {
 	private Collection<Path> pathsToBeRemoved;
 	private Collection<Path> pathsToBeAdded;
 	private TutorialStep step;
+	private boolean readyToGo;
+	private Button readyButton;
 	
 	public static Grid getInstance(){
 		return instance;
@@ -71,6 +75,23 @@ public class Grid extends Component {
 		pathsToBeAdded = new ArrayList<Path>();
 		pathsToBeRemoved = new HashSet<Path>();
 		step = TutorialStep.CLICK_TOWER;
+		readyToGo = false;
+	}
+	
+	public void initReadyButton(){
+		int w = (int) (Model.getInstance().getScreenWidth() * 0.2);
+		int h = (int) (Model.getInstance().getScreenHeight() * 0.2);
+		int x = Model.getInstance().getScreenWidth() - w;
+		int y = 0;
+		readyButton = new ReadyButton(x, y, w, h);
+	}
+	
+	public void ready(){
+		readyToGo = true;
+	}
+	
+	public void unReady(){
+		readyToGo = false;
 	}
 	
 	public Grid(int x, int y, int w, int l, String testBoard){
@@ -166,6 +187,10 @@ public class Grid extends Component {
 				return;
 			}
 		}
+	}
+	
+	public Button getReadyButton(){
+		return readyButton;
 	}
 
 	@Override
@@ -282,10 +307,12 @@ public class Grid extends Component {
 		addPaths();
 		removePaths();
 		Iterator<TrailItem> tit = trailItems.iterator();
-		while(tit.hasNext()){
-			TrailItem ti = tit.next();
-			if(ti.update(timeElapsed)){
-				removeItem(ti);
+		if(readyToGo){
+			while(tit.hasNext()){
+				TrailItem ti = tit.next();
+				if(ti.update(timeElapsed)){
+					removeItem(ti);
+				}
 			}
 		}
 		Iterator<Tower> towit = towers.iterator();
@@ -305,7 +332,13 @@ public class Grid extends Component {
 				pit.remove();
 			}
 		}
-		difficulty.update(timeElapsed);
+		if(readyToGo){
+			difficulty.update(timeElapsed);
+		}
+	}
+	
+	public boolean getReadyToGo(){
+		return readyToGo;
 	}
 	
 	// This method also contains checks for certain tutorial steps
@@ -434,6 +467,7 @@ public class Grid extends Component {
 		// Restore happiness
 		Player.getInstance().increaseHappiness(25);
 		Controller.setRunningTutorial(false);
+		unReady();
 	}
 	
 	@Override

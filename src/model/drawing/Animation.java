@@ -203,7 +203,20 @@ public class Animation {
 		insertTrailItemImage("images/pollutant3.png", "pollutant3");
 		insertTrailItemImage("images/pollutant4.png", "pollutant4");
 		insertTowerImage("images/pollutant_tower.png", "pollutant_tower");
+		insertTowerImage("images/pollutant_tower2.png", "pollutant_tower2");
+		insertTowerImage("images/pollutant_tower3.png", "pollutant_tower3");
+		insertTowerImage("images/pollutant_tower4.png", "pollutant_tower4");
+		insertTowerImage("images/pollutant_tower5.png", "pollutant_tower5");
+		insertTowerImage("images/pollutant_tower6.png", "pollutant_tower6");
+		insertTowerImage("images/pollutant_tower7.png", "pollutant_tower7");
 		insertScreenImage("images/bcg.png", "bcg");
+		insertTowerImage("images/BlueTowerIcon.png", "BlueTowerIcon");
+		insertTowerImage("images/RedTowerIcon.png", "RedTowerIcon");
+		insertTowerImage("images/GreenTowerIcon.png", "GreenTowerIcon");
+		insertTowerImage("images/NewPlayerButton.png", "NewPlayerButton");
+		insertTowerImage("images/ExperiencedPlayerButton.png", "ExperiencedPlayerButton");
+		insertTowerImage("images/play.png", "play");
+		insertScreenImage("images/title.png", "title");
 		for (int i=1; i<=34; i++){
 			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*i - 1));
 			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*i));
