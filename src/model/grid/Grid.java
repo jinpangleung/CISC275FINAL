@@ -517,6 +517,7 @@ public class Grid extends Component {
 		boolean isHorizontal = false;
 		
 		if(Controller.isRunningTutorial()){
+			Controller.setTime(0);
 			// Draw stuff for specific steps
 			switch(step){
 			case CLICK_GABBION:

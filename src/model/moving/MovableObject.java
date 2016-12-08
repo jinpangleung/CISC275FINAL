@@ -69,10 +69,10 @@ public class MovableObject extends GridItem {
 			Grid.getInstance().addPath(new Path(this, new Coord(this.getCoord().getX(),
 						Model.getInstance().getScreenHeight() + 50), new DestroyBehavior()));
 			if ((TrailItem)this instanceof Larvae){
-				Player.getInstance().increaseHappiness(1);
+				Player.getInstance().increaseHappiness(2);
 				Difficulty.collect((TrailItem)this);
 			}else{	
-				Player.getInstance().decreaseHappiness(5);
+				Player.getInstance().decreaseHappiness(2);
 			}
 			return;
 		}
@@ -120,10 +120,10 @@ public class MovableObject extends GridItem {
 			Grid.getInstance().addPath(new Path(this, new Coord(this.getCoord().getX(),
 						Model.getInstance().getScreenHeight() + 50), new DestroyBehavior()));
 			if ((TrailItem)this instanceof Larvae){
-				Player.getInstance().increaseHappiness(1);
+				Player.getInstance().increaseHappiness(2);
 				Difficulty.collect((TrailItem)this);
 			}else{	
-				Player.getInstance().decreaseHappiness(5);
+				Player.getInstance().decreaseHappiness(2);
 			}
 			return;
 		}

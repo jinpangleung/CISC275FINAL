@@ -22,6 +22,10 @@ public class Controller {
 	private static boolean runningTutorial;
 	private static boolean isPaused;
 	
+	public static void setTime(long t){
+		time = t;
+	}
+	
 	public Controller(Model model, View view){
 		this.model = model;
 		this.view = view;
