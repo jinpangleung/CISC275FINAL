@@ -25,6 +25,10 @@ public class MovableObject extends GridItem {
 	private static final double INITIAL_VELOCITY = PixelGrid.getInstance().getSquareHeight(); // per second
 	private static double maxVelocity = INITIAL_VELOCITY / Time.nanosecond;
 	
+	public static void setMaxSpeed(double speed){
+		maxVelocity = speed / Time.nanosecond;
+	}
+	
 	private static final double FRICTION = 0.9999;
 	
 	private Velocity velocity;

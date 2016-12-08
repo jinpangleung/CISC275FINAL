@@ -33,16 +33,16 @@ public class Difficulty {
 	
 	private long timeToSpawn;
 	private long spawn_time = 2400000000L;
-	//private long timeToStorm = 240000000000L;
+	private long timeToStorm = 240000000000L;
 	private double velocityScale = 1;
 	private int oysterCount = 1;
 	private int invasiveCount = 1;
 	private int pollutantCount = 1;
 	private int larvaeCount = 1;
-	private int oysterCollected = 1;
-	private int invasiveCollected = 1;
-	private int pollutantCollected = 1;
-	private int larvaeCollected = 1;
+	private static int oysterCollected = 1;
+	private static int invasiveCollected = 1;
+	private static int pollutantCollected = 1;
+	private static int larvaeCollected = 1;
 	private int totalSpawned = 4;
 	private final static double MAX_VEL = PixelGrid.getInstance().getSquareHeight()/Time.nanosecond;//MovableObject.getInstance().getMaxVelocity();//this is causing error
 	private final static double MIN_VEL = (PixelGrid.getInstance().getSquareHeight()/Time.nanosecond)-0000000005;
@@ -62,11 +62,11 @@ public class Difficulty {
 	public void update(long timeElapsed){
 		if(timeToSpawn > 0){
 			timeToSpawn -= timeElapsed;
-			//timeToStorm -= timeElapsed;
+			timeToStorm -= timeElapsed;
 		} else {
 			spawn();
 			timeToSpawn = spawn_time;
-			//timeToStorm -= timeElapsed;
+			timeToStorm -= timeElapsed;
 		}
 	}
 	
@@ -133,7 +133,7 @@ public class Difficulty {
 		float oyster = getPercentCollected(oysterCollected, getTotalCollected());
 		float pollutant = oyster + getPercentCollected(pollutantCollected, getTotalCollected());
 		float invasiveItem = pollutant + getPercentCollected(invasiveCollected, getTotalCollected());
-		
+		System.out.println("r: " + r + " oyster: " + oyster + " poll: " + pollutant + " invasive: " + invasiveItem);
 		if (r <= oyster){
 			oysterCount++;
 			return new Oyster(startCoord);
@@ -143,8 +143,11 @@ public class Difficulty {
 		}else if (r <= invasiveItem){
 			invasiveCount++;
 			return new InvasiveItem(startCoord);
-		}else{
+		}else if(r > invasiveItem){
 			larvaeCount++;
+			return new Larvae(startCoord);
+		}
+		else{
 			return new Larvae(startCoord);
 		}
 	}
@@ -179,29 +182,29 @@ public class Difficulty {
 		//System.out.println("total collected/total spawned: " + 
 		//getTotalCollected() + "/" + totalSpawned + "=" + getPercentTotal(getTotalCollected(), totalSpawned));
 		
-		if (totalSpawned > 5){
+		if (totalSpawned > 10){
 			if (getPercentTotal(getTotalCollected(), totalSpawned) < 16){
-				setVelocityScale(.995);
+				MovableObject.setMaxSpeed(15);
 				//System.out.println("< 16 case");
 				setSpawnRate(this.spawn_time + 500000000);
 			}else if (getPercentTotal(getTotalCollected(), totalSpawned) < 31){
-				setVelocityScale(.996);
+				MovableObject.setMaxSpeed(30);
 				//System.out.println("< 31 case");
 				setSpawnRate(this.spawn_time + 300000000);
 			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 46){
-				setVelocityScale(.997);
+				MovableObject.setMaxSpeed(45);
 				//System.out.println("< 46 case");
 				setSpawnRate(this.spawn_time + 100000000);
 			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 66){
-				setVelocityScale(1.001);
+				MovableObject.setMaxSpeed(65);
 				//System.out.println("< 66 case");
 				setSpawnRate(this.spawn_time - 200000000);
 			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 81){
-				setVelocityScale(1.002);
+				MovableObject.setMaxSpeed(80);
 				//System.out.println("< 81 case");
 				setSpawnRate(this.spawn_time - 400000000);
 			}else{
-				setVelocityScale(1.003);
+				MovableObject.setMaxSpeed(95);
 				//System.out.println("else case");
 				setSpawnRate(this.spawn_time - 600000000);
 			}
@@ -210,7 +213,7 @@ public class Difficulty {
 	}
 
 
-	public void collect(TrailItem item){
+	public static void collect(TrailItem item){
 		if (item instanceof Oyster){
 			oysterCollected++;
 		}else if(item instanceof Pollutant){
@@ -227,11 +230,11 @@ public class Difficulty {
 		return oysterCollected + pollutantCollected + larvaeCollected + invasiveCollected;
 	}
 
-	public double getVelocityScale() {
-		return velocityScale;
-	}
-
-	public void setVelocityScale(double velocityScale) {
-		this.velocityScale = velocityScale;
-	}
+//	public double getVelocityScale() {
+//		return velocityScale;
+//	}
+//
+//	public void setVelocityScale(double velocityScale) {
+//		this.velocityScale = velocityScale;
+//	}
 }

@@ -40,7 +40,7 @@ public class Wave {
 		this.startY = this.y;
 		this.speed = (double) (this.y - TOP)  / (TIME * Time.nanosecond); // Move the en= new Animation("wave", 13);tire screen in 10 seconds
 		this.hasHitGabion = false;
-		this.gabionY = Grid.getInstance().getBottomRight().getY();
+		this.gabionY = Grid.getInstance().getBottomRight().getY() * 0.8;
 		waveAnimation = new Animation("wave", 13);
 		waveAnimation.setxOffset(0);
 		waveAnimation.setyOffset(0);
