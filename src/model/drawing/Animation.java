@@ -235,8 +235,8 @@ public class Animation {
 		insertTowerImage("images/BlueTowerIcon.png", "BlueTowerIcon");
 		insertTowerImage("images/RedTowerIcon.png", "RedTowerIcon");
 		insertTowerImage("images/GreenTowerIcon.png", "GreenTowerIcon");
-		insertTowerImage("images/NewPlayerButton.png", "NewPlayerButton");
-		insertTowerImage("images/ExperiencedPlayerButton.png", "ExperiencedPlayerButton");
+		insertTitleButtonImage("images/NewPlayerButton.png", "NewPlayerButton");
+		insertTitleButtonImage("images/ExperiencedPlayerButton.png", "ExperiencedPlayerButton");
 		insertReadyToGoButton("images/play.png", "play");
 		insertScreenImage("images/title.png", "title");
 		for (int i=1; i<=34; i++){
