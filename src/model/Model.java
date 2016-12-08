@@ -13,6 +13,7 @@ import model.inventory.Inventory;
 import model.player.Player;
 import model.storm.Storm;
 
+import java.awt.Color;
 import java.awt.Font;
 
 /**
@@ -45,6 +46,9 @@ public class Model {
 	private long timeToStorm3 = 360000000000L;
 	private long timeToStorm4 = 480000000000L;
 	private int numOfStorm;
+	private double red;
+	private double blue;
+	private double green;
 	
 	public static final double GRID_HEIGHT = .8;
 	public static final double GRID_WIDTH = .7;
@@ -150,6 +154,25 @@ public class Model {
 		}
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
 		g.drawString("Time " + Long.toString(minutes) + ":" + sec, 100, 100);
+		
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+		g.drawString("100", Model.getInstance().getScreenWidth()-150, 65);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+		g.drawString("0", Model.getInstance().getScreenWidth()-20, 65);
+		
+		for (int i=100; i>=0; i--){
+			red = 255 - i * 2.3;
+			blue = 25 + i;
+			green = 0 + i;
+			
+			Color c = new Color((int) red,(int) green,(int) blue, 6);
+			g.setColor(c);
+			g.fillRect(Model.getInstance().getScreenWidth()-(i+1)-50, 10, Model.getInstance().getScreenWidth()-i-50, 25);
+//			g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+//			g.drawString("100", Model.getInstance().getScreenWidth()-50, 35);
+//			g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+//			g.drawString("0", Model.getInstance().getScreenWidth(), 35);
+		}
 	}
 	
 	public void mouseClicked(int mouseX, int mouseY){
