@@ -189,8 +189,24 @@ public class Model {
 				Color c = new Color((int) red,(int) green,(int) blue, 6);
 				g.setColor(c);
 				g.fillRect(Model.getInstance().getScreenWidth()-(i+1)-50, 10, Model.getInstance().getScreenWidth()-i-50, 25);
-			}
 			
+//				if (minutes >= 5){
+//					if (player.getInstance().getHappiness() >= 50){
+//						Color c2 = new Color(255, 255, 255, 255);
+//						g.setColor(c2);
+//						g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
+//						g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+//						g.drawString("Score: " + player.getInstance().getHappiness() + "Good Job! You saved the estuary!", Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()/2);
+//					}
+//					else {
+//						Color c2 = new Color(0, 0, 0, 255);
+//						g.setColor(c2); 
+//						g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
+//						g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+//						g.drawString("Score: " + player.getInstance().getHappiness() + "The estuary is sick, try again next time.", Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()/2);;
+//					}
+//				}
+			}
 		} else {
 			ts.draw(g);
 		}
@@ -241,8 +257,7 @@ public class Model {
 //			g.drawString("100", Model.getInstance().getScreenWidth()-50, 35);
 //			g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
 //			g.drawString("0", Model.getInstance().getScreenWidth(), 35);
-		}
-	}*/
+		}}*/
 	
 	public void mouseClicked(int mouseX, int mouseY){
 		if(!titleScreen){

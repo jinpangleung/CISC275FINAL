@@ -475,6 +475,16 @@ public class Grid extends Component {
 	@Override
 	public void draw(Graphics g){
 		
+		boolean messageA = false;
+		String message1="Red towers pick up pollution.";
+		String message2="Blue towers pick up oyster shells.";
+		String message3="Green towers pick up invasive species.";
+		boolean messageB = false;
+		String message4="You can make more gabions by collecting oysters.";
+		boolean messageC = false;
+		String message5="Monitor your health with the color guide in the top right corner.";
+		
+		
 		Collection<GridItem> items = new ArrayList<GridItem>();
 		items.addAll(trailItems);
 		items.addAll(gabions);
@@ -494,7 +504,7 @@ public class Grid extends Component {
 		int leftY = this.getBottomRight().getY();
 		leftX = (int) (leftX + this.getWidth() * .4);
 		leftY = (int) (leftY - this.getHeight() * .9);
-		int boxLength = (int) (this.getWidth() * .5);
+		int boxLength = (int) (this.getWidth() * .5 *1.2);
 		int boxHeight = (int) (this.getHeight() * .1);
 		int arrowX = -500;
 		int arrowY = -500;
@@ -511,6 +521,7 @@ public class Grid extends Component {
 			switch(step){
 			case CLICK_GABBION:
 				message = "Gabions are used to stop the storm from hurting your towers.";
+				messageB = true;
 				TowerFactory gabFactory = Inventory.getInstance().getCgf();
 				arrowX = (int) (gabFactory.getTopLeft().getX() - (gabFactory.getWidth() * 1.5));
 				arrowY = (int) (gabFactory.getBottomRight().getY() - (gabFactory.getHeight()));
@@ -539,7 +550,7 @@ public class Grid extends Component {
 				draw = false;
 				break;
 			case PLACE_GABBION:
-				message = "Place the gabion and the game will start!";
+				message = "Place the gabion and press Play to start!";
 				
 				int width = Board.getInstance().getWidth();
 				int height = Board.getInstance().getHeight();
@@ -559,7 +570,8 @@ public class Grid extends Component {
 				degrees = 180;
 				break;
 			case PLACE_ITEM:
-				message = "Items must be dragged to the correct tower to earn points.";
+				message = "Drag items to the correct tower to earn points.";
+				messageA = true;
 				if(!trailItems.isEmpty()){
 					Coord itemCoord = trailItems.get(0).getCoord();
 					arrowX = itemCoord.getX().intValue();
@@ -585,7 +597,8 @@ public class Grid extends Component {
 				scaleY = .6;
 				break;
 			case PLACE_WRONG_ITEM:
-				message = "Dragging an item to the wrong tower loses you points.";
+				message = "Dragging an item to the wrong tower loses you health.";
+				messageC = true;
 				if(!trailItems.isEmpty()){
 					Coord itemCoord = trailItems.get(0).getCoord();
 					arrowX = (int) Math.round(itemCoord.getX());
@@ -603,13 +616,52 @@ public class Grid extends Component {
 			}
 			
 			if(draw){
-				g.setColor(Color.WHITE);
-				g.fillRect(leftX, leftY, boxLength, boxHeight);
+//				g.setColor(Color.WHITE);
+//				g.fillRect(leftX, leftY, boxLength, boxHeight);
 				g.setColor(Color.BLACK);
 				g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 				g.drawString(message,
 					(int) (leftX + (boxLength * .1)),
 					(int) (leftY + (boxHeight * .5) + 8));
+				
+				if(messageA){
+//					g.setColor(Color.WHITE);
+//					g.fillRect(leftX, leftY + boxHeight, boxLength, boxHeight);
+//					g.fillRect(leftX, leftY + (2 * boxHeight), boxLength, boxHeight);
+//					g.fillRect(leftX, leftY + (3* boxHeight), boxLength, boxHeight);
+					g.setColor(Color.BLACK);
+					
+					g.drawString(message1,
+							(int) (leftX + (boxLength * .1)),
+							(int) (leftY + boxHeight + (boxHeight * .5) + 8));
+					
+					g.drawString(message2,
+							(int) (leftX + (boxLength * .1)),
+							(int) (leftY + (2 * boxHeight) + (boxHeight * .5) + 8));
+					
+					g.drawString(message3,
+							(int) (leftX + (boxLength * .1)),
+							(int) (leftY + (3 * boxHeight) + (boxHeight * .5) + 8));
+				}
+				
+				else if (messageB){
+//					g.setColor(Color.WHITE);
+//					g.fillRect(leftX, leftY + boxHeight, boxLength, boxHeight);
+					g.setColor(Color.BLACK);
+					g.drawString(message4,
+							(int) (leftX + (boxLength * .1)),
+							(int) (leftY + boxHeight + (boxHeight * .5) + 8));
+				}
+				
+				else if (messageC){
+//					g.setColor(Color.WHITE);
+//					g.fillRect(leftX, leftY + boxHeight, boxLength, boxHeight);
+					g.setColor(Color.BLACK);
+					g.drawString(message5,
+							(int) (leftX + (boxLength * .1)),
+							(int) (leftY + boxHeight + (boxHeight * .5) + 8));
+				}
+				
 				BufferedImage arrow = Animation.getImage("Arrow");
 				
 				

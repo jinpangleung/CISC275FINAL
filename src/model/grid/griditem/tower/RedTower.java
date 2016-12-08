@@ -7,10 +7,13 @@ import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
 import model.grid.griditem.GridItem;
+import model.grid.griditem.trailitem.Pollutant;
 import model.grid.griditem.trailitem.TrailItem;
 import model.gui.path.Path;
 import model.gui.touch.Touch;
+import model.player.Player;
 import model.grid.gridcell.GridPosition;
+import model.drawing.LockedAnimation;
 
 
 /**
@@ -30,7 +33,7 @@ public class RedTower extends Tower {
 	private boolean opening;
 
 	public RedTower(Coord coord){
-		super(coord, new Animation("pollutant_tower"), new GridPosition(0, 0), GridColor.RED, 
+		super(coord, new LockedAnimation("pollutant_tower", 7), new GridPosition(0, 0), GridColor.RED, 
 				new Color(255, 0, 0, getOpacity()));
 		this.opening = false;
 	}
@@ -58,13 +61,34 @@ public class RedTower extends Tower {
 	}
 
 	private void reactRecycle(GridItem gi) {
-		this.react(gi);
+		if(gi instanceof Pollutant){
+			Pollutant p = (Pollutant) gi;
+			if(p.getRecycle()){
+				Player.getInstance().increaseHappiness(1);
+				return;
+			} else {
+				Player.getInstance().decreaseHappiness(1);
+				return;
+			}
+		} else {
+			Player.getInstance().decreaseHappiness(1);
+		}
 		
 	}
 
 	private void reactTrash(GridItem gi) {
-		// TODO Auto-generated method stub
-		this.react(gi);
+		if(gi instanceof Pollutant){
+			Pollutant p = (Pollutant) gi;
+			if(!p.getRecycle()){
+				Player.getInstance().increaseHappiness(1);
+				return;
+			} else {
+				Player.getInstance().decreaseHappiness(1);
+				return;
+			}
+		} else {
+			Player.getInstance().decreaseHappiness(1);
+		}
 	}
 	
 	@Override

@@ -224,7 +224,7 @@ public class Animation {
 		insertTrailItemImage("images/pollutant2.png", "pollutant2");
 		insertTrailItemImage("images/pollutant3.png", "pollutant3");
 		insertTrailItemImage("images/pollutant4.png", "pollutant4");
-		insertTowerImage("images/pollutant_tower.png", "pollutant_tower");
+		insertTowerImage("images/pollutant_tower1.png", "pollutant_tower1");
 		insertTowerImage("images/pollutant_tower2.png", "pollutant_tower2");
 		insertTowerImage("images/pollutant_tower3.png", "pollutant_tower3");
 		insertTowerImage("images/pollutant_tower4.png", "pollutant_tower4");

@@ -1,6 +1,7 @@
 package model.grid.griditem.trailitem;
 
 import java.util.Collection;
+import java.util.Random;
 
 import model.*;
 import model.drawing.*;
@@ -23,15 +24,21 @@ import model.moving.Velocity;
  */
 
 public class Pollutant extends TrailItem{
+	
+	private boolean recycle;
+	
+	public boolean getRecycle(){
+		return recycle;
+	}
 
 	public Pollutant(Coord c){
 		super(c, new Animation("null"), new GridPosition(0,0), new Velocity(0, 0.0001),  GridColor.RED);
-		int randomNum = (int)(Math.random() * 3);
+		int randomNum = (new Random()).nextInt(4);
 		switch(randomNum){
-		case 0: this.setAnimation(new Animation("pollutant1")); break;
-		case 1: this.setAnimation(new Animation("pollutant2")); break;
-		case 2: this.setAnimation(new Animation("pollutant3")); break;
-		case 3: this.setAnimation(new Animation("pollutant4")); break;
+		case 0: this.setAnimation(new Animation("pollutant1")); recycle = true; break;
+		case 1: this.setAnimation(new Animation("pollutant2")); recycle = true; break;
+		case 2: this.setAnimation(new Animation("pollutant3")); recycle = false; break;
+		case 3: this.setAnimation(new Animation("pollutant4")); recycle = false; break;
 		}
 	}
 	
