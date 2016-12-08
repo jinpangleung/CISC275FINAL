@@ -190,17 +190,9 @@ public class Animation {
 		insertImage("images/null.png", "null");
 		insertScreenImage("images/test1.png", "bcg");
 		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
-		insertImage("images/EH1.png", "EH1");
-		insertImage("images/EH2.png", "EH2");
-		insertImage("images/EH3.png", "EH3");
-		insertImage("images/EH4.png", "EH4");
 		insertImage("images/arrow.png", "Arrow");
-		insertTowerImage("images/Fisherman.png", "Fisherman");
 		insertImage("images/Losing Screen.png", "LosingScreen");
 		insertTowerImage("images/OysterGabion.png", "OysterGabion");
-		insertImage("images/Rain.png", "rain");
-		insertImage("images/Storm.png", "storm");
-		insertScreenImage("images/background.png", "background");
 		insertTrailItemImage("images/invasive_item.png", "invasive_item");
 		insertTrailItemImage("images/invasive_item_tower.png", "invasive_item_tower");
 		insertTrailItemImage("images/larvae.png", "larvae");
