@@ -29,7 +29,7 @@ public class Storm {
 	protected Animation cloudAnimation = new Animation("cloud", 52);
 	protected Animation rainAnimation = new Animation("rain", 10);
 	
-	private long timeLeft = 5000000000L;
+	private long timeLeft = 10000000000L;
 	
 	public Storm(){
 		wave1 = new Wave();
@@ -41,6 +41,7 @@ public class Storm {
 	public boolean update(long elapsedTime){
 		timeLeft -= elapsedTime;
 		cloudAnimation.update(elapsedTime);
+		rainAnimation.update(elapsedTime);
 		if(wave1.update(elapsedTime) && wave2.update(elapsedTime)){
 			return true;
 		} else {
@@ -49,20 +50,23 @@ public class Storm {
 	}
 	
 	public void draw(Graphics g){
-		//while time is less than 2 sec
-		while (timeLeft > 0){
-			if (alpha == 100){
-				//alpha doesn't increment
-			}
-			else{
-				alpha = alpha + 1;
-			}
-			Color c = new Color(0, 0, 0, alpha);
-			g.setColor(c);
-			g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
+		//while time is less than 5 sec
+//		while (timeLeft > 0){
+//			if (alpha == 255){
+//				//alpha doesn't increment
+//			}
+//			else{
+//				
+//				alpha = alpha + 1;
+//			}
+//			Color c = new Color(0, 0, 0, alpha);
+//			g.setColor(c);
+//			g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
+//		}
+		if (timeLeft > 0){
+			cloudAnimation.draw(g, Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenWidth()*0.05);
+			rainAnimation.draw(g, Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()*0.6);
 		}
-		cloudAnimation.draw(g, 0, 0);
-		rainAnimation.draw(g, 0, Model.getInstance().getScreenHeight()*0.2);
 	}
 	
 	public void drawwave(Graphics g){
