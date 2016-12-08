@@ -17,7 +17,7 @@ import model.grid.griditem.GridItem;
 
 public abstract class Gabion extends GridItem {
 	
-	private int health = 100;
+	private int health = 10;
 
 	public Gabion(Coord coord, Animation animation, GridPosition gridPosition) {
 		super(coord, animation, gridPosition, GridColor.WHITE);

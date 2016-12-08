@@ -1,6 +1,7 @@
 package model.inventory.factory;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import controller.Controller;
@@ -89,6 +90,8 @@ public abstract class TowerFactory extends Component {
 	
 	@Override
 	public void draw(Graphics g){
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Times Roman", Font.PLAIN, 20));
 		int x = this.getBottomRight().getX() - ((this.getBottomRight().getX() - this.getTopLeft().getX()) / 2);
 		int y = this.getBottomRight().getY() - ((this.getBottomRight().getY() - this.getTopLeft().getY()) / 2);
 		animation.draw(g, x, y);

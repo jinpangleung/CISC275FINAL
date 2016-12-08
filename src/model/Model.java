@@ -167,25 +167,19 @@ public class Model {
 			}
 			g.setColor(Color.WHITE);
 			g.fillRect(0, 0, 150, 30);
-			if(timeToStorm <= 5 * Time.nanosecond){
-				g.setColor(Color.RED);
-				g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-				g.drawString("Storm Soon", 0, 23);
-			} else{
 			g.setColor(Color.BLACK);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
 			g.drawString("Time " + Long.toString(minutes) + ":" + sec, 10, 23);
-			}
 			
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
 			g.drawString("100", Model.getInstance().getScreenWidth()-150, 65);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+			g.drawString(Integer.toString(Player.getInstance().getHappiness()), Model.getInstance().getScreenWidth() - 75, 65);
 			g.drawString("0", Model.getInstance().getScreenWidth()-20, 65);
 			for (int i=100; i>=0; i--){
 				red = 255 - i * 2.3;
 				blue = 25 + i;
 				green = 0 + i;
-				
 				Color c = new Color((int) red,(int) green,(int) blue, 6);
 				g.setColor(c);
 				g.fillRect(Model.getInstance().getScreenWidth()-(i+1)-50, 10, Model.getInstance().getScreenWidth()-i-50, 25);
