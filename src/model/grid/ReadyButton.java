@@ -1,5 +1,7 @@
 package model.grid;
 
+import java.awt.Graphics;
+
 import model.Button;
 import model.drawing.Animation;
 
@@ -24,5 +26,6 @@ public class ReadyButton extends Button {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 }

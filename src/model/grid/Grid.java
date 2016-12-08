@@ -630,6 +630,9 @@ public class Grid extends Component {
 				g.drawImage(scaledArrow, arrowX, arrowY, null);
 			}
 		}
+		if(!readyToGo){
+			readyButton.draw(g);
+		}
 	}
 	
 	public List<Tower> getTowers(){

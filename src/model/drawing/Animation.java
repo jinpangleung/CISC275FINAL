@@ -193,8 +193,8 @@ public class Animation {
 	}
 	
 	public static void insertReadyToGoButton(String fileName, String imageName){
-		int x = (int) (Model.getInstance().getScreenWidth() * 0.2);
-		int y = (int) (Model.getInstance().getScreenHeight() * 0.2);
+		int x = (int) (Model.getInstance().getScreenHeight() * 0.1);
+		int y = (int) (Model.getInstance().getScreenHeight() * 0.1);
 		BufferedImage img = readImageFromFile(fileName);
 	    if(img == null){
 	    	insertBufferedImage(null, imageName);
@@ -238,7 +238,7 @@ public class Animation {
 		insertTowerImage("images/GreenTowerIcon.png", "GreenTowerIcon");
 		insertTowerImage("images/NewPlayerButton.png", "NewPlayerButton");
 		insertTowerImage("images/ExperiencedPlayerButton.png", "ExperiencedPlayerButton");
-		insertTowerImage("images/play.png", "play");
+		insertReadyToGoButton("images/play.png", "play");
 		insertScreenImage("images/title.png", "title");
 		for (int i=1; i<=34; i++){
 			insertCloudImage("images/cloud" + Integer.toString(i) + ".png", "cloud" + Integer.toString(2*i - 1));
