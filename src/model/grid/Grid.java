@@ -382,7 +382,8 @@ public class Grid extends Component {
 				// At this step only one item so index 0
 				Tower tower = towers.get(0);
 				Coord itemCoord = trailItems.get(0).getCoord();
-				if(tower.isInRange(itemCoord)){
+				Coord modifedCoord = new Coord(itemCoord.getX() - 10, itemCoord.getY());
+				if(tower.isInRange(modifedCoord)){
 					Controller.setPaused(true);
 					step = TutorialStep.PLACE_ITEM;
 				}
@@ -393,7 +394,8 @@ public class Grid extends Component {
 				// At this step only one item so index 0
 				Tower tower = towers.get(0);
 				Coord itemCoord = trailItems.get(0).getCoord();
-				if(tower.isInRange(itemCoord)){
+				Coord modifedCoord = new Coord(itemCoord.getX() - 10, itemCoord.getY());
+				if(tower.isInRange(modifedCoord)){
 					Controller.setPaused(true);
 					step = TutorialStep.PLACE_WRONG_ITEM;
 				}

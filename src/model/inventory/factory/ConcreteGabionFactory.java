@@ -2,6 +2,7 @@ package model.inventory.factory;
 
 import controller.Controller;
 import model.TutorialStep;
+import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.Grid;
 import model.grid.griditem.gabion.ConcreteGabion;
@@ -20,6 +21,7 @@ public class ConcreteGabionFactory extends TowerFactory {
 
 	public ConcreteGabionFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
+		this.animation = new Animation("ConcreteGabion");
 		setCurrency(3);
 	}
 	

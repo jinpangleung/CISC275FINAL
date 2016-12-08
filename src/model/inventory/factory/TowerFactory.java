@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import controller.Controller;
+import model.drawing.Animation;
 import model.TutorialStep;
 import model.grid.Grid;
 import model.gui.component.Component;
@@ -23,6 +24,9 @@ public abstract class TowerFactory extends Component {
 	
 	protected int currency; // how many towers are left, or how many oysters you have
 	protected int costPer; // how much each tower cost, oysters will probably be 4
+	protected Animation animation;
+	protected int x;
+	protected int y;
 	
 	public TowerFactory(ComponentPosition topLeft, int width, int height){
 		super(topLeft, width, height);
@@ -85,9 +89,8 @@ public abstract class TowerFactory extends Component {
 	
 	@Override
 	public void draw(Graphics g){
-		super.draw(g);
-		g.setColor(Color.RED);
-		g.drawString(Integer.toString(getCurrency()), (int) getTopLeft().getX(), (int) getTopLeft().getY());
+		animation.draw(g, (this.getBottomRight().getX() - this.getTopLeft().getX()) / 2, 
+				(this.getBottomRight().getY() - this.getTopLeft().getY()));
 	}
 
 }

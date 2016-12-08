@@ -20,7 +20,7 @@ import model.grid.griditem.gabion.Gabion;
 
 public class Wave {
 	
-	private static final int DAMAGE = 10;
+	private static final int DAMAGE = 50;
 	
 	private WaveState state;
 	private double y;

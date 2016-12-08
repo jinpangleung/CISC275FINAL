@@ -40,7 +40,7 @@ public class Model {
 	private Storm storm3;
 	private Storm storm4;
 	//private long timeToStorm = 120000000000L;
-	private long timeToStorm = 7000000000L; //test
+	private long timeToStorm = 120000000000L; //test
 	private long timeToStorm2 = 240000000000L;
 	private long timeToStorm3 = 360000000000L;
 	private long timeToStorm4 = 480000000000L;

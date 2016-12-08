@@ -1,5 +1,6 @@
 package model.inventory.factory;
 
+import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.tower.GreenTower;
 import model.gui.component.ComponentPosition;
@@ -17,6 +18,7 @@ public class GreenTowerFactory extends TowerFactory {
 
 	public GreenTowerFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
+		this.animation = new Animation("GreenTowerIcon");
 	}
 	
 	public GreenTowerFactory(int x, int y, int width, int height){

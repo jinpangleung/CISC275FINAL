@@ -1,7 +1,10 @@
 package model.inventory.factory;
 
+import com.sun.prism.Graphics;
+
 import controller.Controller;
 import model.TutorialStep;
+import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.Grid;
 import model.grid.griditem.tower.RedTower;
@@ -21,6 +24,7 @@ public class RedTowerFactory extends TowerFactory {
 
 	public RedTowerFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
+		this.animation = new Animation("RedTowerIcon");
 	}
 	
 	public RedTowerFactory(int x, int y, int width, int height){
@@ -40,5 +44,5 @@ public class RedTowerFactory extends TowerFactory {
 			Touch.getInstance().clamp(new RedTower(new Coord(topLeft.getX(), topLeft.getY())));
 		}
 	}
-
 }
+

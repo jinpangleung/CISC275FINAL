@@ -1,5 +1,6 @@
 package model.inventory.factory;
 	
+import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.gabion.OysterGabion;
 import model.gui.component.ComponentPosition;
@@ -19,6 +20,7 @@ public class OysterGabionFactory extends TowerFactory {
 
 	public OysterGabionFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
+		this.animation = new Animation("OysterGabion");
 		setCurrency(0);
 		setCostPer(OYSTERS_PER_GABION);
 	}
