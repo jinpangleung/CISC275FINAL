@@ -22,7 +22,6 @@ import model.drawing.Coord;
 public class Storm {
 	
 	private Wave wave1;
-	private Wave wave2;
 	private int alpha;
 	protected Coord coord;
 	protected Animation animation;
@@ -33,7 +32,6 @@ public class Storm {
 	
 	public Storm(){
 		wave1 = new Wave();
-		wave2 = new Wave();
 		alpha = 0;
 		// TODO
 	}
@@ -42,7 +40,7 @@ public class Storm {
 		timeLeft -= elapsedTime;
 		cloudAnimation.update(elapsedTime);
 		rainAnimation.update(elapsedTime);
-		if(wave1.update(elapsedTime) && wave2.update(elapsedTime)){
+		if(wave1.update(elapsedTime)){
 			return true;
 		} else {
 			return false;
@@ -64,13 +62,12 @@ public class Storm {
 			g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
 			cloudAnimation.draw(g, Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenWidth()*0.05);
 			rainAnimation.draw(g, Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()*0.6);
-
 		}
+		wave1.draw(g);
 	}
 	
 	public void drawwave(Graphics g){
 		wave1.draw(g);
-		wave2.draw(g);
 	}
 
 }

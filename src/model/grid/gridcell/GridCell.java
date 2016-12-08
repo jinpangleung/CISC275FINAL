@@ -34,7 +34,7 @@ public class GridCell {
 	public static void initialize(){
 		double diagonalAcceleration = ACCELERATION_BY_NANOSECOND * Math.cos(Math.toRadians(45));
 		
-		accelerationByDirection = new Acceleration[8];
+		accelerationByDirection = new Acceleration[9];
 		accelerationByDirection[Direction.NORTH.ordinal()] = 
 				new Acceleration(0, -ACCELERATION_BY_NANOSECOND);
 		accelerationByDirection[Direction.EAST.ordinal()] = 
@@ -51,6 +51,7 @@ public class GridCell {
 				new Acceleration(diagonalAcceleration, diagonalAcceleration);
 		accelerationByDirection[Direction.SOUTHWEST.ordinal()] = 
 				new Acceleration(-diagonalAcceleration, diagonalAcceleration);
+		accelerationByDirection[Direction.NONE.ordinal()] = new Acceleration(0, 0);
 	}
 	
 	public Acceleration getAcceleration(){

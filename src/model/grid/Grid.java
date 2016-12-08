@@ -236,6 +236,11 @@ public class Grid extends Component {
 			Tower t = towit.next();
 			t.update(timeElapsed);
 		}
+		Iterator<Gabion> gib = gabions.iterator();
+		while(gib.hasNext()){
+			Gabion g = gib.next();
+			g.update(timeElapsed);
+		}
 		Iterator<Path> pit = paths.iterator();
 		while(pit.hasNext()){
 			Path p = pit.next();

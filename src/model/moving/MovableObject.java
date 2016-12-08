@@ -22,16 +22,13 @@ public class MovableObject extends GridItem {
 		this.velocity = velocity;
 	}
 	
-	private static final double INITIAL_VELOCITY = PixelGrid.getInstance().getSquareHeight()*10; // per second
+	private static final double INITIAL_VELOCITY = PixelGrid.getInstance().getSquareHeight(); // per second
 	private static double maxVelocity = INITIAL_VELOCITY / Time.nanosecond;
 	
 	private static final double FRICTION = 0.9999;
 	
 	private Velocity velocity;
-	
-	public static void setMaxSpeed(double speed){
-		maxVelocity = speed/Time.nanosecond;
-	}
+	private Acceleration lastAcceleration;
 
 	public void move(long elapsedTime) {
 		GridCell currentGridCell = PixelGrid.getInstance().getGridCell(PixelGrid.getInstance().getGridPosition(this.getCoord()));
@@ -40,9 +37,8 @@ public class MovableObject extends GridItem {
 		double xAccel = accel.getX()*elapsedTime;
 		double yAccel = accel.getY()*elapsedTime;
 		
-		double xVel = this.velocity.getX() + xAccel;
-		double yVel = this.velocity.getY() + yAccel;
-		
+		double xVel = this.getVelocity().getX() + xAccel;
+		double yVel = this.getVelocity().getY() + yAccel;
 		
 		if(xVel >= maxVelocity)
 			xVel = maxVelocity;
@@ -71,13 +67,56 @@ public class MovableObject extends GridItem {
 		
 		GridCell nextGridCell = PixelGrid.getInstance().getGridCell(PixelGrid.getInstance().getGridPosition(new Coord(xCoord, yCoord)));
 		if(!nextGridCell.isTrail()){
-			return;
+			moveLastAcceleration(elapsedTime);
 		} else {
 			this.getCoord().setX(xCoord);
 			this.getCoord().setY(yCoord);
 			this.setGridPosition(nextGridCell.getGridPosition());
+			this.lastAcceleration = accel;
 			return;
 		}
+	}
+	
+	private void moveLastAcceleration(long elapsedTime){
+		Acceleration accel = lastAcceleration;
+		
+		double xAccel = accel.getX()*elapsedTime;
+		double yAccel = accel.getY()*elapsedTime;
+		
+		double xVel = this.getVelocity().getX() + xAccel;
+		double yVel = this.getVelocity().getY() + yAccel;
+		
+		if(xVel >= maxVelocity)
+			xVel = maxVelocity;
+		if(yVel >= maxVelocity)
+			yVel = maxVelocity;
+		if(xVel <= -maxVelocity)
+			xVel = -maxVelocity;
+		if(yVel <= -maxVelocity)
+			yVel = -maxVelocity;
+		
+		this.getVelocity().setX(xVel);
+		this.getVelocity().setY(yVel);
+		
+		this.applyFriction(xAccel == 0, yAccel == 0);
+		
+		double xCoord = this.getCoord().getX() + (xVel * elapsedTime);
+		double yCoord = this.getCoord().getY() + (yVel * elapsedTime);
+		
+		if(PixelGrid.getInstance().isOutsideGrid(new Coord(xCoord, yCoord))){
+			Grid.getInstance().removeItem(this);
+			Grid.getInstance().addPath(new Path(this, new Coord(this.getCoord().getX(),
+						Model.getInstance().getScreenHeight() + 50), new DestroyBehavior()));
+			Player.getInstance().decreaseHappiness(5);
+			return;
+		}
+		
+		GridCell nextGridCell = PixelGrid.getInstance().getGridCell(PixelGrid.getInstance().getGridPosition(new Coord(xCoord, yCoord)));
+		this.getCoord().setX(xCoord);
+		this.getCoord().setY(yCoord);
+		this.setGridPosition(nextGridCell.getGridPosition());
+		this.lastAcceleration = accel;
+		return;
 	}
 	
 	private void applyFriction(boolean x, boolean y){

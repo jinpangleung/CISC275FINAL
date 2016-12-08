@@ -33,16 +33,16 @@ public class Difficulty {
 	
 	private long timeToSpawn;
 	private long spawn_time = 2400000000L;
-	private long timeToStorm = 240000000000L;
+	//private long timeToStorm = 240000000000L;
 	private double velocityScale = 1;
 	private int oysterCount = 1;
 	private int invasiveCount = 1;
 	private int pollutantCount = 1;
 	private int larvaeCount = 1;
-	private static int oysterCollected = 1;
-	private static int invasiveCollected = 1;
-	private static int pollutantCollected = 1;
-	private static int larvaeCollected = 1;
+	private int oysterCollected = 1;
+	private int invasiveCollected = 1;
+	private int pollutantCollected = 1;
+	private int larvaeCollected = 1;
 	private int totalSpawned = 4;
 	private final static double MAX_VEL = PixelGrid.getInstance().getSquareHeight()/Time.nanosecond;//MovableObject.getInstance().getMaxVelocity();//this is causing error
 	private final static double MIN_VEL = (PixelGrid.getInstance().getSquareHeight()/Time.nanosecond)-0000000005;
@@ -62,11 +62,11 @@ public class Difficulty {
 	public void update(long timeElapsed){
 		if(timeToSpawn > 0){
 			timeToSpawn -= timeElapsed;
-			timeToStorm -= timeElapsed;
+			//timeToStorm -= timeElapsed;
 		} else {
 			spawn();
 			timeToSpawn = spawn_time;
-			timeToStorm -= timeElapsed;
+			//timeToStorm -= timeElapsed;
 		}
 	}
 	
@@ -109,7 +109,7 @@ public class Difficulty {
 		
 		float oyster = getPercentCollected(oysterCollected, getTotalCollected());
 		float pollutant = oyster + getPercentCollected(pollutantCollected, getTotalCollected());
-		float invasiveItem = oyster + pollutant + getPercentCollected(invasiveCollected, getTotalCollected());
+		float invasiveItem = pollutant + getPercentCollected(invasiveCollected, getTotalCollected());
 		
 		if (r <= oyster){
 			oysterCount++;
@@ -156,29 +156,29 @@ public class Difficulty {
 		//System.out.println("total collected/total spawned: " + 
 		//getTotalCollected() + "/" + totalSpawned + "=" + getPercentTotal(getTotalCollected(), totalSpawned));
 		
-		if (totalSpawned > 10){
+		if (totalSpawned > 5){
 			if (getPercentTotal(getTotalCollected(), totalSpawned) < 16){
-				MovableObject.setMaxSpeed(15);
+				setVelocityScale(.995);
 				//System.out.println("< 16 case");
 				setSpawnRate(this.spawn_time + 500000000);
 			}else if (getPercentTotal(getTotalCollected(), totalSpawned) < 31){
-				MovableObject.setMaxSpeed(30);
+				setVelocityScale(.996);
 				//System.out.println("< 31 case");
 				setSpawnRate(this.spawn_time + 300000000);
 			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 46){
-				MovableObject.setMaxSpeed(45);
+				setVelocityScale(.997);
 				//System.out.println("< 46 case");
 				setSpawnRate(this.spawn_time + 100000000);
 			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 66){
-				MovableObject.setMaxSpeed(65);
+				setVelocityScale(1.001);
 				//System.out.println("< 66 case");
 				setSpawnRate(this.spawn_time - 200000000);
 			}else if(getPercentTotal(getTotalCollected(), totalSpawned) < 81){
-				MovableObject.setMaxSpeed(80);
+				setVelocityScale(1.002);
 				//System.out.println("< 81 case");
 				setSpawnRate(this.spawn_time - 400000000);
 			}else{
-				MovableObject.setMaxSpeed(95);
+				setVelocityScale(1.003);
 				//System.out.println("else case");
 				setSpawnRate(this.spawn_time - 600000000);
 			}
@@ -187,7 +187,7 @@ public class Difficulty {
 	}
 
 
-	public static void collect(TrailItem item){
+	public void collect(TrailItem item){
 		if (item instanceof Oyster){
 			oysterCollected++;
 		}else if(item instanceof Pollutant){
@@ -204,11 +204,11 @@ public class Difficulty {
 		return oysterCollected + pollutantCollected + larvaeCollected + invasiveCollected;
 	}
 
-//	public double getVelocityScale() {
-//		return velocityScale;
-//	}
-//
-//	public void setVelocityScale(double velocityScale) {
-//		this.velocityScale = velocityScale;
-//	}
+	public double getVelocityScale() {
+		return velocityScale;
+	}
+
+	public void setVelocityScale(double velocityScale) {
+		this.velocityScale = velocityScale;
+	}
 }

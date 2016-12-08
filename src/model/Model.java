@@ -3,6 +3,7 @@ package model;
 import java.awt.Graphics;
 
 import controller.Controller;
+import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.Grid;
 import model.grid.griditem.tower.Tower;
@@ -35,6 +36,8 @@ public class Model {
 	private int screenWidth;
 	private int screenHeight;
 	private Storm storm;
+	private long timeToStorm = 7000000000L;
+	private int numOfStorm;
 	
 	public static final double GRID_HEIGHT = .8;
 	public static final double GRID_WIDTH = .7;
@@ -89,8 +92,16 @@ public class Model {
 	}
 	
 	public void update(long timeElapsed){
+		//int numOfStorm = (int) (timeElapsed/timeToStorm);
 		grid.update(timeElapsed);
-		storm.update(timeElapsed);
+		timeToStorm -= timeElapsed;
+		if (timeToStorm <= 0){
+			storm.update(timeElapsed);
+		}
+//		if(numOfStorm == 1){
+//			storm.update(timeElapsed);
+//			timeToStorm = timeToStorm + timeToStorm;
+//		}
 	}
 	
 	public void draw(Graphics g){
@@ -99,7 +110,9 @@ public class Model {
 		inventory.draw(g);
 		grid.draw(g);
 		touch.draw(g);
-		storm.draw(g);
+		if (timeToStorm <= 0){
+			storm.draw(g);
+		}
 		long timeRemaining = Controller.getTime();
 		long seconds = timeRemaining / Time.nanosecond;
 		long minutes = seconds / 60;

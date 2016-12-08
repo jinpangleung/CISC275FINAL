@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import model.Model;
 import model.Time;
+import model.grid.Grid;
 import model.grid.PixelGrid;
 
 /**
@@ -168,6 +169,17 @@ public class Animation {
 	    }
 	}
 	
+	public static void insertWaveImage(String fileName, String imageName){
+		double x = Model.getInstance().getScreenWidth();
+		double y = Model.getInstance().getScreenHeight();
+	    BufferedImage img = readImageFromFile(fileName);
+	    if(img == null){
+	    	insertBufferedImage(null, imageName);
+	    } else {
+	    	insertBufferedImage(resize(img, (int) x, (int) y), imageName);
+	    }
+	}
+	
 	/**
 	 * initialize
 	 * Load all images into image library 
@@ -265,6 +277,9 @@ public class Animation {
 		insertRainImage("images/rain08.png", "rain8");
 		insertRainImage("images/rain09.png", "rain9");
 		insertRainImage("images/rain10.png", "rain10");
+		for (int i=1; i<=13; i++){
+			insertWaveImage("images/wave" + Integer.toString(i) + ".png", "wave" + Integer.toString(i));
+		}
 	}
 	
 	/**
