@@ -14,7 +14,7 @@ import model.grid.griditem.gabion.Gabion;
 /**
  * Wave
  * 
- * @author Eric
+ * @author Eric, Sam, Roy
  *
  */
 
