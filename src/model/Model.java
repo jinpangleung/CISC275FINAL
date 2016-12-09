@@ -45,7 +45,7 @@ public class Model {
 	private boolean isEnd;
 	
 	private TitleScreen ts;
-	private boolean titleScreen;
+	public boolean titleScreen;
 	
 	public static final double GRID_HEIGHT = .8;
 	public static final double GRID_WIDTH = .7;
