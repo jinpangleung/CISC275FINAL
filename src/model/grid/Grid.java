@@ -11,7 +11,6 @@ import java.util.*;
 import controller.Controller;
 import model.Button;
 import model.Model;
-import model.Time;
 import model.TutorialStep;
 import model.difficulty.Difficulty;
 import model.drawing.Animation;
@@ -306,8 +305,8 @@ public class Grid extends Component {
 		removeItems();
 		addPaths();
 		removePaths();
-		Iterator<TrailItem> tit = trailItems.iterator();
 		if(readyToGo){
+			Iterator<TrailItem> tit = trailItems.iterator();
 			while(tit.hasNext()){
 				TrailItem ti = tit.next();
 				if(ti.update(timeElapsed)){
@@ -478,7 +477,7 @@ public class Grid extends Component {
 		boolean messageA = false;
 		String message1="Red towers pick up pollution. Left is recycling, right is garbage.";
 		String message2="Blue towers pick up oyster shells.";
-		String message3="Green towers pick up invasive species.";
+		String message3="Green towers pick up invasive species. Leave Horseshoe crabs untouched.";
 		boolean messageB = false;
 		String message4="You can make more gabions by collecting oysters.";
 		boolean messageC = false;
@@ -626,24 +625,38 @@ public class Grid extends Component {
 					(int) (leftY + (boxHeight * .5) + 8));
 				
 				if(messageA){
-//					g.setColor(Color.WHITE);
-//					g.fillRect(leftX, leftY + boxHeight, boxLength, boxHeight);
-//					g.fillRect(leftX, leftY + (2 * boxHeight), boxLength, boxHeight);
-//					g.fillRect(leftX, leftY + (3* boxHeight), boxLength, boxHeight);
+					// g.setColor(Color.WHITE);
+					// g.fillRect(leftX, leftY + boxHeight, boxLength, boxHeight);
+					// g.fillRect(leftX, leftY + (2 * boxHeight), boxLength, boxHeight);
+					// g.fillRect(leftX, leftY + (3* boxHeight), boxLength, boxHeight);
 					g.setColor(Color.BLACK);
-					
 					g.drawString(message1,
-							(int) (leftX + (boxLength * .1)),
-							(int) (leftY + boxHeight + (boxHeight * .5) + 8));
-					
+					(int) (leftX + (boxLength * .1)),
+					(int) (leftY + boxHeight + (boxHeight * .5) + 8));
+					g.drawImage(Animation.getImage("pollutant1"), (int) (leftX +
+					(boxLength * .1)), (int) (leftY + boxHeight + (boxHeight * .5) + 8),
+					null);
+					g.drawImage(Animation.getImage("pollutant2"), (int) (leftX +
+					(boxLength * .1)) + 100, (int) (leftY + boxHeight + (boxHeight * .5) +
+					8), null);
+					g.drawImage(Animation.getImage("pollutant3"), (int) (leftX +
+					(boxLength * .1)) + 200, (int) (leftY + boxHeight + (boxHeight * .5) +
+					8), null);
+					g.drawImage(Animation.getImage("pollutant4"), (int) (leftX +
+					(boxLength * .1)) + 300, (int) (leftY + boxHeight + (boxHeight * .5) +
+					8), null);
 					g.drawString(message2,
-							(int) (leftX + (boxLength * .1)),
-							(int) (leftY + (2 * boxHeight) + (boxHeight * .5) + 8));
-					
+					(int) (leftX + (boxLength * .1)),
+					(int) (leftY + (2 * boxHeight) + (boxHeight * .5) + 8));
+					g.drawImage(Animation.getImage("oyster"), (int) (leftX + (boxLength * .1)),
+					(int) (leftY + (2 * boxHeight) + (boxHeight * .5) + 8), null);
 					g.drawString(message3,
-							(int) (leftX + (boxLength * .1)),
-							(int) (leftY + (3 * boxHeight) + (boxHeight * .5) + 8));
-				}
+					(int) (leftX + (boxLength * .1)),
+					(int) (leftY + (3 * boxHeight) + (boxHeight * .5) + 8));
+					g.drawImage(Animation.getImage("invasive_item"), (int) (leftX +
+					(boxLength * .1)),
+					(int) (leftY + (3 * boxHeight) + (boxHeight * .5) + 8), null);
+					}
 				
 				else if (messageB){
 //					g.setColor(Color.WHITE);

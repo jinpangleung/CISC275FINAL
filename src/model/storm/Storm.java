@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import model.Model;
+import model.Time;
 import model.drawing.Animation;
 import model.drawing.Coord;
 
@@ -24,27 +25,24 @@ public class Storm {
 	private Wave wave1;
 	private int alpha;
 	protected Coord coord;
-	protected Animation animation;
-	protected Animation cloudAnimation = new Animation("cloud", 294);
-	protected Animation rainAnimation = new Animation("rain", 10);
+	protected Animation cloudAnimation;
+	protected Animation rainAnimation;
 
-	private long timeLeft = (long) (9.8 * 1000000000L);
+	private long timeLeft;
 	
 	public Storm(){
 		wave1 = new Wave();
 		alpha = 0;
-		// TODO
+		cloudAnimation = new Animation("cloud", 294);
+		rainAnimation = new Animation("rain", 10);
+		timeLeft = (long) (9.8 * Time.nanosecond);
 	}
 	
 	public boolean update(long elapsedTime){
 		timeLeft -= elapsedTime;
 		cloudAnimation.update(elapsedTime);
 		rainAnimation.update(elapsedTime);
-		if(wave1.update(elapsedTime)){
-			return true;
-		} else {
-			return false;
-		}
+		return wave1.update(elapsedTime) && timeLeft <= 0;
 	}
 	
 	public void draw(Graphics g){
@@ -54,7 +52,6 @@ public class Storm {
 				//alpha doesn't increment
 			}
 			else{
-				
 				alpha = alpha + 1;
 			}
 			Color c = new Color(0, 0, 0, alpha);
@@ -63,10 +60,6 @@ public class Storm {
 			cloudAnimation.draw(g, Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenWidth()*0.05);
 			rainAnimation.draw(g, Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()*0.6);
 		}
-		wave1.draw(g);
-	}
-	
-	public void drawwave(Graphics g){
 		wave1.draw(g);
 	}
 

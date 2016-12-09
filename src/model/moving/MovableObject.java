@@ -13,6 +13,7 @@ import model.grid.gridcell.GridPosition;
 import model.grid.griditem.GridColor;
 import model.grid.griditem.GridItem;
 import model.grid.griditem.trailitem.Larvae;
+import model.grid.griditem.trailitem.Oyster;
 import model.grid.griditem.trailitem.TrailItem;
 import model.gui.path.DestroyBehavior;
 import model.gui.path.Path;
@@ -71,7 +72,9 @@ public class MovableObject extends GridItem {
 			if ((TrailItem)this instanceof Larvae){
 				Player.getInstance().increaseHappiness(2);
 				Difficulty.collect((TrailItem)this);
-			}else{	
+			}else if(this instanceof Oyster){
+					
+			} else {
 				Player.getInstance().decreaseHappiness(2);
 			}
 			return;
@@ -122,7 +125,9 @@ public class MovableObject extends GridItem {
 			if ((TrailItem)this instanceof Larvae){
 				Player.getInstance().increaseHappiness(2);
 				Difficulty.collect((TrailItem)this);
-			}else{	
+			}else if(this instanceof Oyster){
+					
+			} else {
 				Player.getInstance().decreaseHappiness(2);
 			}
 			return;

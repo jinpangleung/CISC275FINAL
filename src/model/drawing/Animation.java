@@ -213,7 +213,7 @@ public class Animation {
 		insertImage("images/null.png", "null");
 		insertTowerImage("images/ConcreteGabion.png", "ConcreteGabion");
 		insertImage("images/arrow.png", "Arrow");
-		insertImage("images/Losing Screen.png", "LosingScreen");
+		insertScreenImage("images/Losing Screen.png", "LosingScreen");
 		insertTowerImage("images/OysterGabion.png", "OysterGabion");
 		insertTrailItemImage("images/invasive_item.png", "invasive_item");
 		insertTrailItemImage("images/invasive_item_tower.png", "invasive_item_tower");

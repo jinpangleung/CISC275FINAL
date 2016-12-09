@@ -113,4 +113,8 @@ public class RedTower extends Tower {
 		}
 		return false;
 	}
+	
+	public void close(){
+		this.opening = false;
+	}
 }

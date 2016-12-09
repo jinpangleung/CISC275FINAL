@@ -2,7 +2,6 @@ package main;
 
 import controller.Controller;
 import model.Model;
-import model.Time;
 import model.player.Player;
 import view.View;
 
@@ -47,10 +46,6 @@ public class Main {
     			} catch (Exception e){
     				
     			}
-    		}
-    		
-    		if(controller.getTime() > Time.nanosecond * 180){
-    			isGameDone = true;
     		}
     	}
     	

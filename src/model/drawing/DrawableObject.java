@@ -60,7 +60,8 @@ public abstract class DrawableObject implements Drawable{
 		double right = this.getCoord().getX() + halfWidth;
 		double top = this.getCoord().getY() - halfHeight;
 		double bottom = this.getCoord().getY() + halfHeight;
-		return left <= x && right >= x && top <= y && bottom >= y;
+		
+		return left-5 <= x && right+5 >= x && top-5 <= y && bottom+5 >= y;
 	}
 	
 	// Checks if Coord is inside of drawable object

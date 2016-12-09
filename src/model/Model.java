@@ -3,9 +3,9 @@ package model;
 import java.awt.Graphics;
 
 import controller.Controller;
-import model.difficulty.Difficulty;
 import model.drawing.Animation;
 import model.grid.Grid;
+import model.grid.griditem.tower.RedTower;
 import model.grid.griditem.tower.Tower;
 import model.gui.component.*;
 import model.gui.touch.Touch;
@@ -37,18 +37,12 @@ public class Model {
 	private int screenWidth;
 	private int screenHeight;
 	private Storm storm;
-	private Storm storm2;
-	private Storm storm3;
-	private Storm storm4;
-	//private long timeToStorm = 120000000000L;
-	private long timeToStorm = 120000000000L; //test
-	private long timeToStorm2 = 240000000000L;
-	private long timeToStorm3 = 360000000000L;
-	private long timeToStorm4 = 480000000000L;
-	private int numOfStorm;
+	private boolean isStorming;
+	private long timeToStorm;
 	private double red;
 	private double blue;
 	private double green;
+	private boolean isEnd;
 	
 	private TitleScreen ts;
 	private boolean titleScreen;
@@ -57,6 +51,8 @@ public class Model {
 	public static final double GRID_WIDTH = .7;
 	public static final double Y_PADDING = .1;
 	public static final double X_PADDING = .05;
+	private static final long TIME_BETWEEN_STORMS = 120 * Time.nanosecond; // 2 minutes
+	private static final long END_TIME = 300 * Time.nanosecond; // end game after 5 minutes
 	
 	
 	public void initialize(int screenWidth, int screenHeight){
@@ -86,17 +82,16 @@ public class Model {
 		
 		Tower.initialize(screenWidth, screenHeight);
 		
-		Model.instance = this;
-		
-		this.storm = new Storm();
-		this.storm2 = new Storm();
-		this.storm3 = new Storm();
-		this.storm4 = new Storm();
-		
 		titleScreen = true;
 		ts = new TitleScreen();
 		
 		grid.initReadyButton();
+		
+		isStorming = false;
+		
+		timeToStorm = TIME_BETWEEN_STORMS;
+		
+		isEnd = false;
 		
 		System.out.println("\tModel has been initialized");
 	}
@@ -118,170 +113,123 @@ public class Model {
 	}
 	
 	public void update(long timeElapsed){
-		if(Controller.getTime() <= 300 * Time.nanosecond){
-		if(!titleScreen){
-			//int numOfStorm = (int) (timeElapsed/timeToStorm);
-			grid.update(timeElapsed);
-			if(Grid.getInstance().getReadyToGo()){
-				timeToStorm -= timeElapsed;
-				if (timeToStorm <= 0){
-					storm.update(timeElapsed);
+		if (!isEnd){
+				if(Controller.getTime() <= END_TIME){ // While game is under 5 minutes
+					if(!titleScreen){
+						grid.update(timeElapsed);
+						if(Grid.getInstance().getReadyToGo()){
+							timeToStorm -= timeElapsed;
+							if (timeToStorm <= 0){
+								isStorming = true;
+								timeToStorm = TIME_BETWEEN_STORMS;
+								storm = new Storm();
+							}
+						}
+						if(isStorming){
+							if(storm.update(timeElapsed)){ // if you update storm and find that it is done
+								isStorming = false;
+								storm = null;
+							}
+						}
+					}
+					if (Player.getInstance().getHappiness()<= 0){
+						//end game
+						isEnd = true;
+					}
 				}
-			}
-	//		if(numOfStorm == 1){
-	//			storm.update(timeElapsed);
-	//			timeToStorm = timeToStorm + timeToStorm;
-	//		}
 		}
-		if (timeToStorm2 <= 0){
-			storm2.update(timeElapsed);
-		}
-		if (timeToStorm3 <= 0){
-			storm3.update(timeElapsed);
-		}
-		if (timeToStorm4 <= 0){
-			storm4.update(timeElapsed);
-		}
-//		if(numOfStorm == 1){
-//			storm.update(timeElapsed);
-//			timeToStorm = timeToStorm + timeToStorm;
-//		}
-	}
 	}
 	
 	public void draw(Graphics g){
-		if(Controller.getTime() <= 300 * Time.nanosecond){
-		if(!titleScreen){
-			g.drawImage(Animation.getImage("bcg"), 0, 0, null);
-			player.draw(g);
-			inventory.draw(g);
-			grid.draw(g);
-			touch.draw(g);
-			if (timeToStorm <= 0){
-				storm.draw(g);
+		if(Controller.getTime() <= END_TIME){
+			if(!titleScreen){
+				g.drawImage(Animation.getImage("bcg"), 0, 0, null);
+				player.draw(g);
+				inventory.draw(g);
+				grid.draw(g);
+				touch.draw(g);
+				if (isStorming){
+					storm.draw(g);
+				}
+				
+				long timeRemaining = Controller.getTime();
+				long seconds = timeRemaining / Time.nanosecond;
+				long minutes = seconds / 60;
+				String sec = Long.toString(seconds%60);
+				if(sec.length() == 1){
+					sec = "0" + sec;
+				}
+				g.setColor(Color.WHITE);
+				g.fillRect(0, 0, 150, 30);
+				if(timeToStorm <= 5 * Time.nanosecond){
+					g.setColor(Color.RED);
+					g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+					g.drawString("Storm Soon", 10, 23);
+				} else if(isStorming){
+					g.setColor(Color.RED);
+					g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+					g.drawString("Storming", 10, 23);
+				} else {
+					g.setColor(Color.BLACK);
+					g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+					g.drawString("Time " + Long.toString(minutes) + ":" + sec, 10, 23);
+				}
+				
+				g.setColor(Color.BLACK);
+				g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+				g.drawString("0", Model.getInstance().getScreenWidth()-180, 65);
+				g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+				g.drawString(Integer.toString(Player.getInstance().getHappiness()), Model.getInstance().getScreenWidth() - 110, 65);
+				g.drawString("100", Model.getInstance().getScreenWidth()-50, 65);
+				for (int i=100; i>=0; i--){
+					red = 255 - i * 2.3;
+					blue = 25 + i;
+					green = 0 + i;
+					Color c = new Color((int) red,(int) green,(int) blue, 100);
+					g.setColor(c);
+					g.fillRect(Model.getInstance().getScreenWidth()-200+2*i, 10, 2, 25);
+				}
+			} else {
+				ts.draw(g);
 			}
-			
-			long timeRemaining = Controller.getTime();
-			long seconds = timeRemaining / Time.nanosecond;
-			long minutes = seconds / 60;
-			String sec = Long.toString(seconds%60);
-			if(sec.length() == 1){
-				sec = "0" + sec;
+			if (Player.getInstance().getHappiness()<= 0){
+				//end game
+				g.drawImage(Animation.getImage("LosingScreen"), 0, 0, null);
 			}
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, 150, 30);
-			g.setColor(Color.BLACK);
-			g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-			g.drawString("Time " + Long.toString(minutes) + ":" + sec, 10, 23);
-			
-			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-			g.drawString("0", Model.getInstance().getScreenWidth()-180, 65);
-			g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-			g.drawString(Integer.toString(Player.getInstance().getHappiness()), Model.getInstance().getScreenWidth() - 110, 65);
-			g.drawString("100", Model.getInstance().getScreenWidth()-50, 65);
-			for (int i=100; i>=0; i--){
-				red = 255 - i * 2.3;
-				blue = 25 + i;
-				green = 0 + i;
-				Color c = new Color((int) red,(int) green,(int) blue, 100);
-				g.setColor(c);
-				g.fillRect(Model.getInstance().getScreenWidth()-200+2*i, 10, 2, 25);
-			
-//				if (minutes >= 5){
-//					if (player.getInstance().getHappiness() >= 50){
-//						Color c2 = new Color(255, 255, 255, 255);
-//						g.setColor(c2);
-//						g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
-//						g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-//						g.drawString("Score: " + player.getInstance().getHappiness() + "Good Job! You saved the estuary!", Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()/2);
-//					}
-//					else {
-//						Color c2 = new Color(0, 0, 0, 255);
-//						g.setColor(c2); 
-//						g.fillRect(0, 0, Model.getInstance().getScreenWidth(), Model.getInstance().getScreenHeight());
-//						g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-//						g.drawString("Score: " + player.getInstance().getHappiness() + "The estuary is sick, try again next time.", Model.getInstance().getScreenWidth()/2, Model.getInstance().getScreenHeight()/2);;
-//					}
-//				}
-			}
-		} else {
-			ts.draw(g);
-		}
 		} else {
 			g.drawImage(Animation.getImage("end"), 0, 0, null);
 		}
 	}
 	
-	/*public void draw(Graphics g){
-		g.drawImage(Animation.getImage("bcg"), 0, 0, null);
-		player.draw(g);
-		inventory.draw(g);
-		grid.draw(g);
-		touch.draw(g);
-		if (timeToStorm <= 0){
-			storm.draw(g);
-		}
-		if (timeToStorm2 <= 0){
-			storm2.draw(g);
-		}
-		if (timeToStorm3 <= 0){
-			storm3.draw(g);
-		}
-		if (timeToStorm4 <= 0){
-			storm4.draw(g);
-		}
-		long timeRemaining = Controller.getTime();
-		long seconds = timeRemaining / Time.nanosecond;
-		long minutes = seconds / 60;
-		String sec = Long.toString(seconds%60);
-		if(sec.length() == 1){
-			sec = "0" + sec;
-		}
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-		g.drawString("Time " + Long.toString(minutes) + ":" + sec, 100, 100);
-		
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-		g.drawString("100", Model.getInstance().getScreenWidth()-150, 65);
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-		g.drawString("0", Model.getInstance().getScreenWidth()-20, 65);
-		
-		for (int i=100; i>=0; i--){
-			red = 255 - i * 2.3;
-			blue = 25 + i;
-			green = 0 + i;
-			
-			Color c = new Color((int) red,(int) green,(int) blue, 6);
-			g.setColor(c);
-			g.fillRect(Model.getInstance().getScreenWidth()-(i+1)-50, 10, Model.getInstance().getScreenWidth()-i-50, 25);
-//			g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
-//			g.drawString("100", Model.getInstance().getScreenWidth()-50, 35);
-//			g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
-//			g.drawString("0", Model.getInstance().getScreenWidth(), 35);
-		}}*/
-	
 	public void mouseClicked(int mouseX, int mouseY){
-		if(Controller.getTime() <= 300 * Time.nanosecond){
-		if(!titleScreen){
-			if(Grid.getInstance().getReadyButton().isWithin(mouseX, mouseY)){
-				Grid.getInstance().getReadyButton().mouseClicked(mouseX, mouseY);
+		if(Controller.getTime() <= END_TIME){
+			if(!titleScreen){
+				if(Grid.getInstance().getReadyButton().isWithin(mouseX, mouseY)){
+					Grid.getInstance().getReadyButton().mouseClicked(mouseX, mouseY);
+				}
+				componentMapping.mouseClicked(mouseX, mouseY);
+			} else {
+				ts.click(mouseX, mouseY);
 			}
-			componentMapping.mouseClicked(mouseX, mouseY);
-		} else {
-			ts.click(mouseX, mouseY);
-		}
 		}
 	}
 	
 	public void mouseReleased(int mouseX, int mouseY){
-		if(Controller.getTime() <= 300 * Time.nanosecond){
+		if(Controller.getTime() <= END_TIME){
 		if(!titleScreen){
+			for(Tower t : Grid.getInstance().getTowers()){
+				if(t instanceof RedTower){
+					RedTower rt = (RedTower) t;
+					rt.close();
+				}
+			}
 			componentMapping.mouseReleased(mouseX, mouseY);
 		}
 		}
 	}
 	
 	public void mouseDragged(int mouseX, int mouseY){
-		if(Controller.getTime() <= 300*Time.nanosecond){
+		if(Controller.getTime() <= END_TIME){
 		if(!titleScreen){
 			touch.mouseDragged(mouseX, mouseY);
 		}

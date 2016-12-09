@@ -66,7 +66,7 @@ public abstract class Tower extends GridItem {
 	}
 	
 	public boolean isInRange(Coord cd){
-		return Tower.getRange() >= Math.sqrt(Math.pow(cd.getX() - this.getCoord().getX(), 2) +
+		return Tower.getRange()+10 >= Math.sqrt(Math.pow(cd.getX() - this.getCoord().getX(), 2) +
 											Math.pow(cd.getY() - this.getCoord().getY(), 2));
 	}
 	
@@ -161,4 +161,5 @@ public abstract class Tower extends GridItem {
 	public void mouseDragged(int x, int y){
 		// Do nothing except for red tower
 	}
+
 }
