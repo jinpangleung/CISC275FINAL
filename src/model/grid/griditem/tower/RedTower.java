@@ -103,9 +103,6 @@ public class RedTower extends Tower {
 	
 	@Override
 	public boolean update(long timeElapsed){
-		if(cooldownRemaining > 0){
-			cooldownRemaining -= timeElapsed;
-		}
 		if(this.opening){
 			this.getAnimation().update(timeElapsed);
 		} else {
@@ -116,5 +113,9 @@ public class RedTower extends Tower {
 	
 	public void close(){
 		this.opening = false;
+	}
+	
+	public boolean getOpening(){
+		return opening;
 	}
 }

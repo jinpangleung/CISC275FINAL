@@ -32,7 +32,6 @@ import model.player.Player;
 public abstract class Tower extends GridItem {
 
 	////Attributes ////
-	protected long cooldownRemaining;
 	
 	protected static int range;
 	
@@ -43,7 +42,6 @@ public abstract class Tower extends GridItem {
 	
 	public Tower(Coord coord, Animation animation, GridPosition gp, GridColor gc, Color c) {
 		super(coord, animation, gp, gc);
-		cooldownRemaining = 10;
 		this.color = c;
 	}
 	
@@ -52,17 +50,8 @@ public abstract class Tower extends GridItem {
 		Tower.range = (int) rangeDouble;
 	}
 	
-	public long getCooldownRemaining(){
-		return this.cooldownRemaining;
-	}
-	
 	public static int getRange(){
 		return Tower.range;
-	}
-	
-	
-	public void setCooldownRemaining(long cd){
-		this.cooldownRemaining = cd;
 	}
 	
 	public boolean isInRange(Coord cd){
@@ -79,7 +68,6 @@ public abstract class Tower extends GridItem {
 		default: str += "Undefined Color Tower "; break;
 		}
 		str += "Grid Posn: " + gridPosition.toString() + " Pixel Posn " + coord.toString() + " ";
-		str += "Cooldown Remaining = " + Long.toString(cooldownRemaining);
 		return str;
 	}
 	
@@ -123,9 +111,6 @@ public abstract class Tower extends GridItem {
 	
 	@Override
 	public boolean update(long elapsedTime){
-		if(cooldownRemaining > 0){
-			cooldownRemaining -= elapsedTime;
-		}
 		return false;
 	}
 	

@@ -12,7 +12,6 @@ import model.grid.gridcell.GridPosition;
  * @author leung, Eric
  * @version 1
  * @attributes GridColor - Color on the grid
- * @attributes cooldownRemaining - Cooldown for tower
  * @attributes range - range of tower
  * @throw
  * @return
