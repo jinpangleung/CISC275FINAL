@@ -16,6 +16,7 @@ public class BoardTest {
 	public void test() {
 		Board board = new Board("board_text_files/gridTest.txt");
 		
+		//these test 
 		GridCell gc1 = board.getGridCell(0,0);
 		assertEquals(Integer.valueOf(0), gc1.getGridPosition().getX());
 		assertEquals(Integer.valueOf(0), gc1.getGridPosition().getY());
@@ -148,7 +149,8 @@ public class BoardTest {
 		assertFalse(gc16.isCanPlaceTower());
 		assertTrue(gc16.isCanPlaceGabion());
 		
-		
+		assertEquals(4, board.getHeight());
+		assertEquals(4, board.getWidth());
 	}
 
 }
