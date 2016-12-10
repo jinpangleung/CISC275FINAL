@@ -10,21 +10,26 @@ import model.gui.component.ComponentPosition;
 import model.gui.touch.Touch;
 
 /**
- * ConcreteGabionFactory
- * a factory that creates ConcreteGabion
- * 
+ * ConcreteGabionFactory is a factory class that constructs a ConcreteGabion.
+ * See {@see TowerFactory} for more details.
  * @author Eric
- *
  */
-
 public class ConcreteGabionFactory extends TowerFactory {
 
+    /**
+     * Constructs a ConcreteGabionFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public ConcreteGabionFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
 		this.animation = new Animation("ConcreteGabion");
 		setCurrency(3);
 	}
 	
+	/**
+     * Constructs a ConcreteGabionFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public ConcreteGabionFactory(int x, int y, int width, int height){
 		this(new ComponentPosition(x, y), width, height);
 	}

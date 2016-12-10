@@ -16,21 +16,19 @@ import model.Model;
 import model.savefile.Save;
 
 /**
- * ViewPanel
- * Intended to be the only Panel in the View
- * Intended to cover the entire View
+ * ViewPanel is a type of panel used for our game to draw all the things
+ * in the Model that need to be drawn.
+ * 
  * @author Eric
- *
  */
-
 public class ViewPanel extends JPanel{
 	
 	private static final long serialVersionUID = -6692584106492189311L;
 	
-	private Model model;
-	
-	public ViewPanel(Model model){
-		this.model = model;
+	/**
+	 * Constructs a ViewPanel
+	 */
+	public ViewPanel(){
 		bindKeyWith("0.shift.press", KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.SHIFT_DOWN_MASK, true), new SaveAction(0));
 		bindKeyWith("0.press", KeyStroke.getKeyStroke(KeyEvent.VK_0, 0, true), new LoadAction(0));
 		bindKeyWith("1.shift.press", KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.SHIFT_DOWN_MASK, true), new SaveAction(1));
@@ -53,6 +51,11 @@ public class ViewPanel extends JPanel{
 		bindKeyWith("9.press", KeyStroke.getKeyStroke(KeyEvent.VK_9, 0, true), new LoadAction(9));
 	}
 	
+	/**
+	 * Initializes a ViewPanel by adding mc to its
+	 * MouseListener list and MouseMotionListener list
+	 * @param mc a MouseController to be added
+	 */
 	public void initialize(MouseController mc){
 		this.addMouseListener(mc);
 		this.addMouseMotionListener(mc);

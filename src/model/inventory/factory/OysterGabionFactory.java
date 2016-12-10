@@ -11,17 +11,18 @@ import model.gui.component.ComponentPosition;
 import model.gui.touch.Touch;
 
 /**
- * OysterGabionFactory
- * a factory that creates OysterGabion
- * 
- * @author eric
- *
+ * OysterGabionFactory is a factory class that constructs a OysterGabion.
+ * See {@see TowerFactory} for more details.
+ * @author Eric
  */
-
 public class OysterGabionFactory extends TowerFactory {
 	
 	private final int OYSTERS_PER_GABION = 4;
 
+	/**
+     * Constructs a OysterGabionFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public OysterGabionFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
 		this.animation = new Animation("OysterGabion");
@@ -29,6 +30,10 @@ public class OysterGabionFactory extends TowerFactory {
 		setCostPer(OYSTERS_PER_GABION);
 	}
 	
+	/**
+     * Constructs a OysterGabionFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public OysterGabionFactory(int x, int y, int width, int height){
 		this(new ComponentPosition(x, y), width, height);
 	}

@@ -4,7 +4,7 @@ package model.gui.component;
  * ComponentMapping
  * A 2D array that represents the desired "screen"
  * Each "pixel" on the "screen" has a pointer to which Component exists at that "pixel"
- * 
+ * @attributes Component[][] gridOfComponents
  * @author Eric
  *
  */

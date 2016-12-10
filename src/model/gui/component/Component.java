@@ -8,7 +8,8 @@ import java.io.Serializable;
  * Component
  * Component is a static "frame" that exists within a component mapping
  * It has dimensions and can handle mouse clicks and mouse releases within it
- * 
+ * @attributes ComponentPosition topLeft
+ * @attributes ComponentPosition bottomRight
  * @see ComponentMapping
  * @author Eric
  *

@@ -26,7 +26,7 @@ public class GridCell {
 	}
 	
 	private static final double ACCELERATION = 0.00001; // how much to accelerate every second, by pixel
-	public static final double ACCELERATION_BY_NANOSECOND = ACCELERATION / Time.nanosecond;
+	public static double ACCELERATION_BY_NANOSECOND = ACCELERATION / Time.nanosecond;
 	
 	private static Acceleration[] accelerationByDirection;
 	

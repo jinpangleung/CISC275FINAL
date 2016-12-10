@@ -6,7 +6,17 @@ import model.grid.Grid;
 import model.gui.path.Path;
 import model.gui.touch.Touch;
 
+/**
+ * DefaultComponent
+ * The default component that will be placed across the entire screen
+ * @see Component
+ * @author Eric
+ *
+ */
+
 public class DefaultComponent extends Component {
+	
+	private static final long serialVersionUID = 1L;
 
 	public DefaultComponent(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);

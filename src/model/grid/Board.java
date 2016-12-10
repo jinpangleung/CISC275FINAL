@@ -13,14 +13,10 @@ import model.grid.gridcell.GridCell;
 import model.grid.gridcell.GridPosition;
 
 /**
- * Board
- * Contains a 2D array of GridCells
- * Reads from grid.txt to make the board
- * 
- * @author Eric
- *
+ * Board is a class that provides the facilities to read a game board from
+ * a text file. It also sets up the 2D array of GridCell objects.
+ * @author Sam, Eric
  */
-
 public class Board {
 	
 	private int width;

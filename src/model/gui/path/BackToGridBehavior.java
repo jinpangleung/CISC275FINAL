@@ -5,15 +5,12 @@ import java.io.Serializable;
 import model.grid.Grid;
 
 /**
- * BackToGridBehavior
- * When a path is done add it back to the grid wherever it initially started from
- * 
- * @author Eric
- *
+ * BackToGridBehavior is a PathBehavior that adds to the Grid the GridItem
+ * when its done traveling along a Path.
  */
-
 public class BackToGridBehavior implements PathBehavior, Serializable {
 	
+    //@Override
 	public void terminate(Path p){
 		Grid.getInstance().addItem(p.getGridItem());
 	}

@@ -1,7 +1,11 @@
 package model;
-
 import java.io.Serializable;
 
+/**
+ * OrderedPair is a class representing the mathematical concept of an ordered pair.
+ * @author Eric
+ * @param <T> The type of the ordered pair
+ */
 public abstract class OrderedPair<T> implements Serializable {
 	
 	// Attributes

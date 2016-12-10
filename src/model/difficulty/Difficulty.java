@@ -18,13 +18,11 @@ import model.gui.path.*;
 import model.moving.MovableObject;
 
 /**
- * Difficulty
- * the difficulty of the game, how fast stuff spawn
- * it also handles where the trailItem spawns
- * 
- *
+ * Difficulty is a class that handles how the difficulty of the game changes
+ * with how well the player is doing. It also handles spawning of TrailItem objects.
+ * @author Sam
+ * @version
  */
-
 public class Difficulty {
 	
 	private long timeToSpawn;
@@ -203,12 +201,4 @@ public class Difficulty {
 	public int getTotalCollected(){
 		return oysterCollected + pollutantCollected + larvaeCollected + invasiveCollected;
 	}
-
-//	public double getVelocityScale() {
-//		return velocityScale;
-//	}
-//
-//	public void setVelocityScale(double velocityScale) {
-//		this.velocityScale = velocityScale;
-//	}
 }

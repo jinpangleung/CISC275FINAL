@@ -7,20 +7,25 @@ import model.gui.component.ComponentPosition;
 import model.gui.touch.Touch;
 
 /**
- * GreenTowerFactory
- * a factory that creates greentower
- * 
- * @author eric
- *
+ * GreenTowerFactory is a factory class that constructs a GreenTower.
+ * See {@see TowerFactory} for more details.
+ * @author Eric
  */
-
 public class GreenTowerFactory extends TowerFactory {
 
+    /**
+     * Constructs a GreenTowerFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public GreenTowerFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
 		this.animation = new Animation("GreenTowerIcon");
 	}
 	
+	/**
+     * Constructs a GreenTowerFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public GreenTowerFactory(int x, int y, int width, int height){
 		this(new ComponentPosition(x, y), width, height);
 	}

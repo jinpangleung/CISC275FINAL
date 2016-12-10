@@ -5,18 +5,17 @@ import java.io.Serializable;
 
 /**
  * DrawableObject
- * An Object that can be drawn
- * A DrawableObject must have a coord and an animation
- * 
- * @see Coord
+ * An Object, specifically something within the Grid, that can be drawn
  * @author Eric
- *
+ * @attributes Coord
+ * @attributes Aniamtion
  */
 
 public abstract class DrawableObject implements Drawable, Serializable{
 	
 	protected Coord coord;
 	protected Animation animation;
+	
 	
 	public DrawableObject(Coord coord, Animation animation){
 		this.coord = coord;

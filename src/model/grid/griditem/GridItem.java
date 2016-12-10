@@ -6,15 +6,20 @@ import model.drawing.DrawableObject;
 import model.grid.gridcell.GridPosition;
 
 /**
- * GridItem
- * Abstract class that represents an object that can exists on a Grid
- * A GridItem is drawable
+ * GridItem is a class that represents an object that can exists on a Grid
  * @author Eric
  *
  */
-
 public abstract class GridItem extends DrawableObject {
 	
+    /**
+     * Constructs a GridItem
+     * 
+     * @param coord See {@see DrawableObject} constructor
+     * @param animation See {@see DrawableObject} constructor
+     * @param gridPosition the GridPosition of the new GridItem
+     * @param gc the GridColor of the new GridItem
+     */
 	public GridItem(Coord coord, Animation animation, GridPosition gridPosition, GridColor gc) {
 		super(coord, animation);
 		this.gridPosition = gridPosition;
@@ -25,6 +30,7 @@ public abstract class GridItem extends DrawableObject {
 	protected GridColor gridColor;
 	
 	public boolean snapping = false;
+	
 	
 	public GridPosition getGridPosition(){
 		return gridPosition;

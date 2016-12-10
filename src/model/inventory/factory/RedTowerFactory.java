@@ -1,7 +1,5 @@
 package model.inventory.factory;
 
-import com.sun.prism.Graphics;
-
 import controller.Controller;
 import model.TutorialStep;
 import model.drawing.Animation;
@@ -12,21 +10,25 @@ import model.gui.component.ComponentPosition;
 import model.gui.touch.Touch;
 
 /**
- * RedTowerFactory
- * a factory that creates redtower
- * 
- * @author eric
- *
+ * RedTowerFactory is a factory class that constructs a RedTower.
+ * See {@see TowerFactory} for more details.
+ * @author Eric
  */
-
-
 public class RedTowerFactory extends TowerFactory {
 
+    /**
+     * Constructs a RedTowerFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public RedTowerFactory(ComponentPosition topLeft, int width, int height) {
 		super(topLeft, width, height);
 		this.animation = new Animation("RedTowerIcon");
 	}
 	
+	/**
+     * Constructs a RedTowerFactory object. See {@see TowerFactory} for
+     * more details.
+     */
 	public RedTowerFactory(int x, int y, int width, int height){
 		this(new ComponentPosition(x, y), width, height);
 	}
