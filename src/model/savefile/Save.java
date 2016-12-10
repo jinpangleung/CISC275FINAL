@@ -5,6 +5,7 @@ import model.Model;
 
 public class Save {
 	
+	
 	private static final String BASE = "save";
 	
 	public static void save(int i){

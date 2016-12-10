@@ -16,6 +16,7 @@ import model.player.Player;
 
 public class WriteToFile {
     
+	
     public static void write(String fileName){
     	try{
 	    	FileOutputStream fos = new FileOutputStream(fileName + ".ser");
