@@ -3,7 +3,6 @@ package model.grid.griditem.tower;
 import java.awt.Color;
 
 import model.difficulty.Difficulty;
-import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
 import model.grid.griditem.GridItem;
@@ -19,26 +18,32 @@ import model.drawing.LockedAnimation;
 /**
  * A RedTower is a tower that can pick up pollution. 
  * 
- * @author leung, Eric
- * @version 1
- * @attributes GridColor - Color on the grid
- * @attributes cooldownRemaining - Cooldown for tower
- * @attributes range - range of tower
+ * @author 
+ * @attributes opening - true if tower is expanding, false otherwise
  * @throw
  * @return
  */
-
 public class RedTower extends Tower {
 	
-	private boolean opening;
+	private boolean opening; //if tower is bins or not
 
+	/**
+	 * Initializes the tower to have a range which is set by screen size
+	 * @param coord - Coordinate position
+	 * @return none
+	 */
 	public RedTower(Coord coord){
 		super(coord, new LockedAnimation("pollutant_tower", 7), new GridPosition(0, 0), GridColor.RED, 
 				new Color(255, 0, 0, getOpacity()));
 		this.opening = false;
 	}
 	
-	//@Override
+	/**
+	 * Reacts to mouse release
+	 * @param mouseX - mouse x position
+	 * @param mouseY - mouse y position
+	 * @return none
+	 */
 	public void release(int mouseX, int mouseY){
 		if(Touch.getInstance().isHolding()){
 			if(this.isInRange(Touch.getInstance().getStartPosition())){
@@ -60,6 +65,11 @@ public class RedTower extends Tower {
 		}
 	}
 
+	/**
+	 * Reacts to item dropped in recycling bin
+	 * @param gi - grid item
+	 * @return none
+	 */
 	private void reactRecycle(GridItem gi) {
 		if(gi instanceof Pollutant){
 			Pollutant p = (Pollutant) gi;
@@ -76,6 +86,11 @@ public class RedTower extends Tower {
 		
 	}
 
+	/**
+	 * Reacts to item dropped in trash can
+	 * @param gi - grid item
+	 * @return none
+	 */
 	private void reactTrash(GridItem gi) {
 		if(gi instanceof Pollutant){
 			Pollutant p = (Pollutant) gi;
@@ -91,6 +106,12 @@ public class RedTower extends Tower {
 		}
 	}
 	
+	/**
+	 * Reacts to mouse being dragged
+	 * @param x - x value
+	 * @param y - y value
+	 * @return none
+	 */
 	@Override
 	public void mouseDragged(int x, int y){
 		// Expand image
@@ -101,6 +122,11 @@ public class RedTower extends Tower {
 		}
 	}
 	
+	/**
+	 * Update method, just returns false
+	 * @param elapsedTime - time elapsed
+	 * @return false
+	 */
 	@Override
 	public boolean update(long timeElapsed){
 		if(this.opening){
@@ -111,10 +137,20 @@ public class RedTower extends Tower {
 		return false;
 	}
 	
+	/**
+	 * sets opening to false
+	 * @param none
+	 * @return none
+	 */
 	public void close(){
 		this.opening = false;
 	}
 	
+	/**
+	 * Gets opening
+	 * @param none
+	 * @return opening
+	 */
 	public boolean getOpening(){
 		return opening;
 	}

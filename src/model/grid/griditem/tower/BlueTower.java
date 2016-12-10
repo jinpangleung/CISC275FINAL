@@ -10,16 +10,19 @@ import model.grid.gridcell.GridPosition;
 /**
  * A BlueTower is a tower that can pick up oysters. 
  * 
- * @author leung, Eric
- * @version 1
- * @attributes GridColor - Color on the grid
- * @attributes range - range of tower
+ * @author 
+ * @attributes 
  * @throw
  * @return
  */
 
 public class BlueTower extends Tower{
 	
+	/**
+	 * Initializes the tower to have a range which is set by screen size
+	 * @param coord - Coordinate position
+	 * @return none
+	 */
 	public BlueTower(Coord coord){
 		super(coord, new Animation("oyster_tower"), new GridPosition(0, 0), GridColor.BLUE,
 				new Color(0, 0, 255, getOpacity()));

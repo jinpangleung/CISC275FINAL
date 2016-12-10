@@ -20,8 +20,33 @@ import java.awt.Font;
  * Model
  * Model holds all of the game elements
  * It should be updatable based on elapsed time since last update
- * @author Eric
- *
+ * @author Roy
+ * @attributes defaultComponent - 
+ * @attributes componentMapping - 
+ * @attributes touch - an instance of touch
+ * @attributes grid - makes model contains a grid
+ * @attributes player - an instance of the player
+ * @attributes inventory - an instance of the inventory
+ * @attributes instance - the instance of the class
+ * @attributes screenWidth - width of the screen
+ * @attributes screenHeight - height of the screen
+ * @attributes storm - makes model contains a storm
+ * @attributes isStorming - check if storm is happening
+ * @attributes timeToStorm - the time when storm comes
+ * @attributes red - int of the red color component
+ * @attributes blue - int of the blue color component
+ * @attributes green - int of the green color component
+ * @attributes isEnd - a boolean that checks whether the game ended yet
+ * @attributes ts - an instance of the title screen
+ * @attributes titleScreen - a boolean that checks if we are in the titlescreen
+ * @attributes GRID_HEIGHT - ratio of the height of the grid from screen 
+ * @attributes GRID_WIDTH - ratio of the width of the grid from screen 
+ * @attributes Y_PADDING - ratio of the y component we have of the screen
+ * @attributes X_PADDING - ratio of the x component we have of the screen
+ * @attributes TIME_BETWEEN_STORMS - the number of time between each storm
+ * @attributes END_TIME - the amount of time for the game
+ * 
+ * 
  */
 
 public class Model {
@@ -54,6 +79,16 @@ public class Model {
 	private static final long TIME_BETWEEN_STORMS = 120 * Time.nanosecond; // 2 minutes
 	private static final long END_TIME = 300 * Time.nanosecond; // end game after 5 minutes
 	
+	
+	/**
+	 * initialize
+	 * It initializes the model and set all the attributes as it is below
+	 * @author Roy
+	 * @param int screenWidth
+	 * @param int screenHeight
+	 * @return none
+	 * 
+	 */
 	
 	public void initialize(int screenWidth, int screenHeight){
 		System.out.println("\tModel is being initialized");
@@ -96,21 +131,77 @@ public class Model {
 		System.out.println("\tModel has been initialized");
 	}
 	
+	/**
+	 * getinstance()
+	 * It gets the instance of the model, so later we could use this to get the instance of it and work
+	 * with it
+	 * @author Roy
+	 * @return Model.instance
+	 *
+	 */
+	
+	
 	public static Model getInstance(){
 		return Model.instance;
 	}
+	
+	
+	/**
+	 * getScreenWidth()
+	 * A getter that returns the width of the screen
+	 * @author Roy
+	 * @return screen width 
+	 */
 	
 	public int getScreenWidth(){
 		return this.screenWidth;
 	}
 	
+	/**
+	 * getScreenHeight()
+	 * A getter that returns the height of the screen
+	 * @author Roy
+	 * @return screen height
+	 */
+	
 	public int getScreenHeight(){
 		return this.screenHeight;
 	}
 	
+	/**
+	 * endTitleScreen()
+	 * It changes the attributes titleScreen into false and that helps us to end the title screen later
+	 * @author Roy
+	 * @return none
+	 *
+	 */
+	
 	public void endTitleScreen(){
 		this.titleScreen = false;
 	}
+	
+	/**
+	 * getTitleScreen()
+	 * A getter that returns titleScreen, which tells us if we are still in the titleScreen
+	 * @author Roy
+	 * @return none
+	 *
+	 */
+	
+	public boolean getTitleScreen(){
+		return this.titleScreen;
+	}
+	
+	/**
+	 * update()
+	 * It updates the model
+	 * It first checks if the game ended then checks we are in title screen or having a storm
+	 * Then, it updates everything wihtin it, basically the whole game
+	 * @author Roy
+	 * @param long timeElapsed
+	 * @return none
+	 *
+	 */
 	
 	public void update(long timeElapsed){
 		if (!isEnd){
@@ -139,6 +230,16 @@ public class Model {
 				}
 		}
 	}
+	
+	/**
+	 * draw()
+	 * It checks condition of the game and draws stuff onto player's screen accordingly
+	 * It contains everything that needs to draw on here
+	 * @author Roy
+	 * @param Grpahic g
+	 * @return none
+	 *
+	 */
 	
 	public void draw(Graphics g){
 		if(Controller.getTime() <= END_TIME){
@@ -201,6 +302,15 @@ public class Model {
 		}
 	}
 	
+	/**
+	 * mouseClicked()
+	 * reacts to the mouse click
+	 * @author Roy
+	 * @param int mouseX
+	 * @param int mouseY
+	 * @return none
+	 *
+	 */
 	public void mouseClicked(int mouseX, int mouseY){
 		if(Controller.getTime() <= END_TIME){
 			if(!titleScreen){
@@ -214,6 +324,15 @@ public class Model {
 		}
 	}
 	
+	/**
+	 * mouseReleased()
+	 * reacts to the mouse click
+	 * @author Roy
+	 * @param int mouseX
+	 * @param int mouseY
+	 * @return none
+	 *
+	 */
 	public void mouseReleased(int mouseX, int mouseY){
 		if(Controller.getTime() <= END_TIME){
 		if(!titleScreen){
@@ -228,6 +347,15 @@ public class Model {
 		}
 	}
 	
+	/**
+	 * mouseDragged()
+	 * reacts to the mouse click
+	 * @author Roy
+	 * @param int mouseX
+	 * @param int mouseY
+	 * @return none
+	 *
+	 */
 	public void mouseDragged(int mouseX, int mouseY){
 		if(Controller.getTime() <= END_TIME){
 		if(!titleScreen){
@@ -235,7 +363,15 @@ public class Model {
 		}
 		}
 	}
-
+	
+	/**
+	 * updateTutorial()
+	 * a seperate update just for the tutorial
+	 * @author Roy
+	 * @param long elapsedTime
+	 * @return none
+	 *
+	 */
 	public void updateTutorial(long elapsedTime) {
 		grid.updateTutorial(elapsedTime);
 	}

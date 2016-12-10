@@ -6,16 +6,21 @@ import model.grid.gridcell.GridPosition;
 
 
 /**
- * ConcretGabion
- * a gabion that has limited amount of it, where it could help to stop damage from storm
- * 
- * @author Roy
- *
+ * A Gabion that is Concrete
+ * @author 
+ * @attributes
+ * @throw
+ * @return
  */
 
 
 public class ConcreteGabion extends Gabion {
 
+	/**
+	 * Constructor
+	 * @param coord - coordinate position
+	 * @return none
+	 */
 	public ConcreteGabion(Coord coord){
 		super(coord, new Animation("ConcreteGabion"), new GridPosition(0, 0));
 	}
