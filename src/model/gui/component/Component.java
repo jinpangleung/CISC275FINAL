@@ -2,6 +2,7 @@ package model.gui.component;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 /**
  * Component
@@ -13,7 +14,7 @@ import java.awt.Graphics;
  *
  */
 
-public abstract class Component {
+public abstract class Component implements Serializable {
 	
 	protected ComponentPosition topLeft;
 	protected ComponentPosition bottomRight;
