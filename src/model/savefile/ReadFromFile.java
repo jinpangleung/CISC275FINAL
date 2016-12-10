@@ -16,7 +16,6 @@ import model.inventory.factory.*;
 import model.player.Player;
 
 public class ReadFromFile {
-	
 	public static void read(String fileName){
 		try{
 			FileInputStream fis = new FileInputStream(fileName + ".ser");
@@ -43,6 +42,11 @@ public class ReadFromFile {
 	        Grid.getInstance().setTowers(towers);
 	        Grid.getInstance().setGabions(gabions);
 	        Grid.getInstance().setPaths(paths);
+	        Model.getInstance().getComponentMapping().addComponent(rtf);
+	        Model.getInstance().getComponentMapping().addComponent(btf);
+	        Model.getInstance().getComponentMapping().addComponent(gtf);
+	        Model.getInstance().getComponentMapping().addComponent(ogf);
+	        Model.getInstance().getComponentMapping().addComponent(cgf);
 	        Inventory.getInstance().setRtf(rtf);
 	        Inventory.getInstance().setBtf(btf);
 	        Inventory.getInstance().setGtf(gtf);
