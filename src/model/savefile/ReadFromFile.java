@@ -16,7 +16,6 @@ import model.inventory.factory.*;
 import model.player.Player;
 
 public class ReadFromFile {
-	
 	public static void read(String fileName){
 		try{
 			FileInputStream fis = new FileInputStream(fileName + ".ser");
