@@ -1,6 +1,7 @@
 package model.player;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 /**
  * Happiness
@@ -10,11 +11,11 @@ import java.awt.Graphics;
  *
  */
 
-public class Happiness {
+public class Happiness implements Serializable{
 	
 	private int raw;
 	
-	private static final int BASE_HAPPINESS = 50;
+	private static final int BASE_HAPPINESS = 75;
 	private static final int MAX_HAPPINESS = 100;
 	private static final int MIN_HAPPINESS = 0;
 	
