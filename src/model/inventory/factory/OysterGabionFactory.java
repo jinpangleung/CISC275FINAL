@@ -42,7 +42,7 @@ public class OysterGabionFactory extends TowerFactory {
 		}
 	}
 	
-	@Override
+	//@Override
 	public void draw(Graphics g){
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Times Roman", Font.PLAIN, 20));

@@ -154,7 +154,7 @@ public class MovableObject extends GridItem {
 		return this.velocity;
 	}
 	
-	@Override
+	//@Override
 	public boolean update(long elapsedTime){
 		move(elapsedTime);
 		return false;

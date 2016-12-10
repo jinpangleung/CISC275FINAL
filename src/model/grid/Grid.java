@@ -174,7 +174,7 @@ public class Grid extends Component {
 	}
 
 	
-	@Override
+	//@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		Iterator<TrailItem> it = trailItems.iterator();
 		while(it.hasNext()){
@@ -192,7 +192,7 @@ public class Grid extends Component {
 		return readyButton;
 	}
 
-	@Override
+	//@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		if(!Touch.getInstance().isHolding()){
 			return;
@@ -471,7 +471,7 @@ public class Grid extends Component {
 		unReady();
 	}
 	
-	@Override
+	//@Override
 	public void draw(Graphics g){
 		
 		boolean messageA = false;

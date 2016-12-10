@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.Random;
 
 import model.Model;
@@ -19,7 +20,7 @@ import model.gui.path.Path;
  *
  */
 
-public class Player {
+public class Player implements Serializable{
 	
 	private Happiness happiness;
 	private static Player instance;
@@ -32,6 +33,10 @@ public class Player {
 		happiness = new Happiness();
 		instance = this;
 		alpha = 100;
+	}
+	
+	public static void setInstance(Player p){
+		instance = p;
 	}
 	
 	

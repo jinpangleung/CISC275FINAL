@@ -1,5 +1,7 @@
 package model.gui.path;
 
+import java.io.Serializable;
+
 /**
  * DestroyBehavior
  * GridItem should be destroyed when the path is finished
@@ -8,7 +10,7 @@ package model.gui.path;
  *
  */
 
-public class DestroyBehavior implements PathBehavior {
+public class DestroyBehavior implements PathBehavior , Serializable{
 	
 	public void terminate(Path p){
 		

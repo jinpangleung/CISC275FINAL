@@ -1,6 +1,7 @@
 package model.drawing;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 /**
  * DrawableObject
@@ -12,7 +13,7 @@ import java.awt.Graphics;
  *
  */
 
-public abstract class DrawableObject implements Drawable{
+public abstract class DrawableObject implements Drawable, Serializable{
 	
 	protected Coord coord;
 	protected Animation animation;

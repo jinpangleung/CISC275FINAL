@@ -6,15 +6,14 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
 import model.Model;
 import model.Time;
-import model.grid.Grid;
 import model.grid.PixelGrid;
-import model.grid.ReadyButton;
 
 /**
  * Animation
@@ -22,10 +21,24 @@ import model.grid.ReadyButton;
  * <p>
  * All DrawableObjects needs an animation
  * @author Eric
+ * @param imageLibrary - the image library that makes sure images don't get load in more than  once
+ * @param RESIZE_X_PERCENT - resize ratio for images
+ * @param RESIZE_Y_PERCENT - resize ratio for images
+ * @param sprites - animations
+ * @param length - length of the animation
+ * @param index - the index for sprites
+ * @param xOffset - off set value on x component
+ * @param yOffset - off set value on y component
+ * @param imageWidth - width of the image
+ * @param imageHeight - height of the image
+ * @param animationTime - how long the animation lasts
+ * @param frameTime - how long each frame is
+ * @param elapsedTime - the game time
+ * @param completedCycle - boolean of whether the cycle for the animation is done
  *
  */
 
-public class Animation {
+public class Animation implements Serializable{
 	
 	// Image Library
 	private static HashMap<String, BufferedImage> imageLibrary;
@@ -33,6 +46,20 @@ public class Animation {
 	// Resizing
 	private static final double RESIZE_X_PERCENT = 0.7;
 	private static final double RESIZE_Y_PERCENT = 0.8;
+	private static final int DESIRED_FPS = 30;
+	
+	// Attributes
+	protected String[] sprites;
+	protected int length;
+	protected int index;
+	protected int xOffset;
+	protected int yOffset;
+	protected int imageWidth;
+	protected int imageHeight;
+	protected long animationTime;
+	protected long frameTime;
+	protected long elapsedTime;
+	protected boolean completedCycle;
 	
 	/**
 	 * readImageFromFile
@@ -147,6 +174,13 @@ public class Animation {
 		}
 	}
 	
+	/**
+	 * insertCloudItemImage
+	 * Read cloud images from file, and resize it then insert it
+	 * @param String fileName
+	 * @param String imageName
+	 * @return none
+	 */
 	public static void insertCloudImage(String fileName, String imageName){
 		double x = Model.getInstance().getScreenWidth();
 		double y = Model.getInstance().getScreenHeight() * 0.2;
@@ -158,7 +192,13 @@ public class Animation {
 	    }
 	   }
 	
-	
+	/**
+	 * insertRainItemImage
+	 * Read rain images from file, and resize it then insert it
+	 * @param String fileName
+	 * @param String imageName
+	 * @return none
+	 */
 	public static void insertRainImage(String fileName, String imageName){
 		double x = Model.getInstance().getScreenWidth();
 		double y = Model.getInstance().getScreenHeight() * 0.8;
@@ -170,6 +210,13 @@ public class Animation {
 	    }
 	}
 	
+	/**
+	 * insertWaveItemImage
+	 * Read wave images from file, and resize it then insert it
+	 * @param String fileName
+	 * @param String imageName
+	 * @return none
+	 */
 	public static void insertWaveImage(String fileName, String imageName){
 		double x = Model.getInstance().getScreenWidth();
 		double y = Model.getInstance().getScreenHeight();
@@ -181,6 +228,13 @@ public class Animation {
 	    }
 	}
 	
+	/**
+	 * insertTitleButtonImage
+	 * Read title button images from file, and resize it then insert it
+	 * @param String fileName
+	 * @param String imageName
+	 * @return none
+	 */
 	public static void insertTitleButtonImage(String fileName, String imageName){
 		int x =(int) (Model.getInstance().getScreenWidth() * 0.3);
 		int y =(int) (Model.getInstance().getScreenHeight() * 0.3);
@@ -192,6 +246,13 @@ public class Animation {
 	    }
 	}
 	
+	/**
+	 * insertReadyToGoButton
+	 * Read ready button images from file, and resize it then insert it
+	 * @param String fileName
+	 * @param String imageName
+	 * @return none
+	 */
 	public static void insertReadyToGoButton(String fileName, String imageName){
 		int x = (int) (Model.getInstance().getScreenHeight() * 0.1);
 		int y = (int) (Model.getInstance().getScreenHeight() * 0.1);
@@ -350,25 +411,13 @@ public class Animation {
 	}
 	
 	
-	// Animation
-	
-	// Unless otherwise specified, how often should the frame of the animation be switched
-	private static final int DESIRED_FPS = 30;
-	
-	// Attributes
-	protected String[] sprites;
-	protected int length;
-	protected int index;
-	protected int xOffset;
-	protected int yOffset;
-	protected int imageWidth;
-	protected int imageHeight;
-	protected long animationTime;
-	protected long frameTime;
-	protected long elapsedTime;
-	protected boolean completedCycle;
-	
-	// Constructor
+	/**
+	 * Constructor for animation
+	 * @author Roy
+	 * @param sprite
+	 * @return none
+	 *
+	 */
 	public Animation(String sprite){
 		this.sprites = new String[1];
 		this.sprites[0] = sprite;
@@ -387,6 +436,14 @@ public class Animation {
 		this.completedCycle = false;
 	}
 	
+	
+	/**
+	 * Constructor for animation
+	 * @author Roy
+	 * @param base
+	 * @param num
+	 *
+	 */
 	public Animation(String base, int num){
 		this.sprites = new String[num];
 		for(int i = 0; i < num; i++){
@@ -407,21 +464,54 @@ public class Animation {
 		this.completedCycle = false;
 	}
 	
+	/**
+	 * reverseUpdate()
+	 * doesn't do anything here, would be overwritten in the sub classes
+	 * @author Roy
+	 * @param long elapsedTime
+	 * @return none
+	 *
+	 */
 	public void reverseUpdate(long elapsedTime){
 		// Do nothing
 	}
 	
-	// Draw Image at current index
+	/**
+	 * draw
+	 * draw the animation at the specified spot
+	 * @author Roy
+	 * @param Graphics g
+	 * @param double x
+	 * @param double y
+	 * @return none
+	 *
+	 */
 	public void draw(Graphics g, double x, double y){
 		g.drawImage(Animation.getImage(sprites[index]), (int) x - xOffset, (int) y - yOffset, null);
 	}
 	
-	// Draw Image given coord
+	/**
+	 * draw
+	 * draw the animation at the specified spot
+	 * @author Roy
+	 * @param Graphics g
+	 * @param Coord c
+	 * @return none
+	 *
+	 */
 	public void draw(Graphics g, Coord c){
 		this.draw(g, c.getX(), c.getY());
 	}
 	
-	// Update the index based on how much time has passed
+	/**
+	 * update
+	 * keep updating the animation
+	 * @author Roy
+	 * @param Graphics g
+	 * @param long elapsedTime
+	 * @return none
+	 *
+	 */
 	public void update(long elapsedTime){
 		this.elapsedTime += elapsedTime;
 		this.elapsedTime = this.elapsedTime % this.animationTime;
@@ -429,82 +519,232 @@ public class Animation {
 		this.index = (int) newIndex;
 	}
 
+	/**
+	 * getSprites()
+	 * gets the attributes sprites
+	 * @author Roy
+	 * @return sprites
+	 *
+	 */
 	public String[] getSprites() {
 		return sprites;
 	}
 
+	/**
+	 * setSprites()
+	 * sets the attributes sprites
+	 * @author Roy
+	 * @param sprites
+	 * @return none
+	 *
+	 */
 	public void setSprites(String[] sprites) {
 		this.sprites = sprites;
 	}
 
+	/**
+	 * getLength()
+	 * gets the attributes length
+	 * @author Roy
+	 * @return length
+	 *
+	 */
 	public int getLength() {
 		return length;
 	}
-
+	
+	/**
+	 * setLength()
+	 * sets the attributes length
+	 * @author Roy
+	 * @param length
+	 * @return none
+	 *
+	 */
 	public void setLength(int length) {
 		this.length = length;
 	}
 
+	/**
+	 * getIndex()
+	 * gets the attributes index
+	 * @author Roy
+	 * @return index
+	 *
+	 */
 	public int getIndex() {
 		return index;
 	}
 
+	/**
+	 * setIndex()
+	 * sets the attributes index
+	 * @author Roy
+	 * @param index
+	 * @return none
+	 *
+	 */
 	public void setIndex(int index) {
 		this.index = index;
 	}
 
+	/**
+	 * getxOffset()
+	 * gets the attributes xOffset
+	 * @author Roy
+	 * @return xOffset
+	 *
+	 */
 	public int getxOffset() {
 		return xOffset;
 	}
-
+	
+	/**
+	 * setxOffset()
+	 * sets the attributes xOffset
+	 * @author Roy
+	 * @param xOffset
+	 * @return none
+	 *
+	 */
 	public void setxOffset(int xOffset) {
 		this.xOffset = xOffset;
 	}
-
+	
+	/**
+	 * getyOffset()
+	 * gets the attributes yOffset
+	 * @author Roy
+	 * @return yOffset
+	 *
+	 */
 	public int getyOffset() {
 		return yOffset;
 	}
 
+	/**
+	 * setyOffset()
+	 * sets the attributes yOffset
+	 * @author Roy
+	 * @param yOffset
+	 * @return none
+	 *
+	 */
 	public void setyOffset(int yOffset) {
 		this.yOffset = yOffset;
 	}
 
+	/**
+	 * getImageWidth()
+	 * gets the attributes imageWidth
+	 * @author Roy
+	 * @return imageWidth
+	 *
+	 */
 	public int getImageWidth() {
 		return imageWidth;
 	}
 
+	/**
+	 * setImageWidth()
+	 * sets the attributes imageWidth
+	 * @author Roy
+	 * @param imageWidth
+	 * @return none
+	 *
+	 */
 	public void setImageWidth(int imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
+	/**
+	 * getImageHeight()
+	 * gets the attributes imageWidth
+	 * @author Roy
+	 * @return imageHeight
+	 *
+	 */
 	public int getImageHeight() {
 		return imageHeight;
 	}
-
+	
+	/**
+	 * setImageHeight()
+	 * sets the attributes imageHeight
+	 * @author Roy
+	 * @param imageHeight
+	 * @return none
+	 *
+	 */
 	public void setImageHeight(int imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
+	/**
+	 * getAnimationTime()
+	 * gets the attributes animationTime
+	 * @author Roy
+	 * @return animationTime
+	 *
+	 */
 	public long getAnimationTime() {
 		return animationTime;
 	}
 
+	/**
+	 * setAnimationTime()
+	 * sets the attributes animationTime
+	 * @author Roy
+	 * @param animationTime
+	 * @return none
+	 *
+	 */
 	public void setAnimationTime(long animationTime) {
 		this.animationTime = animationTime;
 	}
 
+	/**
+	 * getFrameTime()
+	 * gets the attributes frameTime
+	 * @author Roy
+	 * @return frameTime
+	 *
+	 */
 	public long getFrameTime() {
 		return frameTime;
 	}
 
+	/**
+	 * setFrameTime()
+	 * sets the attributes frameTime
+	 * @author Roy
+	 * @param frameTime
+	 * @return none
+	 *
+	 */
 	public void setFrameTime(long frameTime) {
 		this.frameTime = frameTime;
 	}
 
+	/**
+	 * getElapsedTime()
+	 * gets the attributes elapsedTime
+	 * @author Roy
+	 * @return elapsedTime
+	 *
+	 */
 	public long getElapsedTime() {
 		return elapsedTime;
 	}
 
+	/**
+	 * setElapsedTime()
+	 * sets the attributes elapsedTime
+	 * @author Roy
+	 * @param elapsedTime
+	 * @return none
+	 *
+	 */
 	public void setElapsedTime(long elapsedTime) {
 		this.elapsedTime = elapsedTime;
 	}

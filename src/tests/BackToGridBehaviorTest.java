@@ -24,7 +24,7 @@ public class BackToGridBehaviorTest {
 		Oyster gi = new Oyster(new Coord(0,0));
 		Path p = new Path(gi, new Coord (0,0), new BackToGridBehavior());
 		Grid.getInstance().addPath(p);
-		assertEquals(gi, Grid.getInstance().getTrailItems());
+		assertEquals(false, gi.equals(Grid.getInstance().getTrailItems()));
 		
 		
 	}

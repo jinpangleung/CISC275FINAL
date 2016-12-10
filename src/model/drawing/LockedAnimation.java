@@ -7,7 +7,7 @@ public class LockedAnimation extends Animation {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@Override
+	//@Override
 	public void update(long elapsedTime){
 		if(this.index == this.length - 1){
 			return;
@@ -24,7 +24,7 @@ public class LockedAnimation extends Animation {
 	
 	
 	
-	@Override
+	//@Override
 	public void reverseUpdate(long elapsedTime){
 		if(this.index == 0){
 			return;

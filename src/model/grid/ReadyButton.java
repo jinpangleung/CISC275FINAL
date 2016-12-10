@@ -36,7 +36,7 @@ public class ReadyButton extends Button {
 	 *
 	 */
 	 
-	@Override
+	//@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		Grid.getInstance().ready();
@@ -52,7 +52,7 @@ public class ReadyButton extends Button {
 	 * @return none
 	 *
 	 */
-	@Override
+	//@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		

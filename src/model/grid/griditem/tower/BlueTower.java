@@ -6,7 +6,6 @@ import model.drawing.Animation;
 import model.drawing.Coord;
 import model.grid.griditem.GridColor;
 import model.grid.gridcell.GridPosition;
-
 /**
  * A BlueTower is a tower that can pick up oysters. 
  * 

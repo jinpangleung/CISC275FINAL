@@ -13,13 +13,13 @@ public class StartButton extends Button {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		Model.getInstance().endTitleScreen();
 		Controller.setRunningTutorial(false);
 	}
 
-	@Override
+	//@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		

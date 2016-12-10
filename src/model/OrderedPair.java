@@ -1,6 +1,8 @@
 package model;
 
-public abstract class OrderedPair<T> {
+import java.io.Serializable;
+
+public abstract class OrderedPair<T> implements Serializable {
 	
 	// Attributes
 	private T x;

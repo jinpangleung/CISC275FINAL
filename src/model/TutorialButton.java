@@ -37,7 +37,7 @@ public class TutorialButton extends Button {
 	 * @return none
 	 *
 	 */
-	@Override
+	//@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		Model.getInstance().endTitleScreen();
@@ -55,7 +55,7 @@ public class TutorialButton extends Button {
 	 * @return none
 	 *
 	 */
-	@Override
+	//@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		

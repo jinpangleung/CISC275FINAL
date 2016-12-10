@@ -38,7 +38,7 @@ public abstract class Button extends Component{
 	 * @return none
 	 *
 	 */
-	@Override
+	//@Override
 	public void draw(Graphics g){
 		ani.draw(g, this.getTopLeft().getX(), this.getTopLeft().getY());
 	}

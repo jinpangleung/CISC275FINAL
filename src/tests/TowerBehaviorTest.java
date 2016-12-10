@@ -19,7 +19,7 @@ public class TowerBehaviorTest {
 		Tower t = new GreenTower(new Coord(0,0));
 		Path p = new Path(t, new Coord (0,0), new TowerBehavior());
 		Grid.getInstance().addPath(p);
-		assertEquals(t, Grid.getInstance().getTowers());
+		assertEquals(false, t.equals(Grid.getInstance().getTowers()));
 		
 		
 	}

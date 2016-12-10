@@ -3,6 +3,7 @@ package model.inventory.factory;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import controller.Controller;
 import model.drawing.Animation;
@@ -21,7 +22,7 @@ import model.gui.touch.Touch;
  *
  */
 
-public abstract class TowerFactory extends Component {
+public abstract class TowerFactory extends Component implements Serializable{
 	
 	protected int currency; // how many towers are left, or how many oysters you have
 	protected int costPer; // how much each tower cost, oysters will probably be 4

@@ -1,5 +1,7 @@
 package model.gui.path;
 
+import java.io.Serializable;
+
 import model.Time;
 import model.drawing.Coord;
 import model.grid.Grid;
@@ -12,7 +14,7 @@ import model.gui.touch.Touch;
  * A Path is used to tell a Grid Items to move from one point of the screen to another
  */
 
-public class Path {
+public class Path implements Serializable{
 	
 	private static final long TIME_TO_COMPLETE_PATH = Time.nanosecond/3;
 	

@@ -112,7 +112,7 @@ public class RedTower extends Tower {
 	 * @param y - y value
 	 * @return none
 	 */
-	@Override
+	//@Override
 	public void mouseDragged(int x, int y){
 		// Expand image
 		if(this.isWithin(new Coord(x, y))){
@@ -127,7 +127,7 @@ public class RedTower extends Tower {
 	 * @param elapsedTime - time elapsed
 	 * @return false
 	 */
-	@Override
+	//@Override
 	public boolean update(long timeElapsed){
 		if(this.opening){
 			this.getAnimation().update(timeElapsed);

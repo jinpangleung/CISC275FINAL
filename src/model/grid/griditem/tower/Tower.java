@@ -145,7 +145,7 @@ public abstract class Tower extends GridItem {
 	 * @param elapsedTime - time elapsed
 	 * @return false
 	 */
-	@Override
+	//@Override
 	public boolean update(long elapsedTime){
 		return false;
 	}
@@ -164,7 +164,7 @@ public abstract class Tower extends GridItem {
 	 * @param g - graphical image of tower
 	 * @return none
 	 */
-	@Override
+	//@Override
 	public void draw(Graphics g){
 		if(Touch.getInstance().isHolding()){
 				if(Touch.getInstance().getHolding().equals(this)){

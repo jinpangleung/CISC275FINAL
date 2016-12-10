@@ -1,5 +1,7 @@
 package model.gui.path;
 
+import java.io.Serializable;
+
 import model.grid.Grid;
 
 /**
@@ -10,7 +12,7 @@ import model.grid.Grid;
  *
  */
 
-public class BackToGridBehavior implements PathBehavior {
+public class BackToGridBehavior implements PathBehavior, Serializable {
 	
 	public void terminate(Path p){
 		Grid.getInstance().addItem(p.getGridItem());

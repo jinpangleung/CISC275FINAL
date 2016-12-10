@@ -1,6 +1,7 @@
 package model.inventory;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import model.grid.griditem.GridItem;
 import model.grid.griditem.gabion.*;
@@ -17,9 +18,29 @@ import model.inventory.factory.*;
  *
  */
 
-public class Inventory {
+public class Inventory implements Serializable {
 	
 	private RedTowerFactory rtf;
+	public void setRtf(RedTowerFactory rtf) {
+		this.rtf = rtf;
+	}
+
+	public void setBtf(BlueTowerFactory btf) {
+		this.btf = btf;
+	}
+
+	public void setGtf(GreenTowerFactory gtf) {
+		this.gtf = gtf;
+	}
+
+	public void setCgf(ConcreteGabionFactory cgf) {
+		this.cgf = cgf;
+	}
+
+	public void setOgf(OysterGabionFactory ogf) {
+		this.ogf = ogf;
+	}
+
 	private BlueTowerFactory btf;
 	private GreenTowerFactory gtf;
 	private ConcreteGabionFactory cgf;
